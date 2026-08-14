@@ -1,0 +1,6 @@
+import {dummy} from '../data/dummy.js'
+import {Kpi,Card,Bars,Table,Header,Page} from '../components/DashboardUI.jsx'
+export default function Territorio(){const k=dummy.kpis;return <Page><Header title="Incidencia del Territorio" subtitle="Concentración espacial de incendios y superficie afectada."/>
+<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><Kpi label="Incendios" value={k.incendios.toLocaleString('es-CL')}/><Kpi label="Superficie" value={`${k.superficieHa.toLocaleString('es-CL')} ha`}/><Kpi label="Promedio ha/incendio" value={`${(k.superficieHa/k.incendios).toFixed(1)} ha`}/><Kpi label="Comunas destacadas" value="5"/></div>
+<div className="grid gap-6 lg:grid-cols-2"><Card title="Mapa de incidencia"><div className="mt-4 grid h-72 place-items-center rounded-xl bg-gradient-to-br from-arena-100 to-verde-50 text-xs font-semibold text-slate-500">MAPA TERRITORIAL · MOCKUP</div></Card><Card title="Ranking territorial"><Bars rows={dummy.territorio} label="comuna" value="incendios"/></Card></div>
+<Card title="Detalle territorial"><Table rows={dummy.territorio} columns={[['provincia','Provincia'],['comuna','Comuna'],['incendios','Incendios'],['hectareas','Hectáreas']]}/></Card></Page>}
