@@ -1,4 +1,5 @@
-import { MapContainer, TileLayer, Marker, Circle, Polyline, Tooltip, Popup, LayersControl, LayerGroup } from "react-leaflet";
+import { useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Circle, Polyline, Tooltip, Popup, LayersControl, LayerGroup, useMap } from "react-leaflet";
 import L from "leaflet";
 import CensusContextLayers from "./CensusContextLayers.jsx";
 import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
@@ -18,6 +19,15 @@ const placeIcon=L.divIcon({
   html:'<div class="exposurePlace">🏘️</div>',
   iconSize:[34,34],iconAnchor:[17,17]
 });
+
+
+function FlyExposure({fire}){
+  const map=useMap();
+  useEffect(()=>{
+    if(hasValidLatLng(fire)) map.flyTo([fire.lat,fire.lon],11,{duration:1.15});
+  },[fire?.id,fire?.lat,fire?.lon,map]);
+  return null;
+}
 
 export default function PopulationExposureMap({fire,nearest}){
   const safeFire = hasValidLatLng(fire) ? fire : { ...fire, lat:-33.45, lon:-70.66 };
@@ -39,6 +49,7 @@ export default function PopulationExposureMap({fire,nearest}){
 
   return <div className="populationExposureMap">
     <MapContainer center={center} zoom={11} scrollWheelZoom>
+      <FlyExposure fire={safeFire}/>
       <LayersControl position="topright">
         <BaseLayer checked name="Mapa claro">
           <TileLayer attribution="&copy; OpenStreetMap" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>

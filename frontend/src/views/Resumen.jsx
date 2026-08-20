@@ -134,7 +134,6 @@ export default function Resumen({onOpenBitacora}) {
                   points={pts.map(p=>`${p.px},${p.py}`).join(" ")}
                 />
                 {pts.map((pt,i)=><g key={pt.label}>
-                  <circle cx={pt.px} cy={pt.py} r="5" className="trendPoint"/>
                   <rect
                     x={Math.max(0,pt.px-42)}
                     y="0"

@@ -78,7 +78,7 @@ function PriorityMap({items,selectedId,onSelect}){
       <div>
         <small>MAPA</small>
         <h3>Prioridad territorial</h3>
-        <p>Polígono completo = territorio. Clic para seleccionar; el mapa hace zoom animado.</p>
+        
       </div>
     </div>
 

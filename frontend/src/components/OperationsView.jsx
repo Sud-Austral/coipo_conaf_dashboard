@@ -51,7 +51,7 @@ function FireTimeline({meta}){
       {events.map(e=>{
         const at=new Date(e.datetime).getTime();
         const left=((at-start)/span)*100;
-        return <span key={`${e.label}-${e.datetime}`} className="fireMasterEvent" style={{left:`${left}%`}}>
+        return <span key={`${e.label}-${e.datetime}`} className="fireMasterEvent" style={{left:`${left}%`,"--lane":events.indexOf(e)%3}}>
           <i/>
           <em>{e.label}</em>
           <small>{dateLabel(e.datetime)}</small>
@@ -148,7 +148,7 @@ export default function OperationsView(){
     </section>
 
     <section className="opMainGrid">
-      <OperationalReplayMap fire={fire} fireOptions={operationalReplayFires} onFireChange={(id)=>{setFireId(id);setSelectedResourceId(null)}}/>
+      <OperationalReplayMap fire={fire} fireOptions={operationalReplayFires} selectedResourceId={selectedResourceId} onSelectResource={setSelectedResourceId} onFireChange={(id)=>{setFireId(id);setSelectedResourceId(null)}}/>
       <aside className="opSide">
         <div className="opIncident">
           <small>INCENDIO SELECCIONADO</small>
@@ -171,14 +171,8 @@ export default function OperationsView(){
         </div>
         <div className="opResources">
           <h3>Recursos asignados</h3>
-          <p className="opResourcesHint">Selecciona un recurso para ver su propia línea operacional.</p>
-          {fire.resources.map(r=><button
-            key={r.id}
-            className={String(selectedResourceId)===String(r.id)?"selected":""}
-            onClick={()=>setSelectedResourceId(String(selectedResourceId)===String(r.id)?null:r.id)}
-          >
-            <span>{r.name}</span><b>{r.combatants}</b><small>{r.type}</small>
-          </button>)}
+          <p className="opResourcesHint">El filtro de Historia operacional se selecciona en las tarjetas bajo el mapa.</p>
+          {fire.resources.map(r=><div key={r.id}><span>{r.name}</span><b>{r.combatants}</b><small>{r.type}</small></div>)}
         </div>
       </aside>
     </section>

@@ -21,6 +21,34 @@ const flameIcon = ha => {
   });
 };
 
+
+const regionSummaryIcon=(region)=>{
+  const count=Number(region.incendios||0);
+  const size=Math.max(30,Math.min(78,26+Math.sqrt(Math.max(count,1))*2));
+  return L.divIcon({
+    className:"regionalFireDivIcon",
+    html:`<div class="regionalFireSummary" style="width:${size}px;height:${size}px"><span class="regionalFireEmoji">🔥</span><b>${count.toLocaleString("es-CL")}</b></div>`,
+    iconSize:[size,size],iconAnchor:[size/2,size/2]
+  });
+};
+
+function DamageFireLayer({selectedRegion,shownFires,onSelectRegion,onOpenBitacora}){
+  const map=useMap();
+  const [zoom,setZoom]=useState(map.getZoom());
+  useEffect(()=>{const fn=()=>setZoom(map.getZoom());map.on("zoomend",fn);return()=>map.off("zoomend",fn)},[map]);
+  const aggregate=!selectedRegion || zoom<=6.15;
+  if(aggregate) return regions.filter(hasValidLatLng).map(r=>
+    <Marker key={`sum-${r.id}`} position={[r.lat,r.lon]} icon={regionSummaryIcon(r)} eventHandlers={{click:()=>onSelectRegion?.(r.id)}}>
+      <Tooltip direction="top"><b>{r.name}</b><br/>{Number(r.incendios||0).toLocaleString("es-CL")} incendios</Tooltip>
+    </Marker>
+  );
+  return shownFires.map(f=><Marker key={f.id} position={[f.lat,f.lon]} icon={flameIcon(f.ha)}
+    eventHandlers={{dblclick:()=>onOpenBitacora?.(f)}}>
+    <Tooltip direction="top" offset={[0,-20]}><div className="fireTooltip"><b>{f.name}</b><span>{f.ha.toLocaleString("es-CL")} ha</span><small>Doble clic → Bitácora</small></div></Tooltip>
+    <Popup><b>{f.name}</b><br/>{f.ha.toLocaleString("es-CL")} ha<br/>{f.estado}</Popup>
+  </Marker>);
+}
+
 function FlyToSelection({regionId}){
   const map=useMap();
   useEffect(()=>{
@@ -102,13 +130,7 @@ export default function DamageImpactMap({selectedRegion,onSelectRegion,onOpenBit
 
           <Overlay checked name="Incendios">
             <LayerGroup>
-              {shownFires.map(f=><Marker key={f.id} position={[f.lat,f.lon]} icon={flameIcon(f.ha)}
-                eventHandlers={{dblclick:()=>onOpenBitacora?.(f)}}>
-                <Tooltip direction="top" offset={[0,-20]}>
-                  <div className="fireTooltip"><b>{f.name}</b><span>{f.ha.toLocaleString("es-CL")} ha</span><small>Doble clic → Bitácora</small></div>
-                </Tooltip>
-                <Popup><b>{f.name}</b><br/>{f.ha.toLocaleString("es-CL")} ha<br/>{f.estado}</Popup>
-              </Marker>)}
+              <DamageFireLayer selectedRegion={selectedRegion} shownFires={shownFires} onSelectRegion={onSelectRegion} onOpenBitacora={onOpenBitacora}/>
             </LayerGroup>
           </Overlay>
 

@@ -120,7 +120,7 @@ function ReplayCamera({fire,resources,time,playing,actualMaxTime,visualMaxTime})
 }
 
 
-export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]}){
+export default function OperationalReplayMap({fire,onFireChange,fireOptions=[],selectedResourceId,onSelectResource}){
   const safeFire = hasValidLatLng(fire)
     ? fire
     : { ...(fire||{}), lat:-33.45, lon:-70.66, resources:[] };
@@ -172,9 +172,7 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
 
     // El retiro es un cierre visual entre puntos conocidos. La salida del
     // incendio sí está registrada; la trayectoria de retorno no es GPS.
-    const returnStart=Math.max(retreat,actualMaxTime);
-    if(time<returnStart) return {pos:r.destination,status:"Retiro registrado",progress:1};
-
+    const returnStart=Math.min(retreat,actualMaxTime);
     if(time<maxTime){
       const p=Math.max(0,Math.min(1,(time-returnStart)/Math.max(1,maxTime-returnStart)));
       return {
@@ -301,7 +299,12 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
         const eventText=time>actualMaxTime
           ? state.status
           : (current ? `${current.label} · ${current.time}` : "En base");
-        return <div key={r.id}><b>{r.name}</b><span>{eventText}</span><small>{r.combatants} combatientes</small></div>
+        return <button
+          type="button"
+          key={r.id}
+          className={String(selectedResourceId)===String(r.id)?"selected":""}
+          onClick={()=>onSelectResource?.(String(selectedResourceId)===String(r.id)?null:r.id)}
+        ><b>{r.name}</b><span>{eventText}</span><small>{r.combatants} combatientes</small></button>
       })}
     </div>
   </section>;

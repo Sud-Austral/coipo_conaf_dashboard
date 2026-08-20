@@ -267,10 +267,9 @@ main{max-width:1540px;margin:auto;padding:22px 28px 34px}
   font-size:9px;
   line-height:1.45;
 }
-.kpiInfoWrap:hover .kpiInfoPopover,
-.kpiInfoWrap:focus-within .kpiInfoPopover{
+.kpiInfoPopover.open{
   display:grid;
-  gap:5px;
+  gap:4px;
 }
 .kpiInfoPopover>b{font-size:10px}
 .kpiInfoPopover>span{color:var(--muted)}
@@ -935,3 +934,50 @@ main{max-width:1540px;margin:auto;padding:22px 28px 34px}
   padding:3px 6px;border:1px solid var(--line);border-radius:999px;background:var(--panel)
 }
 .timelineUnavailable{font-size:9px;color:var(--muted)}
+
+/* v2.8.7 · refinamiento visual */
+.kpiInfoButton{width:20px;height:20px}
+.kpiInfoPopover{
+  width:220px!important;padding:8px 9px!important;border-radius:8px!important;
+  font-size:8px!important;line-height:1.35!important;top:24px!important;
+  box-shadow:0 7px 18px rgba(0,0,0,.18)!important
+}
+.kpiInfoPopover>b{font-size:8.5px!important}
+.kpiInfoPopover>span{font-size:7.5px!important}
+.kpiInfoPopover strong{font-size:7.5px!important}
+.trendInteractive svg polyline{stroke-width:1.6!important;stroke-linecap:round;stroke-linejoin:round}
+.trendPoint{display:none!important}
+
+/* Replay resource cards are the timeline filter */
+.replayEvents>button{
+  display:grid;padding:9px;background:var(--panel2);border:1px solid var(--line);
+  border-radius:9px;color:var(--text);text-align:left;cursor:pointer
+}
+.replayEvents>button.selected{outline:2px solid var(--text);background:var(--panel)}
+.replayEvents>button b{font-size:10px}.replayEvents>button span,.replayEvents>button small{font-size:9px;color:var(--muted);margin-top:3px}
+
+/* Stagger close fire milestones vertically */
+.fireTimelineTrack{height:88px}
+.fireMasterEvent{top:calc(1px + (var(--lane) * 20px))}
+.fireMasterEvent em{top:17px}
+.fireMasterEvent:hover small{top:28px}
+.fireTimelineTotal{top:68px}
+
+/* Bitácora resource histories */
+.bitResourceHistories{display:grid;gap:10px;margin-top:10px}
+.bitResourceHistory{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--panel2)}
+.bitResourceHistoryHead{display:flex;justify-content:space-between;gap:12px;align-items:start}
+.bitResourceHistoryHead>div{display:grid;gap:2px}.bitResourceHistoryHead b{font-size:9px}.bitResourceHistoryHead small{font-size:7px;color:var(--muted)}
+.bitResourceHistoryHead>strong{font-size:9px;border:1px solid var(--line);border-radius:999px;padding:4px 7px}
+.bitResourceHistoryLine{height:55px;position:relative;margin:18px 12px 2px;border-top:2px solid var(--line)}
+.bitResourceHistoryLine>span{position:absolute;top:calc(-5px + (var(--lane) * 22px));transform:translateX(-50%)}
+.bitResourceHistoryLine i{display:block;width:9px;height:9px;border-radius:50%;background:var(--text)}
+.bitResourceHistoryLine b,.bitResourceHistoryLine small{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:6.5px}
+.bitResourceHistoryLine b{top:11px}.bitResourceHistoryLine small{top:22px;color:var(--muted)}
+@media print{
+  .bitResourceHistory{break-inside:avoid;padding:3mm;margin-bottom:2mm}
+  .bitResourceHistoryPrint{display:grid!important;gap:1mm;margin-top:2mm}
+  .bitResourceHistoryPrint>div{display:grid;grid-template-columns:1fr auto;gap:4mm;border-top:.2mm solid #ddd;padding:1.5mm 0}
+  .bitResourceHistoryPrint span{display:flex;gap:3mm}.bitResourceHistoryPrint b,.bitResourceHistoryPrint small,.bitResourceHistoryPrint em{font-size:7pt}
+  .bitResourceHistoryPrint em{font-style:normal;font-weight:700}
+}

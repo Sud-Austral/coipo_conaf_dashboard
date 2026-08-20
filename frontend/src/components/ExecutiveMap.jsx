@@ -107,6 +107,29 @@ function RegionalFireSummary({region,onTerritorySelect}) {
   );
 }
 
+
+function ZoomAwareFires({context,regionalFireSummaries,visibleFires,onTerritorySelect,onSelectFire,onOpenBitacora}){
+  const map=useMap();
+  const [zoom,setZoom]=useState(map.getZoom());
+
+  useEffect(()=>{
+    const update=()=>setZoom(map.getZoom());
+    map.on("zoomend",update);
+    return()=>map.off("zoomend",update);
+  },[map]);
+
+  // Al alejarnos suficientemente, siempre volvemos a la lectura agregada regional.
+  const aggregate = context.level==="country" || zoom<=6.15;
+
+  return aggregate
+    ? regionalFireSummaries.map(region=>(
+        <RegionalFireSummary key={`regional-fire-${region.id}`} region={region} onTerritorySelect={onTerritorySelect}/>
+      ))
+    : visibleFires.map(f=>(
+        <FireMarker key={f.id} fire={f} onSelectFire={onSelectFire} onOpenBitacora={onOpenBitacora}/>
+      ));
+}
+
 function MapNavigator({context, selectedBounds}) {
   const map = useMap();
 
@@ -334,23 +357,14 @@ export default function ExecutiveMap({
 
           <Overlay checked name={context.level==="country" ? "Incendios por región" : "Incendios"}>
             <LayerGroup>
-              {context.level==="country"
-                ? regionalFireSummaries.map(region=>(
-                    <RegionalFireSummary
-                      key={`regional-fire-${region.id}`}
-                      region={region}
-                      onTerritorySelect={onTerritorySelect}
-                    />
-                  ))
-                : visibleFires.map(f => (
-                    <FireMarker
-                      key={f.id}
-                      fire={f}
-                      onSelectFire={onSelectFire}
-                      onOpenBitacora={onOpenBitacora}
-                    />
-                  ))
-              }
+              <ZoomAwareFires
+                context={context}
+                regionalFireSummaries={regions.filter(hasValidLatLng)}
+                visibleFires={visibleFires}
+                onTerritorySelect={onTerritorySelect}
+                onSelectFire={onSelectFire}
+                onOpenBitacora={onOpenBitacora}
+              />
             </LayerGroup>
           </Overlay>
 
@@ -450,8 +464,8 @@ export default function ExecutiveMap({
       <div className="mapMetaRow">
         <span className="geoRule">
           {context.level==="country"
-            ? "🔥 Tamaño = cantidad de incendios por región · clic para drill-down"
-            : "🔥 Tamaño = superficie registrada del incendio"}
+            ? "Número = incendios registrados por región · clic para drill-down"
+            : "Al alejar el mapa, los incendios vuelven a agruparse por región"}
         </span>
       </div>
 

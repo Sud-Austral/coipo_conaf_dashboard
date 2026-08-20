@@ -187,10 +187,32 @@ export default function Bitacora({fire,onBack}) {
         </div>
       </section>
 
-      <section>
+      <section className="bitResponseOperational">
         <h2>Respuesta operacional</h2>
-        <div className="bitResourceList">
-          {(op?.resources||[]).map(r=><div key={r.id}><b>{r.name}</b><span>{r.type}</span><strong>{r.combatants} combatientes</strong></div>)}
+        <p className="bitSectionIntro">Hitos de cada recurso participante y duración total registrada.</p>
+        <div className="bitResourceHistories">
+          {(op?.resources||[]).map(r=>{
+            const ev=r.events||[];
+            const first=ev.length?Math.min(...ev.map(e=>e.t)):0;
+            const last=ev.length?Math.max(...ev.map(e=>e.t)):0;
+            return <article key={r.id} className="bitResourceHistory">
+              <div className="bitResourceHistoryHead">
+                <div><b>{r.name}</b><small>{r.type} · {r.combatants} combatientes</small></div>
+                <strong>{durationLabel(last-first)}</strong>
+              </div>
+              <div className="bitResourceHistoryLine noPrint">
+                {ev.map((e,i)=><span key={`${r.id}-${e.label}`} style={{left:`${((e.t-first)/Math.max(1,last-first))*100}%`,"--lane":i%2}}>
+                  <i/><b>{e.label}</b><small>{e.time}</small>
+                </span>)}
+              </div>
+              <div className="bitResourceHistoryPrint printOnly">
+                {ev.map((e,i)=><div key={`pdf-${r.id}-${e.label}`}>
+                  <span><b>{e.label}</b><small>{e.time}</small></span>
+                  {i<ev.length-1&&<em>{durationLabel(ev[i+1].t-e.t)}</em>}
+                </div>)}
+              </div>
+            </article>;
+          })}
         </div>
       </section>
 
@@ -199,7 +221,7 @@ export default function Bitacora({fire,onBack}) {
         <div className="bitSources"><span>Incendio ✓</span><span>Movimientos ✓</span><span>Recursos ✓</span><span>Daño · según cobertura</span><span>Urbano/rural · pendiente servicio oficial</span></div>
       </section>
 
-      <footer>Fuente: SIDCO · Documento generado desde Forestin / COIPO Dashboard · v2.6.5</footer>
+      <footer>Fuente: SIDCO · Documento generado desde Forestin / COIPO Dashboard · v2.8.7</footer>
     </article>
   );
 }
