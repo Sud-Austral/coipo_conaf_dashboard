@@ -249,8 +249,8 @@ export default function TerritorialPriorityView(){
         <PriorityMap items={enriched} selectedId={selectedId} onSelect={setSelectedId}/>
         <aside className="priorityRightColumn">
           <section className="territorialRankingCard">
-            <div className="priorityCardHead"><div><small>RANKING</small><h3>Territorios prioritarios</h3></div></div>
-            <div className="territorialRankingList">{ranking.map((x,i)=><button key={x.id} className={Number(selectedId)===Number(x.id)?"selected":""} onClick={()=>setSelectedId(x.id)}><span>{String(i+1).padStart(2,"0")}</span><div><b>{x.name}</b><small>{Number(x.incendios||0).toLocaleString("es-CL")} incendios · {Number(x.superficie||0).toLocaleString("es-CL")} ha</small><i style={{width:`${x.ipt}%`,background:priorityColor(x.ipt)}}/></div><strong>{x.ipt}</strong></button>)}</div>
+            <div className="priorityCardHead"><div><small>RANKING · TOP 8</small><h3>Territorios prioritarios</h3></div></div>
+            <div className="territorialRankingList">{ranking.slice(0,8).map((x,i)=><button key={x.id} className={Number(selectedId)===Number(x.id)?"selected":""} onClick={()=>setSelectedId(x.id)}><span>{String(i+1).padStart(2,"0")}</span><div><b>{x.name}</b><small>{Number(x.incendios||0).toLocaleString("es-CL")} incendios · {Number(x.superficie||0).toLocaleString("es-CL")} ha</small><i style={{width:`${x.ipt}%`,background:priorityColor(x.ipt)}}/></div><strong>{x.ipt}</strong></button>)}</div>
           </section>
 
           <section className="whyPriorityCard">
@@ -265,7 +265,7 @@ export default function TerritorialPriorityView(){
         </aside>
       </section>
 
-      <ExecutiveRanking items={ranking} selectedId={selectedId} onSelect={setSelectedId}/>
+      <ExecutiveRanking items={ranking.slice(0,8)} selectedId={selectedId} onSelect={setSelectedId}/>
 
       <section className="significantChangesV251">
         <div className="priorityCardHead"><div><small>SEÑALES</small><h3>Cambios significativos</h3></div></div>

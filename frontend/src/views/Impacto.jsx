@@ -28,7 +28,6 @@ export default function Impacto({onOpenBitacora}){
   const [category,setCategory]=useState(null);
   const selectedRegion=regions.find(r=>String(r.id)===String(regionId));
   const totalCat=damageByCategory202526.reduce((a,x)=>a+x.ha,0);
-  const maxCat=Math.max(...damageByCategory202526.map(x=>x.ha));
 
   const ranking=useMemo(()=>{
     const arr=[...damageTerritoriesDemo];
@@ -66,13 +65,13 @@ export default function Impacto({onOpenBitacora}){
     </section>
 
     <section className="damageCategoryCard">
-      <div className="damageCardHead"><small>COMPOSICIÓN</small><h3>¿Qué se está dañando?</h3><p>Distribución de la superficie de daño caracterizada por tipo de cobertura afectada.</p></div>
+      <div className="damageCardHead"><small>COMPOSICIÓN</small><h3>¿Qué se está dañando?</h3><p>Cada barra se compara contra el total de superficie de daño caracterizada de la temporada: <b>{fmt(totalCat)} ha = 100%</b>.</p></div>
       <div className="damageCategoryBars">
         {damageByCategory202526.map(x=>{
           const pct=x.ha/totalCat*100;
           return <button key={x.key} className={category===x.key?"selected":""} onClick={()=>setCategory(category===x.key?null:x.key)}>
             <div><b>{x.label}</b><span>{fmt(x.ha)} ha · {pct.toFixed(1).replace(".",",")}%</span></div>
-            <i><em style={{width:`${x.ha/maxCat*100}%`}}/></i>
+            <i title={`${pct.toFixed(1).replace(".",",")}% del total caracterizado`}><em style={{width:`${pct}%`}}/></i>
           </button>
         })}
       </div>

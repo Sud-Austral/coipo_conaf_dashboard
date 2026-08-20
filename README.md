@@ -212,3 +212,14 @@ Fuentes cartográficas configuradas:
 - Durante la operación mantiene el foco en el incendio mientras llegan recursos.
 - Al finalizar agrega un cierre visual de retiro y vuelve automáticamente al encuadre inicial.
 - El retorno es una interpolación visual entre puntos conocidos, no tracking GPS histórico.
+
+## v2.8.6 · Claridad ejecutiva
+- Vista 2: ranking territorial limitado a Top 8.
+- Vista 1: gráfico mensual interactivo con tarjeta hover por mes.
+- La serie 2025/26 usa conteos SIDCO reales.
+- La serie mensual 2024/25 queda explícitamente pendiente de extracción; no se inventan valores.
+- Vista 4: barras de composición escaladas contra el total caracterizado (100%), no contra la categoría mayor.
+- Vista 3: historia operacional principal ahora pertenece al incendio completo.
+- Línea del incendio con gradiente rojo → verde, fechas y duración total.
+- KPI del incendio seleccionado muestra inicio / término o Activo.
+- Recursos asignados son seleccionables y muestran una línea operacional secundaria filtrada.

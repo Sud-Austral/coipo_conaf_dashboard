@@ -3,10 +3,12 @@ import { ChevronRight, RotateCcw } from "lucide-react";
 import KpiCard from "../components/KpiCard.jsx";
 import ExecutiveMap from "../components/ExecutiveMap.jsx";
 import { baseKpis, regions, provincesByRegion, communesByProvince, fires } from "../data/dashboardData.js";
+import { seasonTrendReal } from "../data/seasonTrend.real.js";
 
 export default function Resumen({onOpenBitacora}) {
   const [path,setPath] = useState([{level:"country",id:"CL",name:"Chile",lat:-36.8,lon:-72.4}]);
   const [selectedFire,setSelectedFire] = useState(null);
+  const [trendHover,setTrendHover] = useState(null);
   const context = path[path.length-1];
 
   const nextItems = useMemo(()=>{
@@ -110,15 +112,65 @@ export default function Resumen({onOpenBitacora}) {
       </div>
 
       <section className="trendPanel">
-        <div><small>EVOLUCIÓN</small><h3>Temporada 2025/26 vs 2024/25</h3></div>
-        <div className="trendMock">
-          <svg viewBox="0 0 1000 170" preserveAspectRatio="none">
-            <polyline fill="none" stroke="currentColor" strokeWidth="3"
-              points="0,145 90,142 180,136 270,118 350,84 430,38 510,53 590,91 680,110 770,128 870,139 1000,146"/>
-            <polyline className="previousLine" fill="none" strokeWidth="2"
-              points="0,144 90,140 180,131 270,112 350,94 430,60 510,45 590,75 680,103 770,119 870,133 1000,142"/>
-          </svg>
-          <div className="months"><span>Jul</span><span>Ago</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dic</span><span>Ene</span><span>Feb</span><span>Mar</span><span>Abr</span><span>May</span><span>Jun</span></div>
+        <div>
+          <small>EVOLUCIÓN</small>
+          <h3>Temporada 2025/26 vs 2024/25</h3>
+          <p className="trendHelp">Pasa el mouse por cada mes para comparar el acumulado mensual disponible.</p>
+        </div>
+        <div className="trendInteractive">
+          {(()=>{
+            const max=Math.max(1,...seasonTrendReal.map(x=>Number(x.current||0)));
+            const pts=seasonTrendReal.map((x,i)=>{
+              const px=(i/(seasonTrendReal.length-1))*1000;
+              const py=145-(Number(x.current||0)/max)*112;
+              return {x,...x,px,py};
+            });
+            return <>
+              <svg viewBox="0 0 1000 170" preserveAspectRatio="none">
+                <polyline
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  points={pts.map(p=>`${p.px},${p.py}`).join(" ")}
+                />
+                {pts.map((pt,i)=><g key={pt.label}>
+                  <circle cx={pt.px} cy={pt.py} r="5" className="trendPoint"/>
+                  <rect
+                    x={Math.max(0,pt.px-42)}
+                    y="0"
+                    width="84"
+                    height="170"
+                    fill="transparent"
+                    onMouseEnter={()=>setTrendHover(i)}
+                    onMouseLeave={()=>setTrendHover(null)}
+                  />
+                </g>)}
+              </svg>
+
+              {trendHover!=null && (()=>{
+                const x=seasonTrendReal[trendHover];
+                return <div
+                  className="trendHoverCard"
+                  style={{left:`${Math.min(88,Math.max(8,(trendHover/(seasonTrendReal.length-1))*100))}%`}}
+                >
+                  <b>{x.label} {x.year}</b>
+                  <span><strong>{Number(x.current||0).toLocaleString("es-CL")}</strong> incendios · 2025/26</span>
+                  <span>
+                    <strong>{x.previous==null?"—":Number(x.previous).toLocaleString("es-CL")}</strong>
+                    {x.previous==null?" 2024/25 · pendiente extracción mensual":" incendios · 2024/25"}
+                  </span>
+                </div>;
+              })()}
+
+              <div className="months">
+                {seasonTrendReal.map(x=><span key={x.label}>{x.label}</span>)}
+              </div>
+              <div className="trendLegend">
+                <span><i/>2025/26 · datos reales</span>
+                <span className="previousPending">2024/25 · pendiente serie mensual</span>
+              </div>
+            </>;
+          })()}
         </div>
       </section>
     </>
