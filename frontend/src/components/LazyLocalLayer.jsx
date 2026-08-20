@@ -18,10 +18,14 @@ function mapBBox(map){
 function Notice({text}){
   const map=useMap();
   useEffect(()=>{
-    const c=L.control({position:"bottomleft"});
-    c.onAdd=()=>{const d=L.DomUtil.create("div","localLayerNotice");d.textContent=text;return d};
-    c.addTo(map);
-    return ()=>{try{c.remove()}catch(_){}};
+    const container=map.getContainer();
+    const id=`layer-notice-${Math.random().toString(36).slice(2)}`;
+    const d=document.createElement("div");
+    d.id=id;
+    d.className="localLayerNotice localLayerNoticeSingle";
+    d.textContent=text;
+    container.appendChild(d);
+    return ()=>{document.getElementById(id)?.remove()};
   },[map,text]);
   return null;
 }

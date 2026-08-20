@@ -51,7 +51,7 @@ function FireTimeline({meta}){
       {events.map(e=>{
         const at=new Date(e.datetime).getTime();
         const left=((at-start)/span)*100;
-        return <span key={`${e.label}-${e.datetime}`} className="fireMasterEvent" style={{left:`${left}%`,"--lane":events.indexOf(e)%3}}>
+        return <span key={`${e.label}-${e.datetime}`} className="fireMasterEvent" style={{left:`${left}%`,"--lane":events.indexOf(e)%4}}>
           <i/>
           <em>{e.label}</em>
           <small>{dateLabel(e.datetime)}</small>
@@ -122,10 +122,14 @@ function Kpi({icon:Icon,label,value,sub,detail,coverage,source,confidence}){
 
 export default function OperationsView(){
   const [fireId,setFireId]=useState(operationalReplayFires[0].id);
-  const [selectedResourceId,setSelectedResourceId]=useState(null);
+  const [selectedResourceIds,setSelectedResourceIds]=useState([]);
   const fire=useMemo(()=>operationalReplayFires.find(f=>f.id===fireId)||operationalReplayFires[0],[fireId]);
   const lifecycle=operationalFireLifecycleReal[fire.id]||null;
-  const selectedResource=fire.resources.find(r=>String(r.id)===String(selectedResourceId))||null;
+  const selectedResources=fire.resources.filter(r=>selectedResourceIds.includes(String(r.id)));
+  const toggleResource=(id)=>{
+    const key=String(id);
+    setSelectedResourceIds(prev=>prev.includes(key)?prev.filter(x=>x!==key):[...prev,key]);
+  };
 
   const totalCombatants=fire.resources.reduce((a,r)=>a+r.combatants,0);
   const firstDispatch=Math.min(...fire.resources.map(r=>r.events.find(e=>e.label==="Despacho")?.t ?? 9999));
@@ -148,7 +152,7 @@ export default function OperationsView(){
     </section>
 
     <section className="opMainGrid">
-      <OperationalReplayMap fire={fire} fireOptions={operationalReplayFires} selectedResourceId={selectedResourceId} onSelectResource={setSelectedResourceId} onFireChange={(id)=>{setFireId(id);setSelectedResourceId(null)}}/>
+      <OperationalReplayMap fire={fire} fireOptions={operationalReplayFires} selectedResourceId={selectedResourceIds} onSelectResource={toggleResource} onFireChange={(id)=>{setFireId(id);setSelectedResourceIds([])}}/>
       <aside className="opSide">
         <div className="opIncident">
           <small>INCENDIO SELECCIONADO</small>
@@ -171,7 +175,7 @@ export default function OperationsView(){
         </div>
         <div className="opResources">
           <h3>Recursos asignados</h3>
-          <p className="opResourcesHint">El filtro de Historia operacional se selecciona en las tarjetas bajo el mapa.</p>
+          <p className="opResourcesHint">Selecciona recursos desde las tarjetas ubicadas bajo el mapa.</p>
           {fire.resources.map(r=><div key={r.id}><span>{r.name}</span><b>{r.combatants}</b><small>{r.type}</small></div>)}
         </div>
       </aside>
@@ -186,12 +190,12 @@ export default function OperationsView(){
 
       <FireTimeline meta={lifecycle}/>
 
-      {selectedResource && <div className="resourceTimelineFiltered">
+      {selectedResources.length>0 && <div className="resourceTimelineFiltered">
         <div className="resourceTimelineFilteredHead">
-          <small>RECURSO SELECCIONADO</small>
-          <button onClick={()=>setSelectedResourceId(null)}>Cerrar filtro</button>
+          <small>RECURSOS SELECCIONADOS · {selectedResources.length}</small>
+          <button onClick={()=>setSelectedResourceIds([])}>Limpiar recursos</button>
         </div>
-        <ResourceTimeline resource={selectedResource}/>
+        {selectedResources.map(resource=><ResourceTimeline key={resource.id} resource={resource}/>)}
       </div>}
     </section>
 

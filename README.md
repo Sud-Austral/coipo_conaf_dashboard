@@ -223,3 +223,13 @@ Fuentes cartográficas configuradas:
 - Línea del incendio con gradiente rojo → verde, fechas y duración total.
 - KPI del incendio seleccionado muestra inicio / término o Activo.
 - Recursos asignados son seleccionables y muestran una línea operacional secundaria filtrada.
+
+## v2.8.8
+- Popovers ⓘ compactos y consistentes.
+- Hitos: nodos permanecen en la línea y textos se distribuyen en niveles inferiores.
+- Selección múltiple de recursos desde tarjetas bajo el replay.
+- Botón Limpiar recursos.
+- Recursos más separados alrededor del incendio; fuego siempre por encima.
+- Aviso No disponible ligado exclusivamente a la capa montada/seleccionada.
+- Bitácora: detalle operacional visible en pantalla y opcional para PDF mediante checkbox.
+- Contexto urbano/rural de Bitácora incorpora anillos 1/3/5 km por defecto, también imprimibles.

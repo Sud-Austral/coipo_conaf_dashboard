@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Printer, ArrowLeft, Copy, Map, Satellite, Truck, Building2 } from "lucide-react";
-import { MapContainer, TileLayer, Marker, Polyline, Tooltip, LayersControl, LayerGroup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline, Tooltip, LayersControl, LayerGroup, Circle } from "react-leaflet";
 import L from "leaflet";
 import { operationalReplayFires } from "../data/dashboardData.js";
 import CensusContextLayers from "../components/CensusContextLayers.jsx";
@@ -32,7 +33,7 @@ function MiniMap({type,fire}){
       {type==="satellite"&&<Satellite size={14}/>}
       {type==="resources"&&<Truck size={14}/>}
       {type==="urban"&&<Building2 size={14}/>}
-      <b>{type==="normal"?"Ubicación y contexto":type==="satellite"?"Vista satelital":type==="resources"?"Recursos en el sitio":"Contexto urbano/rural"}</b>
+      <b>{type==="normal"?"Ubicación y contexto":type==="satellite"?"Vista satelital":type==="resources"?"Recursos en el sitio":"Contexto urbano/rural · anillos de exposición"}</b>
     </div>
     <MapContainer center={center} zoom={type==="urban"?11:10} zoomControl={false} dragging={false} scrollWheelZoom={false} doubleClickZoom={false} attributionControl={false}>
       <LayersControl position="topright">
@@ -48,6 +49,11 @@ function MiniMap({type,fire}){
 
         <Overlay checked name="Incendio">
           <LayerGroup>
+            {type==="urban"&&<>
+              <Circle center={center} radius={1000} pathOptions={{color:"#b53b32",weight:2,fillColor:"#b53b32",fillOpacity:.05,dashArray:"5 4"}}><Tooltip permanent direction="right">1 km</Tooltip></Circle>
+              <Circle center={center} radius={3000} pathOptions={{color:"#d9772f",weight:2,fillColor:"#d9772f",fillOpacity:.035,dashArray:"6 5"}}><Tooltip permanent direction="right">3 km</Tooltip></Circle>
+              <Circle center={center} radius={5000} pathOptions={{color:"#d4b13e",weight:2,fillColor:"#d4b13e",fillOpacity:.02,dashArray:"7 6"}}><Tooltip permanent direction="right">5 km</Tooltip></Circle>
+            </>}
             <Marker position={center} icon={fireIcon}/>
           </LayerGroup>
         </Overlay>
@@ -111,6 +117,7 @@ function resourcePositionsAroundFire(center,resources=[]){
 }
 
 export default function Bitacora({fire,onBack}) {
+  const [includeOperationalPdf,setIncludeOperationalPdf]=useState(false);
   const f = fire || {id:"805149434",name:"Hualqui",lat:-36.925556,lon:-72.888056,ha:6943,estado:"Extinguido",inicio:"17 ene 2026 · 17:55",confianza:84};
   const op=operationalReplayFires.find(x=>x.id===f.id) || operationalReplayFires[0];
   const events=op?.resources?.[0]?.events || [];
@@ -190,7 +197,11 @@ export default function Bitacora({fire,onBack}) {
       <section className="bitResponseOperational">
         <h2>Respuesta operacional</h2>
         <p className="bitSectionIntro">Hitos de cada recurso participante y duración total registrada.</p>
-        <div className="bitResourceHistories">
+        <label className="bitPdfOperationalToggle noPrint">
+          <input type="checkbox" checked={includeOperationalPdf} onChange={e=>setIncludeOperationalPdf(e.target.checked)}/>
+          <span>Agregar esta información al PDF</span>
+        </label>
+        <div className={`bitResourceHistories ${includeOperationalPdf?"includeInPdf":"excludeFromPdf"}`}>
           {(op?.resources||[]).map(r=>{
             const ev=r.events||[];
             const first=ev.length?Math.min(...ev.map(e=>e.t)):0;
@@ -221,7 +232,7 @@ export default function Bitacora({fire,onBack}) {
         <div className="bitSources"><span>Incendio ✓</span><span>Movimientos ✓</span><span>Recursos ✓</span><span>Daño · según cobertura</span><span>Urbano/rural · pendiente servicio oficial</span></div>
       </section>
 
-      <footer>Fuente: SIDCO · Documento generado desde Forestin / COIPO Dashboard · v2.8.7</footer>
+      <footer>Fuente: SIDCO · Documento generado desde Forestin / COIPO Dashboard · v2.8.8</footer>
     </article>
   );
 }

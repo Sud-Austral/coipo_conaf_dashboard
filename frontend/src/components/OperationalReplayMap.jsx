@@ -9,6 +9,13 @@ import { hasValidLatLng } from "../utils/mapData.js";
 
 const { BaseLayer, Overlay } = LayersControl;
 
+const fireHeroIcon=L.divIcon({
+  className:"opFireHeroIcon",
+  html:'<div class="opFireHeroEmoji">🔥</div>',
+  iconSize:[46,46],
+  iconAnchor:[23,38]
+});
+
 const validPair = (p) =>
   Array.isArray(p) &&
   p.length >= 2 &&
@@ -49,10 +56,15 @@ function interpolate(a,b,p){
 
 const offsetAroundFire=(destination,index,total)=>{
   if(!destination || total<=1) return destination;
-  const angle=(Math.PI*2*index/total)-Math.PI/2;
+  const ring=Math.floor(index/8);
+  const slot=index%8;
+  const count=Math.min(8,Math.max(1,total-ring*8));
+  const angle=(Math.PI*2*slot/count)-Math.PI/2;
+  const radiusLat=0.014 + ring*0.010;
+  const radiusLon=0.018 + ring*0.013;
   return [
-    destination[0] + Math.sin(angle)*0.0085,
-    destination[1] + Math.cos(angle)*0.0105
+    destination[0] + Math.sin(angle)*radiusLat,
+    destination[1] + Math.cos(angle)*radiusLon
   ];
 };
 
@@ -244,7 +256,7 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[],s
                   : s.pos;
                 return <span key={r.id}>
                   <Polyline positions={[r.base,r.destination]} pathOptions={{weight:2,dashArray:"6 7",opacity:.45}}/>
-                  <Marker position={displayPos} icon={iconFor(r.type,s.status==="En operación")}>
+                  <Marker position={displayPos} icon={iconFor(r.type,s.status==="En operación")} zIndexOffset={100+index}>
                     <Tooltip>
                       <div className="resourceTooltip">
                         <b>{r.name}</b>
@@ -302,8 +314,8 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[],s
         return <button
           type="button"
           key={r.id}
-          className={String(selectedResourceId)===String(r.id)?"selected":""}
-          onClick={()=>onSelectResource?.(String(selectedResourceId)===String(r.id)?null:r.id)}
+          className={Array.isArray(selectedResourceId) && selectedResourceId.includes(String(r.id))?"selected":""}
+          onClick={()=>onSelectResource?.(r.id)}
         ><b>{r.name}</b><span>{eventText}</span><small>{r.combatants} combatientes</small></button>
       })}
     </div>
