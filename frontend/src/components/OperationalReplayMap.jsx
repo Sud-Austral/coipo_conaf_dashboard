@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker, Tooltip
 import L from "leaflet";
 import CensusContextLayers from "./CensusContextLayers.jsx";
 import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
+import ResourceBasesLayer from "./ResourceBasesLayer.jsx";
 
 const { BaseLayer, Overlay } = LayersControl;
 
@@ -33,6 +34,15 @@ const iconFor = (type, active=false) => {
 function interpolate(a,b,p){
   return [a[0] + (b[0]-a[0])*p, a[1] + (b[1]-a[1])*p];
 }
+
+const offsetAroundFire=(destination,index,total)=>{
+  if(!destination || total<=1) return destination;
+  const angle=(Math.PI*2*index/total)-Math.PI/2;
+  return [
+    destination[0] + Math.sin(angle)*0.0085,
+    destination[1] + Math.cos(angle)*0.0105
+  ];
+};
 
 function FitFire({fire}){
   const map=useMap();
@@ -82,7 +92,7 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
       <div>
         <small>REPLAY OPERACIONAL</small>
         <h3>{fire.name} · {fire.ha.toLocaleString("es-CL")} ha</h3>
-        <p>Animación demostrativa basada en hitos temporales de movimiento.</p>
+        <p>Hitos temporales SIDCO reales · Base → Incendio es interpolación visual entre puntos conocidos.</p>
       </div>
       <select value={fire.id} onChange={e=>onFireChange?.(e.target.value)}>
         {fireOptions.map(f=><option key={f.id} value={f.id}>{f.name} · {f.id}</option>)}
@@ -109,7 +119,7 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
           <Overlay checked name="Incendio">
             <LayerGroup>
               <CircleMarker center={[fire.lat,fire.lon]} radius={18} pathOptions={{color:"#a9423a",fillColor:"#d65749",fillOpacity:.72}}>
-                <Tooltip permanent direction="top">🔥 {fire.name}</Tooltip>
+                
                 <Popup>{fire.ha.toLocaleString("es-CL")} ha · {fire.status}</Popup>
               </CircleMarker>
             </LayerGroup>
@@ -117,11 +127,14 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
 
           <Overlay checked name="Recursos">
             <LayerGroup>
-              {fire.resources.map(r=>{
+              {fire.resources.map((r,index)=>{
                 const s=resourceState(r);
+                const displayPos = s.status==="En operación"
+                  ? offsetAroundFire(s.pos,index,fire.resources.length)
+                  : s.pos;
                 return <span key={r.id}>
                   <Polyline positions={[r.base,r.destination]} pathOptions={{weight:2,dashArray:"6 7",opacity:.45}}/>
-                  <Marker position={s.pos} icon={iconFor(r.type,s.status==="En operación")}>
+                  <Marker position={displayPos} icon={iconFor(r.type,s.status==="En operación")}>
                     <Tooltip>
                       <div className="resourceTooltip">
                         <b>{r.name}</b>
@@ -154,6 +167,10 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
           <Overlay name="Otros usos de suelo">
             <LayerGroup><EnvironmentalContextLayers showOtherLand/></LayerGroup>
           </Overlay>
+
+          <Overlay name="Bases de recursos">
+            <LayerGroup><ResourceBasesLayer/></LayerGroup>
+          </Overlay>
         </LayersControl>
       </MapContainer>
     </div>
@@ -166,7 +183,7 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
     </div>
 
     <div className="replayEvents">
-      {fire.resources.map(r=>{
+      {fire.resources.map((r,index)=>{
         const current=[...r.events].reverse().find(e=>e.t<=time);
         return <div key={r.id}><b>{r.name}</b><span>{current ? `${current.label} · ${current.time}` : "En base"}</span><small>{r.combatants} combatientes</small></div>
       })}

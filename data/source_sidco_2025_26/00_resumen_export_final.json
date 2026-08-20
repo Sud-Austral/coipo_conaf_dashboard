@@ -1,0 +1,26 @@
+{
+  "period": {
+    "from": "2025-07-01",
+    "toExclusive": "2026-07-01"
+  },
+  "generatedAt": "2026-08-20T15:00:31.789036",
+  "incendios": {
+    "total": 9664,
+    "conCoordenadaValida": 7344
+  },
+  "dano": {
+    "registros": 18255,
+    "incendiosConDano": 5287
+  },
+  "movimientos": {
+    "total": 148125,
+    "recursosUnicos": 2187,
+    "incendiosConMovimientos": 8232
+  },
+  "bases": {
+    "puntosAgrupados": 352
+  },
+  "catalogo": {
+    "muestrasTablas": 9
+  }
+}

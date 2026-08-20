@@ -61,7 +61,7 @@ export default function Impacto({onOpenBitacora}){
           <div><b>{r.name}</b><small>{fmt(r.damageHa)} ha caracterizadas · {fmt(r.fires)} incendios</small></div>
           <ChevronRight size={15}/>
         </button>)}
-        <div className="damageUrbanNote"><Info size={15}/><p>La capa urbano/rural queda preparada para conectarse a cartografía oficial INE/IDE. La proximidad poblada debe tratarse como exposición territorial, no como personas amenazadas.</p></div>
+        <div className="damageUrbanNote"><Info size={15}/><p>La capa urbano/rural se carga desde el cache cartográfico local cuando está disponible. La proximidad poblada se interpreta como exposición territorial.</p></div>
       </aside>
     </section>
 
@@ -91,7 +91,7 @@ export default function Impacto({onOpenBitacora}){
           <div><dt>Segundo componente</dt><dd>{damageByCategory202526[1].label}</dd></div>
           <div><dt>Territorio destacado</dt><dd>{ranking[0]?.name || "—"}</dd></div>
         </dl>
-        <p>Este bloque resume exclusivamente resultados de impacto. Las métricas de cobertura, consistencia y confianza se consultan en la Vista 6 · Calidad y Confianza.</p>
+        <p>Este bloque resume exclusivamente resultados de impacto. Las métricas de cobertura, consistencia y confianza se consultan en la Vista 7 · Calidad y Confianza.</p>
       </div>
     </section>
   </div>;

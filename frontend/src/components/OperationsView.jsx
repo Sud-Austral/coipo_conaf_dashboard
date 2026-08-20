@@ -80,7 +80,7 @@ export default function OperationsView(){
   return <div className="operationsView">
     <section className="executiveReading executiveReadingAligned">
       <p>La vista operacional muestra cómo se movilizan recursos y personal, dónde se concentra el esfuerzo y cuánto demora la respuesta. El replay permite reconstruir de forma visual los hitos disponibles del incendio seleccionado.</p>
-      <div className="readingMeta"><span>Foco operacional: {fire.name}</span><strong>{fire.resources.length} recursos demo · {totalCombatants} combatientes</strong></div>
+      <div className="readingMeta"><span>Foco operacional: {fire.name}</span><strong>{fire.resources.length} recursos representados · {totalCombatants} combatientes</strong></div>
     </section>
 
     <section className="opKpis">
@@ -123,7 +123,7 @@ export default function OperationsView(){
 
     <section className="opNote">
       <Info size={16}/>
-      <p>El replay de esta versión usa datos demostrativos para validar la interacción. Al conectar movimientos reales, cada recurso se animará usando sus marcas temporales SIDCO. No se interpreta la línea animada como una trayectoria GPS real.</p>
+      <p>El replay utiliza hitos temporales SIDCO reales. Cuando existe una base georreferenciada, la animación interpola visualmente Base → Incendio entre dos puntos conocidos; no representa una trayectoria GPS histórica.</p>
     </section>
   </div>;
 }

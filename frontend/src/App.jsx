@@ -140,7 +140,7 @@ export default function App(){
 
     <div className="activePeriodBar noPrint">
       <span>Período</span><b>{periodLabel}</b>
-      {emptyData && <em>Sin información demostrativa para este período</em>}
+      {emptyData && <em>Sin extracción local preparada para este período</em>}
     </div>
 
     <main className={emptyData && active!=="calidad" ? "periodEmpty" : ""}>

@@ -4,6 +4,7 @@ import L from "leaflet";
 import { operationalReplayFires } from "../data/dashboardData.js";
 import CensusContextLayers from "../components/CensusContextLayers.jsx";
 import PopulationExposureMap from "../components/PopulationExposureMap.jsx";
+import ResourceBasesLayer from "../components/ResourceBasesLayer.jsx";
 
 const { BaseLayer, Overlay } = LayersControl;
 
@@ -43,15 +44,22 @@ function MiniMap({type,fire}){
 
         <Overlay checked name="Incendio">
           <LayerGroup>
-            <Marker position={center} icon={fireIcon}><Tooltip permanent direction="top">Incendio</Tooltip></Marker>
+            <Marker position={center} icon={fireIcon}/>
           </LayerGroup>
         </Overlay>
 
         <Overlay checked={type==="resources"} name="Recursos">
           <LayerGroup>
-            {op?.resources?.map(r=><span key={r.id}>
-              <Polyline positions={[r.base,r.destination]} pathOptions={{weight:2,dashArray:"4 6",opacity:.55}}/>
-              <Marker position={r.destination} icon={bitResourceIcon(r.type)}><Tooltip>{r.name}</Tooltip></Marker>
+            {resourcePositionsAroundFire(center,op?.resources||[]).map(({resource:r,position})=><span key={r.id}>
+              <Polyline
+                positions={[position,center]}
+                pathOptions={{weight:1.5,dashArray:"3 5",opacity:.42}}
+              />
+              <Marker position={position} icon={bitResourceIcon(r.type)}>
+                <Tooltip direction="top">
+                  <b>{r.name}</b><br/>{r.combatants} combatientes
+                </Tooltip>
+              </Marker>
             </span>)}
           </LayerGroup>
         </Overlay>
@@ -63,6 +71,10 @@ function MiniMap({type,fire}){
         <Overlay checked={type==="urban"} name="Localidades rurales">
           <LayerGroup><CensusContextLayers showRural minRuralZoom={9}/></LayerGroup>
         </Overlay>
+
+        <Overlay checked={type==="resources"} name="Bases de recursos">
+          <LayerGroup><ResourceBasesLayer/></LayerGroup>
+        </Overlay>
       </LayersControl>
     </MapContainer>
     {type==="urban"&&<small className="bitMapCaveat">Contexto urbano/rural disponible desde el selector de capas.</small>}
@@ -73,6 +85,25 @@ function durationLabel(m){
   if(m<60) return `${m} min`;
   const h=Math.floor(m/60), r=m%60;
   return r?`${h} h ${r} min`:`${h} h`;
+}
+
+function resourcePositionsAroundFire(center,resources=[]){
+  if(!resources.length) return [];
+
+  const [lat,lon]=center;
+  const radiusLat=0.0105;
+  const radiusLon=0.0135;
+
+  return resources.map((resource,index)=>{
+    const angle=(Math.PI*2*index/resources.length) - Math.PI/2;
+    return {
+      resource,
+      position:[
+        lat + Math.sin(angle)*radiusLat,
+        lon + Math.cos(angle)*radiusLon
+      ]
+    };
+  });
 }
 
 export default function Bitacora({fire,onBack}) {

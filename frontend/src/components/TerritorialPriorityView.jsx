@@ -7,6 +7,7 @@ import { loadRegionGeoJSON } from "../data/regionGeoJson.js";
 import KpiInfo from "./KpiInfo.jsx";
 import CensusContextLayers from "./CensusContextLayers.jsx";
 import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
+import ResourceBasesLayer from "./ResourceBasesLayer.jsx";
 
 const { BaseLayer, Overlay } = LayersControl;
 
@@ -135,6 +136,10 @@ function PriorityMap({items,selectedId,onSelect}){
           </Overlay>
           <Overlay name="Otros usos de suelo">
             <LayerGroup><EnvironmentalContextLayers showOtherLand/></LayerGroup>
+          </Overlay>
+
+          <Overlay name="Bases de recursos">
+            <LayerGroup><ResourceBasesLayer/></LayerGroup>
           </Overlay>
         </LayersControl>
       </MapContainer>

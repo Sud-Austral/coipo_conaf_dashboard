@@ -2,6 +2,7 @@ import { MapContainer, TileLayer, Marker, Circle, Polyline, Tooltip, Popup, Laye
 import L from "leaflet";
 import CensusContextLayers from "./CensusContextLayers.jsx";
 import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
+import ResourceBasesLayer from "./ResourceBasesLayer.jsx";
 
 const {BaseLayer,Overlay}=LayersControl;
 
@@ -20,6 +21,10 @@ const placeIcon=L.divIcon({
 export default function PopulationExposureMap({fire,nearest}){
   const center=[fire.lat,fire.lon];
   const place=[nearest.lat,nearest.lon];
+  const lineColor =
+    nearest.distanceKm <= 1 ? "#b53b32" :
+    nearest.distanceKm <= 3 ? "#d9772f" :
+    "#d4b13e";
 
   return <div className="populationExposureMap">
     <MapContainer center={center} zoom={11} scrollWheelZoom>
@@ -36,12 +41,35 @@ export default function PopulationExposureMap({fire,nearest}){
 
         <Overlay checked name="Incendio y distancia">
           <LayerGroup>
-            <Circle center={center} radius={1000} pathOptions={{color:"#7c8589",weight:1,fillOpacity:.025,dashArray:"4 4"}}><Tooltip permanent>1 km</Tooltip></Circle>
-            <Circle center={center} radius={3000} pathOptions={{color:"#7c8589",weight:1,fillOpacity:.018,dashArray:"5 5"}}><Tooltip permanent>3 km</Tooltip></Circle>
-            <Circle center={center} radius={5000} pathOptions={{color:"#7c8589",weight:1,fillOpacity:.012,dashArray:"6 6"}}><Tooltip permanent>5 km</Tooltip></Circle>
-            <Marker position={center} icon={fireIcon}><Popup><b>{fire.name}</b><br/>{fire.ha.toLocaleString("es-CL")} ha</Popup></Marker>
+            <Circle
+              center={center}
+              radius={1000}
+              pathOptions={{color:"#b53b32",weight:2,fillColor:"#b53b32",fillOpacity:.055,dashArray:"5 4"}}
+            >
+              <Tooltip permanent direction="right">1 km · proximidad inmediata</Tooltip>
+            </Circle>
+
+            <Circle
+              center={center}
+              radius={3000}
+              pathOptions={{color:"#d9772f",weight:2,fillColor:"#d9772f",fillOpacity:.035,dashArray:"6 5"}}
+            >
+              <Tooltip permanent direction="right">3 km · proximidad alta</Tooltip>
+            </Circle>
+
+            <Circle
+              center={center}
+              radius={5000}
+              pathOptions={{color:"#d4b13e",weight:2,fillColor:"#d4b13e",fillOpacity:.022,dashArray:"7 6"}}
+            >
+              <Tooltip permanent direction="right">5 km · proximidad de contexto</Tooltip>
+            </Circle>
+
+            <Marker position={center} icon={fireIcon}>
+              <Popup><b>{fire.name}</b><br/>{fire.ha.toLocaleString("es-CL")} ha</Popup>
+            </Marker>
             <Marker position={place} icon={placeIcon}><Tooltip permanent direction="top">{nearest.name} · {nearest.type}</Tooltip></Marker>
-            <Polyline positions={[center,place]} pathOptions={{color:"#5c6870",weight:2,dashArray:"7 6"}}>
+            <Polyline positions={[center,place]} pathOptions={{color:lineColor,weight:3,dashArray:"7 6"}}>
               <Tooltip permanent>{nearest.distanceKm.toFixed(1).replace(".",",")} km</Tooltip>
             </Polyline>
           </LayerGroup>
@@ -61,6 +89,9 @@ export default function PopulationExposureMap({fire,nearest}){
         </Overlay>
         <Overlay name="Otros usos de suelo">
           <LayerGroup><EnvironmentalContextLayers showOtherLand/></LayerGroup>
+        </Overlay>
+        <Overlay name="Bases de recursos">
+          <LayerGroup><ResourceBasesLayer/></LayerGroup>
         </Overlay>
       </LayersControl>
     </MapContainer>

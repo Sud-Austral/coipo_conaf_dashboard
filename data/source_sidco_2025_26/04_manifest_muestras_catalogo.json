@@ -1,0 +1,125 @@
+[
+  {
+    "table": "recurso",
+    "columns": [
+      "recu_id",
+      "inst_id",
+      "inst_id_original",
+      "ince_id",
+      "recu_nombre",
+      "recu_tipo",
+      "recu_codigo",
+      "recu_tipo_movil",
+      "comu_id",
+      "stan_id",
+      "recu_inactividad_inicio",
+      "recu_inactividad_fin",
+      "recu_id_asociado",
+      "recu_sub_tipo",
+      "recu_clase"
+    ],
+    "file": "04_muestra_catalogo_recurso.csv"
+  },
+  {
+    "table": "recurso_apoyo",
+    "columns": [
+      "reap_id",
+      "ince_id",
+      "recu_id",
+      "inst_id_origen",
+      "inst_id_destino",
+      "apoy_id",
+      "reap_tipo_recurso",
+      "reap_cantidad_personas",
+      "reap_fecha_salida",
+      "reap_fecha_requerida",
+      "reap_pers_id_contacto",
+      "reap_fecha_requerida_inicio",
+      "reap_fecha_requerida_fin",
+      "reap_tipo_apoyo",
+      "reap_recu_id_contacto"
+    ],
+    "file": "04_muestra_catalogo_recurso_apoyo.csv"
+  },
+  {
+    "table": "recurso_aviso_empresa",
+    "columns": [
+      "reae_id",
+      "reae_nombre"
+    ],
+    "file": "04_muestra_catalogo_recurso_aviso_empresa.csv"
+  },
+  {
+    "table": "recurso_aviso_incendio",
+    "columns": [
+      "rein_id",
+      "reae_id",
+      "ince_id",
+      "rein_tipo"
+    ],
+    "file": "04_muestra_catalogo_recurso_aviso_incendio.csv"
+  },
+  {
+    "table": "recurso_empresa",
+    "columns": [
+      "rece_id",
+      "ince_id",
+      "rece_nombre",
+      "rece_tipo",
+      "rece_fecha_salida",
+      "rece_tipo_recurso",
+      "rece_horometro_salida",
+      "rece_tipo_mision"
+    ],
+    "file": "04_muestra_catalogo_recurso_empresa.csv"
+  },
+  {
+    "table": "recurso_empresa_temporada",
+    "columns": [
+      "reem_id",
+      "reem_codigo_empresa",
+      "reem_tipo",
+      "reem_codigo_tipo",
+      "reem_valido"
+    ],
+    "file": "04_muestra_catalogo_recurso_empresa_temporada.csv"
+  },
+  {
+    "table": "recurso_empresa_temporada_tmp",
+    "columns": [
+      "reem_id",
+      "reem_codigo_empresa",
+      "reem_tipo",
+      "reem_codigo_tipo",
+      "reem_valido"
+    ],
+    "file": "04_muestra_catalogo_recurso_empresa_temporada_tmp.csv"
+  },
+  {
+    "table": "sci_registro_recurso",
+    "columns": [
+      "rere_id",
+      "ince_id",
+      "rere_clase",
+      "rere_tipo",
+      "rere_perf_id_edicion",
+      "rere_codificacion_asignada",
+      "peop_id",
+      "recu_id"
+    ],
+    "file": "04_muestra_catalogo_sci_registro_recurso.csv"
+  },
+  {
+    "table": "tabla_mantenedor",
+    "columns": [
+      "tama_id",
+      "tama_nombre",
+      "tama_tipo",
+      "tama_perf_id_edicion",
+      "tama_codigo",
+      "recu_id",
+      "usua_id"
+    ],
+    "file": "04_muestra_catalogo_tabla_mantenedor.csv"
+  }
+]

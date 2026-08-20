@@ -1,0 +1,29 @@
+SIDCO · EXPORT FINAL MAQUETA 2025/26
+====================================================================================================
+
+Período: 2025-07-01 <= fecha < 2026-07-01
+
+Incendios totales: 9664
+Incendios con coordenada válida: 7344
+Registros de daño: 18255
+Incendios con daño: 5287
+Movimientos: 148125
+Recursos únicos: 2187
+Incendios con movimientos: 8232
+Bases agrupadas: 352
+Tablas catálogo muestreadas: 9
+
+ARCHIVOS PRINCIPALES PARA CHATGPT
+- 00_resumen_export_final.json
+- 01_incendios_todos_2025_26.csv
+- 01_incendios_todos_2025_26.json
+- 02_dano_por_incendio_detalle.csv
+- 02_dano_por_incendio_resumen.csv
+- 03_movimientos_completos_2025_26.csv
+- 04_catalogo_candidatos_tipos_recurso.csv
+- 04_tablas_candidatas_catalogo.csv
+- 04_manifest_muestras_catalogo.json
+- 05_bases_recursos_agrupadas.geojson
+
+RECOMENDACIÓN
+Comprime la carpeta completa salida_export_final_maqueta_2025_26 en ZIP y súbela.

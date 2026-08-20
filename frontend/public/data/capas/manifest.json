@@ -1,0 +1,27 @@
+{
+  "version": "2.0",
+  "generated_at": null,
+  "strategy": "lazy viewport / regional partitions",
+  "layers": {
+    "areas_protegidas": {
+      "available": false,
+      "entries": []
+    },
+    "bosques": {
+      "available": false,
+      "entries": []
+    },
+    "urbano": {
+      "available": false,
+      "entries": []
+    },
+    "rural": {
+      "available": false,
+      "entries": []
+    },
+    "otros_usos": {
+      "available": false,
+      "entries": []
+    }
+  }
+}

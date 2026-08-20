@@ -126,3 +126,57 @@ La capa IPT nacional ahora usa polígonos GeoJSON regionales completos. Hover re
 - Áreas Protegidas conectadas a MMA SIMBIO FeatureServer con polígonos reales.
 - Bosques/Recursos Forestales conectados a WMS IDE Minagri/CONAF.
 - Usos de la Tierra conectados a WMS IDE Minagri/CONAF.
+
+
+## v2.7.2
+- Bitácora sin etiqueta permanente `Incendio` sobre la llama.
+- Recursos distribuidos alrededor del foco para evitar solapamiento.
+- Replay operacional separa visualmente recursos en operación.
+- Anillos de exposición: rojo 1 km, naranjo 3 km, amarillo 5 km.
+- Línea de proximidad usa la misma escala de color.
+
+
+## v2.7.3
+- Capas naturales migradas a estrategia local-first (`public/data/capas`).
+- Script `scripts/descargar_capas_oficiales.py` para cachear fuentes oficiales.
+- `descargar_capas.bat` para Windows.
+- Manifiesto de disponibilidad por capa.
+- El mapa muestra `No disponible` si una capa local falta o falla.
+- Se elimina la dependencia silenciosa de WMS para capas naturales.
+
+## v2.7.4 · Working (sin ZIP)
+- Capa real `Bases de recursos` integrada a los selectores cartográficos.
+- 352 puntos/base agrupados desde SIDCO.
+- Marcador visual 🏠.
+- Tooltip con nombre, cantidad de recursos y tipos disponibles.
+- Disponible también en Bitácora, especialmente en `Recursos en el sitio`.
+- La capa representa bases georreferenciadas; no implica tracking GPS.
+
+
+## v2.8.0 · Maqueta funcional SIDCO 2025/26
+
+Datos integrados:
+- 9,664 incendios reales.
+- 7,344 incendios con coordenada válida.
+- 18,255 registros de daño.
+- 5,287 incendios con daño.
+- 62,908 movimientos asociados a incendio.
+- 1,751 recursos distintos.
+- 352 bases/puntos de recursos agrupados.
+
+Replay:
+- Hitos temporales reales.
+- Cuando existe base georreferenciada se representa Base → Incendio mediante interpolación visual.
+- No es tracking GPS histórico.
+
+Capas:
+1. Ejecutar `descargar_capas.bat`.
+2. El script crea particiones locales en `frontend/public/data/capas/`.
+3. El frontend carga solo las particiones que intersectan el viewport.
+4. Si falta una capa, el mapa muestra `No disponible`.
+
+Fuentes cartográficas configuradas:
+- MMA/SIMBIO · Áreas protegidas.
+- IDE Minagri/CONAF · Recursos forestales.
+- INE · zonas urbanas.
+- INE · localidades/entidades rurales.

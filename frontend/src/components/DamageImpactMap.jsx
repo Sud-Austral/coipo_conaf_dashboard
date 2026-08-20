@@ -6,6 +6,7 @@ import { fires, regions } from "../data/dashboardData.js";
 import { loadRegionGeoJSON } from "../data/regionGeoJson.js";
 import CensusContextLayers from "./CensusContextLayers.jsx";
 import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
+import ResourceBasesLayer from "./ResourceBasesLayer.jsx";
 
 const { BaseLayer, Overlay } = LayersControl;
 
@@ -123,6 +124,10 @@ export default function DamageImpactMap({selectedRegion,onSelectRegion,onOpenBit
           </Overlay>
           <Overlay name="Otros usos de suelo">
             <LayerGroup><EnvironmentalContextLayers showOtherLand/></LayerGroup>
+          </Overlay>
+
+          <Overlay name="Bases de recursos">
+            <LayerGroup><ResourceBasesLayer/></LayerGroup>
           </Overlay>
         </LayersControl>
       </MapContainer>

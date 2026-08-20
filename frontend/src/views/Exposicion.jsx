@@ -1,20 +1,15 @@
 import { useMemo, useState } from "react";
 import { fires } from "../data/dashboardData.js";
+import { exposureReal } from "../data/exposure.real.js";
 import PopulationExposureMap from "../components/PopulationExposureMap.jsx";
 import KpiInfo from "../components/KpiInfo.jsx";
 
-const exposureDemo = {
-  "805119003":{name:"Concepción",type:"Urbana",distanceKm:.8,lat:-36.817,lon:-73.031,expansion:.62,index:91,level:"Muy alta",context:"Interfaz urbano-forestal"},
-  "805149434":{name:"Hualqui",type:"Urbana",distanceKm:1.4,lat:-36.975,lon:-72.925,expansion:.42,index:82,level:"Alta",context:"Bosque / vegetación natural"},
-  "805221387":{name:"Florida",type:"Rural",distanceKm:2.3,lat:-36.805,lon:-72.650,expansion:.31,index:68,level:"Media-alta",context:"Mosaico rural-forestal"},
-  "805351873":{name:"Los Ángeles",type:"Urbana",distanceKm:3.7,lat:-37.465,lon:-72.315,expansion:.28,index:57,level:"Media",context:"Agrícola / rural"},
-  "811206947":{name:"Parral",type:"Rural",distanceKm:4.8,lat:-36.120,lon:-71.790,expansion:.19,index:43,level:"Moderada",context:"Agrícola"}
-};
+const exposureDemo = exposureReal;
 
 export default function Exposicion(){
-  const [selectedId,setSelectedId]=useState(fires[1]?.id||fires[0]?.id);
-  const fire=fires.find(f=>f.id===selectedId)||fires[0];
-  const nearest=exposureDemo[fire.id]||exposureDemo["805149434"];
+  const exposureIds=Object.keys(exposureDemo);\n  const [selectedId,setSelectedId]=useState(exposureIds[0]||fires[0]?.id);
+  const fire=fires.find(f=>f.id===selectedId)||fires.find(f=>exposureDemo[f.id])||fires[0];
+  const nearest=exposureDemo[fire.id]||Object.values(exposureDemo)[0]||{name:"Sin cálculo",type:"—",distanceKm:999,lat:fire.lat,lon:fire.lon,expansion:null,index:null,level:"Sin cálculo",context:"Pendiente cartografía local"};
 
   const counts=useMemo(()=>{
     const rows=Object.values(exposureDemo);
@@ -50,7 +45,7 @@ export default function Exposicion(){
         <div className="sectionHeading">
           <div><span>PROXIMIDAD</span><h3>Anillos de exposición territorial</h3></div>
           <select value={selectedId} onChange={e=>setSelectedId(e.target.value)}>
-            {fires.map(f=><option key={f.id} value={f.id}>{f.name} · {f.ha.toLocaleString("es-CL")} ha</option>)}
+            {fires.filter(f=>exposureDemo[f.id]).map(f=><option key={f.id} value={f.id}>{f.name} · {f.ha.toLocaleString("es-CL")} ha</option>)}
           </select>
         </div>
         <PopulationExposureMap fire={fire} nearest={nearest}/>
