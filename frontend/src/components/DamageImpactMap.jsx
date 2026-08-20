@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, Tooltip, GeoJSON, useMap } from
 import L from "leaflet";
 import { fires, regions } from "../data/dashboardData.js";
 import { loadRegionGeoJSON } from "../data/regionGeoJson.js";
+import CensusContextLayers from "./CensusContextLayers.jsx";
 
 const flameIcon = ha => {
   const size=Math.max(25,Math.min(58,24+Math.sqrt(Math.max(ha,0))/3));
@@ -30,6 +31,7 @@ export default function DamageImpactMap({selectedRegion,onSelectRegion,onOpenBit
   const [base,setBase]=useState("normal");
   const [urban,setUrban]=useState(false);
   const [rural,setRural]=useState(false);
+  const [censusStatus,setCensusStatus]=useState({urban:"off",rural:"off"});
 
   useEffect(()=>{
     let alive=true;
@@ -95,10 +97,25 @@ export default function DamageImpactMap({selectedRegion,onSelectRegion,onOpenBit
           </Tooltip>
           <Popup><b>{f.name}</b><br/>{f.ha.toLocaleString("es-CL")} ha<br/>{f.estado}</Popup>
         </Marker>)}
+
+        <CensusContextLayers
+          showUrban={urban}
+          showRural={rural}
+          minUrbanZoom={7}
+          minRuralZoom={9}
+          onStatusChange={setCensusStatus}
+        />
       </MapContainer>
+
       {(urban||rural) && <div className="officialLayerNotice">
         <MapPin size={14}/>
-        <span>{urban&&rural?"Zonas urbanas + localidades rurales":urban?"Zonas urbanas":"Localidades rurales"}: interfaz preparada. Conectar servicio oficial INE/IDE Chile para dibujar polígonos reales.</span>
+        <span>
+          {urban && censusStatus.urban==="zoom" && "Zonas urbanas: acerca el mapa para cargar geometrías reales. "}
+          {rural && censusStatus.rural==="zoom" && "Localidades rurales: acerca el mapa a nivel comunal para cargar geometrías reales. "}
+          {urban && String(censusStatus.urban).startsWith("ok:") && `Zonas urbanas cargadas: ${String(censusStatus.urban).split(":")[1]}. `}
+          {rural && String(censusStatus.rural).startsWith("ok:") && `Entidades rurales cargadas: ${String(censusStatus.rural).split(":")[1]}. `}
+          {(censusStatus.urban==="error"||censusStatus.rural==="error") && "No fue posible consultar temporalmente el servicio cartográfico."}
+        </span>
       </div>}
     </div>
   </section>;

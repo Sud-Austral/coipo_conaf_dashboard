@@ -85,3 +85,15 @@ La capa IPT nacional ahora usa polígonos GeoJSON regionales completos. Hover re
 - Vista 3: lectura operacional con escala tipográfica consistente.
 - Vista 4: eliminado bloque de calidad; reemplazado por concentración del impacto.
 - Calidad/cobertura técnica concentrada en tooltips y Vista 6.
+
+
+## v2.6.2
+- Bitácora PDF: Historia operacional vertical, sin barra de scroll ni elementos interactivos inútiles en impresión.
+- Pantalla mantiene timeline horizontal.
+
+
+## v2.6.3
+- Capas urbano/rural reales conectadas dinámicamente a servicios de origen INE.
+- Vista 2 reemplaza fallback visual por Leaflet/GeoJSON real.
+- Vista 2 elimina gráfico de burbujas y agrega ranking ejecutivo explicativo.
+- Capas censales disponibles en Vista 2, Vista 4 y Bitácora.

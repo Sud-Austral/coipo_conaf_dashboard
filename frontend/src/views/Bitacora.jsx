@@ -2,6 +2,7 @@ import { Printer, ArrowLeft, Copy, Map, Satellite, Truck, Building2 } from "luci
 import { MapContainer, TileLayer, Marker, CircleMarker, Polyline, Tooltip } from "react-leaflet";
 import L from "leaflet";
 import { operationalReplayFires } from "../data/dashboardData.js";
+import CensusContextLayers from "../components/CensusContextLayers.jsx";
 
 const fireIcon=L.divIcon({className:"bitFireIcon",html:'<div style="font-size:28px">🔥</div>',iconSize:[30,30],iconAnchor:[15,25]});
 const resourceIcon=L.divIcon({className:"bitResourceIcon",html:'<div class="bitResourceDot">●</div>',iconSize:[18,18],iconAnchor:[9,9]});
@@ -26,11 +27,9 @@ function MiniMap({type,fire}){
         <Polyline positions={[r.base,r.destination]} pathOptions={{weight:2,dashArray:"4 6",opacity:.55}}/>
         <Marker position={r.destination} icon={resourceIcon}><Tooltip>{r.name}</Tooltip></Marker>
       </span>)}
-      {type==="urban" && <CircleMarker center={center} radius={70} pathOptions={{color:"#70787d",weight:1,dashArray:"5 6",fillOpacity:.02}}>
-        <Tooltip direction="bottom">Área de análisis · capa oficial INE/IDE pendiente de conexión</Tooltip>
-      </CircleMarker>}
+      {type==="urban" && <CensusContextLayers showUrban showRural minUrbanZoom={7} minRuralZoom={9}/>}
     </MapContainer>
-    {type==="urban"&&<small className="bitMapCaveat">La maqueta no inventa polígonos urbanos: el mapa queda preparado para recibir la capa oficial INE/IDE Chile.</small>}
+    {type==="urban"&&<small className="bitMapCaveat">Contexto censal cargado dinámicamente desde capas de origen INE según el área visible.</small>}
   </div>;
 }
 
@@ -75,12 +74,33 @@ export default function Bitacora({fire,onBack}) {
         </aside>
       </section>
 
-      <section>
+      
+      <section className="bitOperationalHistory">
         <h2>Historia operacional</h2>
-        <div className="bitTimeline">
+
+        {/* Pantalla: línea horizontal interactiva/compacta */}
+        <div className="bitTimeline noPrint">
           {events.map((e,i)=><div key={e.label} className="bitTimelineEvent">
             <div><i></i><b>{e.label}</b><small>{e.time}</small></div>
             {i<events.length-1&&<span>{durationLabel(events[i+1].t-e.t)}</span>}
+          </div>)}
+        </div>
+
+        {/* Impresión/PDF: secuencia vertical, sin scroll ni barras */}
+        <div className="bitTimelinePrint printOnly">
+          {events.map((e,i)=><div key={`print-${e.label}`} className="bitPrintEvent">
+            <div className="bitPrintNode">
+              <i></i>
+              <div>
+                <b>{e.label}</b>
+                <small>{e.time}</small>
+              </div>
+            </div>
+            {i<events.length-1&&
+              <div className="bitPrintDuration">
+                <span>{durationLabel(events[i+1].t-e.t)}</span>
+              </div>
+            }
           </div>)}
         </div>
       </section>
