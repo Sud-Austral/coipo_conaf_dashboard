@@ -1,45 +1,36 @@
-# FW Coipo — Inteligencia de Incendios · Dashboard BI
+# Forestin · SIDCO Dashboard v2.3
 
-Nueva maqueta construida **sobre el template React compartido**.
+Versión consolidada con seis vistas:
 
-## Arquitectura
+1. Resumen Ejecutivo
+2. Prioridad Territorial
+3. Operación y Recursos
+4. Impacto y Daño
+5. Calidad y Confianza
+6. Bitácora
 
-- React 19
-- Vite 8
-- Tailwind CSS 4
-- React Router 7
-- Lucide React
-- Recharts
-- Node.js + Express
-- PostgreSQL + `pg`
+## Mejora principal v2.3
 
-## Vistas
+La Vista 1 incorpora:
 
-1. Inteligencia de Incendios
-2. Incidencia del Territorio
-3. Respuesta
-4. Recursos
-5. Impacto
-6. Evolución
+- rediseño visual institucional;
+- Light Mode limpio;
+- Dark Mode neutro gris carbón/grafito;
+- iconografía SVG profesional;
+- filtros de período y territorio;
+- breadcrumb territorial;
+- sincronización mapa ↔ dashboard;
+- drill-down Chile → Región → Provincia → Comuna → Incendio;
+- ranking territorial dinámico;
+- Leaflet con mapa claro + satélite;
+- capas de Prioridad, Incendios, Superficie, Carga y Calidad;
+- focos de incendio con llama SVG dimensionada por hectáreas;
+- hover con información rápida;
+- clic simple para seleccionar;
+- doble clic para abrir Bitácora;
+- flyTo/flyToBounds en navegación territorial.
 
-## Datos
-
-La interfaz utiliza datos dummy alineados con los campos y tablas que ya levantamos:
-`incendio`, `comuna`, `provincia`, `dano`, `aviso`, `movimiento`, `recurso`, `incendio_evolucion`, `boleta`, `boleta_detalle`, `recurso_empresa`.
-
-El backend Node ya tiene la capa de conexión PostgreSQL preparada.
-
-## Ejecución
-
-### Backend
-
-```bash
-cd backend
-npm install
-npm run dev
-```
-
-### Frontend
+## Ejecutar
 
 ```bash
 cd frontend
@@ -47,14 +38,10 @@ npm install
 npm run dev
 ```
 
-El frontend consume:
+Backend:
 
-`http://localhost:3001/api/dashboard`
-
-Si el backend no está disponible, las vistas utilizan automáticamente el dummy local para permitir revisar la maqueta.
-
-## Importante
-
-Se conserva la identidad visual y estructura del template entregado: colores, Tailwind, cards, navegación, tipografía, Recharts, Lucide, responsive y patrón de layout.
-
-No se copia la lógica del proyecto demo; solamente se reutiliza su estándar técnico/visual.
+```bash
+cd backend
+npm install
+npm run dev
+```

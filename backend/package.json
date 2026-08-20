@@ -1,6 +1,7 @@
 {
-  "name": "fw-coipo-inteligencia-incendios-api",
-  "version": "1.0.0",
+  "name": "forestin-sidco-dashboard-backend",
+  "private": true,
+  "version": "2.3.0",
   "type": "module",
   "scripts": {
     "dev": "node --watch src/server.js",
@@ -8,7 +9,6 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "pg": "^8.16.3"
   }

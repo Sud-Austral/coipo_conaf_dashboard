@@ -1,0 +1,1 @@
+export default function Operacion(){return <section className="placeholderView"><h2>Operación y Recursos</h2><p>Vista 3 cerrada conceptualmente. MapLibre y el mapa avanzado de recursos quedan reservados para esta vista.</p></section>}

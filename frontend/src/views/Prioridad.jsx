@@ -1,0 +1,1 @@
+export default function Prioridad(){return <section className="placeholderView"><h2>Prioridad Territorial</h2><p>Vista 2 cerrada conceptualmente. Se mantiene disponible para la siguiente iteración visual.</p></section>}

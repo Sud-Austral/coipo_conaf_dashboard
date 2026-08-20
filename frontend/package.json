@@ -1,1 +1,23 @@
-{"name":"fw-coipo-inteligencia-incendios","private":true,"version":"1.0.0","type":"module","scripts":{"dev":"vite","build":"vite build","preview":"vite preview"},"dependencies":{"@vitejs/plugin-react":"^6.0.3","lucide-react":"^1.27.0","react":"^19.2.7","react-dom":"^19.2.7","react-router-dom":"^7.18.2","recharts":"^3.10.1","tailwindcss":"^4.3.3","@tailwindcss/vite":"^4.3.3","vite":"^8.1.1"},"devDependencies":{}}
+{
+  "name": "forestin-sidco-dashboard-frontend",
+  "private": true,
+  "version": "2.3.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.468.0",
+    "maplibre-gl": "^5.7.1",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-leaflet": "^5.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.2",
+    "vite": "^7.1.3"
+  }
+}
