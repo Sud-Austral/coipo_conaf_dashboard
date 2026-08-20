@@ -42,7 +42,7 @@ export const baseKpis = [
   {label:"Superficie media",value:"17,67 ha",delta:"+7,4%",confidence:"Media-Alta",coverage:"77,01%",source:"SIDCO · incendio.ince_superficie"},
   {label:"Inicio → Extinción",value:"100 min",delta:"Mediana",confidence:"Alta",coverage:"98,34%",source:"SIDCO · fechas operacionales"},
   {label:"Primer ataque → Control",value:"67 min",delta:"Mediana",confidence:"Media",coverage:"60,45%",source:"SIDCO · fechas operacionales"},
-  {label:"Incendios >400 ha",value:"—",delta:"Pendiente cálculo",confidence:"Media-Alta",coverage:"77,01%",source:"SIDCO · superficie"},
+  {label:"Incendios >400 ha",value:"48",delta:"Temporada 2025/26",confidence:"Media-Alta",coverage:"77,01% de incendios con superficie informada",source:"SIDCO · incendio.ince_superficie",detail:"Conteo de incendios con superficie registrada mayor a 400 ha."},
   {label:"Territorio prioritario",value:"Biobío",delta:"IPT experimental 92",confidence:"Experimental",coverage:"—",source:"Índice interno de priorización"},
   {label:"Recursos movilizados",value:"1.769",delta:"Recursos distintos",confidence:"Alta",coverage:"Alta",source:"SIDCO · recurso + movimiento"}
 ];

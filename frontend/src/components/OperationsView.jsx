@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Info, Gauge, Users, Truck, Flame, Clock, Activity } from "lucide-react";
 import OperationalReplayMap from "./OperationalReplayMap.jsx";
+import KpiInfo from "./KpiInfo.jsx";
 import { operationalSummary, operationalReplayFires } from "../data/dashboardData.js";
 
 
@@ -56,8 +57,15 @@ function ResourceTimeline({resource}){
 }
 
 
-function Kpi({icon:Icon,label,value,sub}){
-  return <article className="opKpi"><div><Icon size={17}/><span>{label}</span></div><strong>{value}</strong><small>{sub}</small></article>;
+function Kpi({icon:Icon,label,value,sub,detail,coverage,source,confidence}){
+  return <article className="opKpi">
+    <div className="opKpiTitle">
+      <span><Icon size={17}/>{label}</span>
+      <KpiInfo label={label} detail={detail || sub} coverage={coverage} source={source} confidence={confidence}/>
+    </div>
+    <strong>{value}</strong>
+    <small>{sub}</small>
+  </article>;
 }
 
 export default function OperationsView(){
@@ -70,18 +78,18 @@ export default function OperationsView(){
   const firstCombat=Math.min(...fire.resources.map(r=>r.events.find(e=>e.label==="Inicio combate")?.t ?? 9999));
 
   return <div className="operationsView">
-    <section className="executiveReading">
+    <section className="executiveReading executiveReadingAligned">
       <p>La vista operacional muestra cómo se movilizan recursos y personal, dónde se concentra el esfuerzo y cuánto demora la respuesta. El replay permite reconstruir de forma visual los hitos disponibles del incendio seleccionado.</p>
       <div className="readingMeta"><span>Foco operacional: {fire.name}</span><strong>{fire.resources.length} recursos demo · {totalCombatants} combatientes</strong></div>
     </section>
 
     <section className="opKpis">
-      <Kpi icon={Truck} label="Recursos movilizados" value={operationalSummary.recursosMovilizados.toLocaleString("es-CL")} sub="Recursos internos distintos"/>
-      <Kpi icon={Users} label="Personal movilizado" value={operationalSummary.personalMovilizado.toLocaleString("es-CL")} sub="Combatientes informados"/>
-      <Kpi icon={Flame} label="Incendios atendidos" value={operationalSummary.incendiosAtendidos.toLocaleString("es-CL")} sub="Con registros de movimiento"/>
-      <Kpi icon={Clock} label="Despacho → arribo" value={`${operationalSummary.medianaDespachoArribo} min`} sub="Mediana temporada"/>
-      <Kpi icon={Activity} label="Arribo → combate" value={`${operationalSummary.medianaArriboCombate} min`} sub="Mediana disponible"/>
-      <Kpi icon={Gauge} label="Primer ataque → control" value={`${operationalSummary.medianaPrimerAtaqueControl} min`} sub="Mediana temporada"/>
+      <Kpi icon={Truck} label="Recursos movilizados" value={operationalSummary.recursosMovilizados.toLocaleString("es-CL")} sub="Recursos distintos" detail="Cantidad de recursos internos distintos que registran actividad operacional." source="SIDCO · recurso + movimiento"/>
+      <Kpi icon={Users} label="Personal movilizado" value={operationalSummary.personalMovilizado.toLocaleString("es-CL")} sub="Combatientes informados" detail="Suma del personal/combatientes informado en movimientos." source="SIDCO · movimiento.movi_nro_combatientes / movi_personal"/>
+      <Kpi icon={Flame} label="Incendios atendidos" value={operationalSummary.incendiosAtendidos.toLocaleString("es-CL")} sub="Con movimiento registrado" detail="Incendios que poseen al menos un registro operacional asociado." source="SIDCO · public.movimiento"/>
+      <Kpi icon={Clock} label="Despacho → arribo" value={`${operationalSummary.medianaDespachoArribo} min`} sub="Mediana temporada" detail="Mediana del tiempo entre despacho y arribo para registros utilizables." source="SIDCO · movi_fecha_despacho → movi_fecha_arribo"/>
+      <Kpi icon={Activity} label="Arribo → combate" value={`${operationalSummary.medianaArriboCombate} min`} sub="Mediana temporada" detail="Mediana del tiempo desde arribo hasta inicio de combate." source="SIDCO · movi_fecha_arribo → movi_fecha_inicio_combate"/>
+      <Kpi icon={Gauge} label="Primer ataque → control" value={`${operationalSummary.medianaPrimerAtaqueControl} min`} sub="Mediana temporada" detail="Mediana del tiempo entre primer ataque y control en registros con ambas marcas temporales." source="SIDCO · incendio · fechas operacionales"/>
     </section>
 
     <section className="opMainGrid">

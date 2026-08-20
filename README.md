@@ -77,3 +77,11 @@ La capa IPT nacional ahora usa polígonos GeoJSON regionales completos. Hover re
 - Vista 6 Calidad y Confianza separada visualmente del flujo principal.
 - Navegación principal: Resumen → Prioridad → Operación → Impacto → Bitácora | Datos: Calidad.
 - Mantiene umbral >400 ha.
+
+
+## v2.6.1
+- KPI limpios con icono de información transversal.
+- Vista 1: Incendios >400 ha = 48.
+- Vista 3: lectura operacional con escala tipográfica consistente.
+- Vista 4: eliminado bloque de calidad; reemplazado por concentración del impacto.
+- Calidad/cobertura técnica concentrada en tooltips y Vista 6.

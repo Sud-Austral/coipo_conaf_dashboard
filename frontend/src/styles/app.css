@@ -210,3 +210,134 @@ main{max-width:1540px;margin:auto;padding:22px 28px 34px}
   .bitacoraV260 .leaflet-control-container{display:none!important}
   .bitacoraV260 footer{margin-top:8mm}
 }
+
+
+/* ============================================================
+   v2.6.1 · KPI limpios + información técnica en icono i
+   ============================================================ */
+.kpiHeaderLine,.damageKpiTitle,.opKpiTitle,.qualityKpiTitle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-width:0;
+}
+.opKpiTitle>span,.damageKpiTitle>span{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+}
+.kpiInfoWrap{
+  position:relative;
+  display:inline-flex;
+  flex:0 0 auto;
+  z-index:30;
+}
+.kpiInfoButton{
+  width:25px;
+  height:25px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:var(--panel2);
+  color:var(--muted);
+  display:grid;
+  place-items:center;
+  padding:0;
+  cursor:help;
+}
+.kpiInfoButton:hover,.kpiInfoButton:focus-visible{
+  color:var(--text);
+  border-color:var(--muted);
+  outline:none;
+}
+.kpiInfoPopover{
+  display:none;
+  position:absolute;
+  z-index:9999;
+  right:0;
+  top:31px;
+  width:285px;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--panel);
+  color:var(--text);
+  box-shadow:0 12px 30px rgba(0,0,0,.28);
+  font-size:9px;
+  line-height:1.45;
+}
+.kpiInfoWrap:hover .kpiInfoPopover,
+.kpiInfoWrap:focus-within .kpiInfoPopover{
+  display:grid;
+  gap:5px;
+}
+.kpiInfoPopover>b{font-size:10px}
+.kpiInfoPopover>span{color:var(--muted)}
+.kpiInfoPopover strong{color:var(--text);font-size:inherit;margin:0;display:inline}
+
+/* Vista 3: misma jerarquía tipográfica de las otras lecturas ejecutivas */
+.executiveReadingAligned{
+  padding:20px 22px!important;
+  box-shadow:var(--shadow);
+}
+.executiveReadingAligned p{
+  font-size:17px!important;
+  line-height:1.55!important;
+  max-width:1180px;
+}
+.executiveReadingAligned .readingMeta{
+  margin-top:14px;
+}
+.executiveReadingAligned .readingMeta span{
+  font-size:11px;
+  text-transform:uppercase;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+.executiveReadingAligned .readingMeta strong{
+  font-size:11px;
+}
+
+/* Vista 4: sin bloque de calidad dentro del análisis de impacto */
+.damageImpactSummaryCard{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  padding:14px;
+}
+.damageImpactSummaryCard dl{
+  display:grid;
+  margin:12px 0;
+}
+.damageImpactSummaryCard dl>div{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  border-bottom:1px solid var(--line);
+  padding:9px 0;
+  font-size:9px;
+}
+.damageImpactSummaryCard dt{color:var(--muted)}
+.damageImpactSummaryCard dd{font-weight:800;text-align:right}
+.damageImpactSummaryCard>p{
+  margin:10px 0 0;
+  font-size:8px;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+/* Evitar que popovers se corten dentro de tarjetas */
+.priorityKpiGrid>article,
+.damageKpi,
+.opKpi,
+.qualityKpis article{
+  overflow:visible!important;
+  position:relative;
+}
+
+@media(max-width:650px){
+  .executiveReadingAligned p{font-size:15px!important}
+  .kpiInfoPopover{width:min(270px,75vw)}
+}

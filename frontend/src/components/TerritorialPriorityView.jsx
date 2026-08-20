@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Info, MapPin, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { regions, territorialPriority } from "../data/dashboardData.js";
+import KpiInfo from "./KpiInfo.jsx";
 
 const priorityColor = v =>
   v >= 80 ? "#aa433a" :
@@ -118,19 +119,47 @@ export default function TerritorialPriorityView(){
 
       <section className="priorityKpiGrid">
         <article className="priorityKpiHero">
-          <small>IPT · {selected.name}</small>
+          <div className="kpiHeaderLine">
+            <small>IPT · {selected.name}</small>
+            <KpiInfo label={`IPT · ${selected.name}`} detail="Índice experimental de prioridad territorial. Integra superficie, frecuencia, grandes incendios, operación y variación." source="Modelo interno del dashboard" confidence="Experimental"/>
+          </div>
           <strong>{selected.ipt}<span>/100</span></strong>
           <div className="iptLinear"><i style={{width:`${selected.ipt}%`,background:priorityColor(selected.ipt)}}/></div>
           <p>Prioridad {selected.ipt>=80?"muy alta":selected.ipt>=60?"alta":"media"}</p>
         </article>
-        <article><small>Incendios</small><strong>{(selected.incendios||0).toLocaleString("es-CL")}</strong><span>Territorio seleccionado</span></article>
-        <article><small>Superficie registrada</small><strong>{(selected.superficie||0).toLocaleString("es-CL")} ha</strong><span>Magnitud acumulada</span></article>
-        <article><small>Grandes incendios</small><strong>&gt;400 ha</strong><span>Umbral oficial del proyecto</span></article>
-        <article><small>Variación territorial</small><strong className={selected.variacion>=0?"metricBad":"metricGood"}>
-          {selected.variacion>=0?<ArrowUpRight size={18}/>:<ArrowDownRight size={18}/>}
-          {selected.variacion}%
-        </strong><span>Factor experimental del IPT</span></article>
-        <article><small>Carga operacional</small><strong>{selected.operacion}/100</strong><span>Factor experimental</span></article>
+
+        <article>
+          <div className="kpiHeaderLine"><small>Incendios</small><KpiInfo label="Incendios" detail="Cantidad de incendios del territorio y período seleccionados." source="SIDCO · public.incendio"/></div>
+          <strong>{(selected.incendios||0).toLocaleString("es-CL")}</strong>
+          <span>Territorio seleccionado</span>
+        </article>
+
+        <article>
+          <div className="kpiHeaderLine"><small>Superficie registrada</small><KpiInfo label="Superficie registrada" detail="Suma de superficie informada para los incendios del territorio seleccionado." coverage="~77% a nivel temporada" source="SIDCO · incendio.ince_superficie" confidence="Media-Alta"/></div>
+          <strong>{(selected.superficie||0).toLocaleString("es-CL")} ha</strong>
+          <span>Magnitud acumulada</span>
+        </article>
+
+        <article>
+          <div className="kpiHeaderLine"><small>Grandes incendios</small><KpiInfo label="Grandes incendios" detail="Se considera gran incendio todo evento con superficie registrada mayor a 400 ha." coverage="Depende de ince_superficie informada" source="SIDCO · incendio.ince_superficie"/></div>
+          <strong>&gt;400 ha</strong>
+          <span>Umbral del proyecto</span>
+        </article>
+
+        <article>
+          <div className="kpiHeaderLine"><small>Variación territorial</small><KpiInfo label="Variación territorial" detail="Variación utilizada como uno de los factores experimentales del IPT." source="Modelo interno del dashboard" confidence="Experimental"/></div>
+          <strong className={selected.variacion>=0?"metricBad":"metricGood"}>
+            {selected.variacion>=0?<ArrowUpRight size={18}/>:<ArrowDownRight size={18}/>}
+            {selected.variacion}%
+          </strong>
+          <span>Variación del territorio</span>
+        </article>
+
+        <article>
+          <div className="kpiHeaderLine"><small>Carga operacional</small><KpiInfo label="Carga operacional" detail="Factor experimental construido a partir de actividad operacional disponible." source="SIDCO · movimiento/recurso" confidence="Experimental"/></div>
+          <strong>{selected.operacion}/100</strong>
+          <span>Índice operacional</span>
+        </article>
       </section>
 
       <section className="priorityCoreGrid">
