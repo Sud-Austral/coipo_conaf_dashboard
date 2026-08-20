@@ -138,3 +138,75 @@ main{max-width:1540px;margin:auto;padding:22px 28px 34px}
 .timelineDurationsV251 span{position:absolute;display:flex;justify-content:center;align-items:center;font-size:8px;font-weight:800;color:var(--muted);border-top:1px solid var(--line);padding-top:5px;white-space:nowrap;overflow:visible}
 @media(max-width:1250px){.priorityKpiGrid{grid-template-columns:repeat(3,1fr)}.priorityCoreGrid{grid-template-columns:1fr}.priorityMapVisual{height:410px}}
 @media(max-width:720px){.priorityKpiGrid{grid-template-columns:repeat(2,1fr)}.significantChangesV251>div{grid-template-columns:1fr}.priorityToolbar{align-items:flex-start;flex-direction:column}.resourceTimeline{grid-template-columns:1fr!important}.resourceTimelineBody{overflow-x:auto;min-height:90px}.timelineTrackV251,.timelineDurationsV251{min-width:700px}}
+
+
+/* ============================================================
+   v2.6.0 · navegación: 5 vistas del dashboard + auditoría de datos
+   ============================================================ */
+.mainNav{justify-content:space-between;align-items:center}
+.navDashboardGroup,.navDataGroup{display:flex;align-items:center;gap:6px}
+.navDataGroup{margin-left:auto;padding-left:18px}
+.navDataGroup>span{width:1px;height:25px;background:var(--line);margin-right:8px}
+.mainNav .dataNavButton{display:flex;align-items:center;gap:6px;color:var(--muted)}
+.mainNav .dataNavButton.active{background:var(--panel2);outline:1px solid var(--line);color:var(--text)}
+
+/* ============================================================
+   v2.6.0 · Vista 4 Impacto y Daño
+   ============================================================ */
+.damageView{display:grid;gap:12px}
+.damageKpiGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.damageKpi{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px;box-shadow:var(--shadow);min-width:0}
+.damageKpi>div{display:flex;align-items:center;gap:6px;color:var(--muted)}
+.damageKpi small{font-size:9px;text-transform:uppercase;font-weight:850;letter-spacing:.05em}
+.damageKpi strong{display:block;margin-top:8px;font-size:23px}
+.damageKpi span{display:block;color:var(--muted);font-size:9px;margin-top:4px}
+.damageCore{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.48fr);gap:12px}
+.damageMapCard,.damageRankingCard,.damageCategoryCard,.damageGradeCard,.damageQualityCard{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.damageMapCard{padding:14px}
+.damageMapHeader{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.damageMapHeader small,.damageCardHead small{font-size:8px;color:var(--muted);font-weight:900;letter-spacing:.11em}
+.damageMapHeader h3,.damageCardHead h3{margin:3px 0;font-size:15px}
+.damageMapHeader p,.damageCardHead p{margin:3px 0 0;color:var(--muted);font-size:9px}
+.damageMapBase{display:flex;gap:5px}.damageMapBase button,.damageLayerBar button{border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:7px;padding:6px 8px;font-size:9px;cursor:pointer}.damageMapBase button.active,.damageLayerBar button.active{background:var(--text);color:var(--panel)}
+.damageLayerBar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0}.damageLayerBar>span{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--muted);margin-right:4px}
+.damageMap{position:relative}.damageMap .leaflet-container{height:480px}
+.damageFireIcon{background:transparent!important;border:0!important}
+.officialLayerNotice{position:absolute;left:12px;right:12px;bottom:12px;z-index:500;background:color-mix(in srgb,var(--panel) 94%,transparent);border:1px solid var(--line);border-radius:8px;padding:8px;display:flex;gap:7px;align-items:flex-start;font-size:8px;color:var(--muted)}
+.damageRankingCard{padding:14px;align-self:start}.damageRankingCard>button{width:100%;display:grid;grid-template-columns:25px 1fr auto;gap:8px;align-items:center;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);padding:11px 4px;text-align:left;cursor:pointer}.damageRankingCard>button>span{font-size:9px;color:var(--muted)}.damageRankingCard>button div{min-width:0}.damageRankingCard>button b{display:block;font-size:10px}.damageRankingCard>button small{display:block;font-size:8px;color:var(--muted);margin-top:3px}.damageRankingCard>button.selected{background:var(--panel2)}
+.damageUrbanNote,.damageDictionaryNote{display:flex;gap:8px;align-items:flex-start;margin-top:12px;padding:9px;background:var(--panel2);border:1px solid var(--line);border-radius:9px}.damageUrbanNote p,.damageDictionaryNote p{margin:0;font-size:8px;color:var(--muted);line-height:1.5}
+.damageCategoryCard,.damageGradeCard,.damageQualityCard{padding:14px}
+.damageCategoryBars{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.damageCategoryBars button{display:grid;gap:7px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--text);padding:10px;text-align:left;cursor:pointer}.damageCategoryBars button.selected{outline:2px solid var(--text)}.damageCategoryBars button>div{display:flex;justify-content:space-between;gap:8px}.damageCategoryBars b{font-size:10px}.damageCategoryBars span,.damageCategoryBars small{font-size:8px;color:var(--muted)}.damageCategoryBars>button>i{height:6px;background:var(--line);border-radius:999px;overflow:hidden}.damageCategoryBars em{display:block;height:100%;background:var(--text);border-radius:999px}
+.damageBottomGrid{display:grid;grid-template-columns:1.3fr .7fr;gap:12px}.gradeBars{display:grid;gap:9px;margin-top:12px}.gradeBars>div{display:grid;grid-template-columns:30px 1fr 95px 85px;gap:8px;align-items:center;font-size:9px}.gradeBars>div>span{font-weight:850}.gradeBars>div>i{height:6px;background:var(--line);border-radius:999px;overflow:hidden}.gradeBars em{display:block;height:100%;background:var(--text)}.gradeBars small{color:var(--muted)}
+.damageQualityCard dl{display:grid;margin:12px 0}.damageQualityCard dl>div{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0;font-size:9px}.damageQualityCard dt{color:var(--muted)}.damageQualityCard dd{font-weight:800}.damageQualityCard>p{font-size:8px;color:var(--muted);line-height:1.5}
+
+/* ============================================================
+   v2.6.0 · Bitácora documental + mapas de impresión
+   ============================================================ */
+.bitacoraV260{max-width:1050px}
+.bitHeaderMeta{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.bitHeaderMeta span,.bitHeaderMeta b{padding:5px 8px;border:1px solid var(--line);border-radius:999px;font-size:9px}
+.bitIntroGrid{display:grid;grid-template-columns:1.45fr .55fr;gap:20px}.bitQuickFacts{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px}.bitQuickFacts>small{font-size:8px;font-weight:900;color:var(--muted);letter-spacing:.1em}.bitQuickFacts>div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);padding:8px 0;font-size:9px}.bitQuickFacts span{color:var(--muted)}
+.bitTimeline{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:12px 0}.bitTimelineEvent{display:flex;align-items:flex-start;min-width:145px}.bitTimelineEvent>div{display:grid;justify-items:center;gap:3px;min-width:88px}.bitTimelineEvent i{width:10px;height:10px;background:var(--text);border-radius:50%}.bitTimelineEvent b{font-size:8px}.bitTimelineEvent small{font-size:8px;color:var(--muted)}.bitTimelineEvent>span{min-width:56px;border-top:1px solid var(--line);margin-top:5px;padding-top:6px;text-align:center;font-size:8px;color:var(--muted);font-weight:800}
+.bitSectionIntro{font-size:9px;color:var(--muted)}
+.bitMapsGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.bitMapBox{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel2)}.bitMapLabel{display:flex;align-items:center;gap:6px;padding:8px 10px;font-size:9px}.bitMapBox .leaflet-container{height:235px;border-radius:0}.bitMapCaveat{display:block;padding:7px 9px;font-size:7px;color:var(--muted);line-height:1.4}.bitFireIcon,.bitResourceIcon{background:transparent!important;border:0!important}.bitResourceDot{display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#4b5960;color:white;border:2px solid white;font-size:7px}
+.bitResourceList{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.bitResourceList>div{display:grid;gap:3px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:10px}.bitResourceList b{font-size:9px}.bitResourceList span,.bitResourceList strong{font-size:8px}.bitResourceList span{color:var(--muted)}
+.bitSources{display:flex;gap:7px;flex-wrap:wrap}.bitSources span{font-size:8px;border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:6px 8px}
+
+/* ============================================================
+   v2.6.0 · Vista 6 Calidad
+   ============================================================ */
+.qualityViewV260{display:grid;gap:12px}
+.qualityIntro,.qualityMatrix{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px}.qualityIntro small{color:var(--muted);font-size:8px;font-weight:900;letter-spacing:.12em}.qualityIntro h2{margin:5px 0}.qualityIntro p{margin:0;color:var(--muted);font-size:10px;max-width:850px;line-height:1.5}
+.qualityKpis{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}.qualityKpis article{display:grid;gap:5px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}.qualityKpis small{font-size:8px;color:var(--muted);font-weight:800}.qualityKpis strong{font-size:18px}.qualityKpis span{font-size:8px;color:var(--muted)}
+.qualityMatrix h3{margin-top:0}.qualityMatrix table{width:100%;border-collapse:collapse}.qualityMatrix th,.qualityMatrix td{text-align:left;border-bottom:1px solid var(--line);padding:9px;font-size:9px}.qualityMatrix th{color:var(--muted)}
+
+@media(max-width:1100px){.damageKpiGrid{grid-template-columns:repeat(2,1fr)}.damageCore,.damageBottomGrid{grid-template-columns:1fr}.damageCategoryBars{grid-template-columns:repeat(2,1fr)}.qualityKpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.navDataGroup>span{display:none}.mainNav{align-items:flex-start}.navDashboardGroup{overflow-x:auto}.damageCategoryBars,.bitMapsGrid,.bitResourceList{grid-template-columns:1fr}.bitIntroGrid{grid-template-columns:1fr}.qualityKpis{grid-template-columns:repeat(2,1fr)}.gradeBars>div{grid-template-columns:28px 1fr 80px}.gradeBars small{grid-column:2/-1}.damageMapHeader{flex-direction:column}}
+@media print{
+  .bitacoraV260{max-width:none!important;padding:12mm!important;font-size:9pt}
+  .bitacoraV260 section{break-inside:avoid}
+  .bitMapsGrid{grid-template-columns:repeat(2,1fr)!important}
+  .bitMapBox{break-inside:avoid}
+  .bitMapBox .leaflet-container{height:55mm!important}
+  .bitacoraV260 .leaflet-control-container{display:none!important}
+  .bitacoraV260 footer{margin-top:8mm}
+}

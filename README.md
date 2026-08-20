@@ -68,3 +68,12 @@ La capa IPT nacional ahora usa polígonos GeoJSON regionales completos. Hover re
 ## v2.5.1
 - Vista 2: corrección completa de layout, KPI y gráfico comparativo.
 - Vista 3: duraciones entre hitos mostradas en minutos u horas/minutos.
+
+
+## v2.6.0
+- Vista 4 Impacto y Daño implementada con clasificación SIDCO validada.
+- Diccionario central `src/config/danoCatalogo.js`.
+- Vista 5 Bitácora ampliada con cronología y cuatro mapas para impresión/PDF.
+- Vista 6 Calidad y Confianza separada visualmente del flujo principal.
+- Navegación principal: Resumen → Prioridad → Operación → Impacto → Bitácora | Datos: Calidad.
+- Mantiene umbral >400 ha.

@@ -177,3 +177,43 @@ export const operationalReplayFires = [
     ]
   }
 ];
+
+
+// v2.6.0 · Vista 4 · cifras obtenidas en exploración SIDCO 2025/26
+// daño clasificado: public.dano, periodo 2025-07-01 a 2026-07-01
+export const damageSummary202526 = {
+  incendiosTotal: 9664,
+  incendiosConDano: 5287,
+  coberturaDanoPct: 54.71,
+  superficieDanoCaracterizada: 79596.4893,
+  largeFires: 48,
+  surfaceCoveragePct: 76.98,
+  source: "SIDCO · public.dano + public.incendio"
+};
+
+export const damageByCategory202526 = [
+  // Plantaciones = suma de códigos 1–5
+  {key:"plantaciones", label:"Plantaciones", codes:[1,2,3,4,5], ha:28076.0286},
+  {key:"arbolado", label:"Arbolado", codes:[6], ha:15241.9390},
+  {key:"matorral", label:"Matorral", codes:[7], ha:13785.2107},
+  {key:"pastizal", label:"Pastizal", codes:[8], ha:12708.6589},
+  {key:"agricola", label:"Agrícola", codes:[9], ha:3963.7701},
+  {key:"desechos", label:"Desechos", codes:[10], ha:5821.8820}
+];
+
+export const damageByGrade202526 = [
+  {grade:0, registros:10149, ha:31486.3202},
+  {grade:25, registros:943, ha:2771.5080},
+  {grade:50, registros:1372, ha:6187.5896},
+  {grade:75, registros:1076, ha:5495.4449},
+  {grade:100, registros:4715, ha:33655.6266}
+];
+
+export const damageTerritoriesDemo = [
+  {id:"8", name:"Biobío", ha:39800, damageHa:34400, fires:2256, coverage:61, urbanDistanceKm:2.8},
+  {id:"9", name:"La Araucanía", ha:23012, damageHa:15180, fires:1375, coverage:56, urbanDistanceKm:4.1},
+  {id:"7", name:"Maule", ha:19925, damageHa:12840, fires:1161, coverage:53, urbanDistanceKm:3.6},
+  {id:"16", name:"Ñuble", ha:13181, damageHa:9100, fires:841, coverage:51, urbanDistanceKm:5.2},
+  {id:"13", name:"Metropolitana", ha:7040, damageHa:4320, fires:1042, coverage:48, urbanDistanceKm:1.7},
+  {id:"5", name:"Valparaíso", ha:2387, damageHa:2180, fires:1261, coverage:45, urbanDistanceKm:1.3}
+];
