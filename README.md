@@ -56,3 +56,10 @@ La capa IPT nacional ahora usa polígonos GeoJSON regionales completos. Hover re
 - Umbral estándar de grandes incendios: >400 ha.
 - KPI Vista 1: 48 (>400 ha), -45,45% vs temporada anterior.
 - Vista 2 Prioridad Territorial incorporada.
+
+
+## v2.5.0
+- Ruteo corregido: Vistas 1, 2 y 3 completas y accesibles.
+- Vista 3 Operación y Recursos implementada.
+- Replay operacional jugable con Play/Pausa/Reinicio/slider.
+- Replay usa datos demo hasta conectar `movimiento` real.

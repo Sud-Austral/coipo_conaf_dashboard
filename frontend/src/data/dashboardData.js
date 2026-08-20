@@ -77,3 +77,103 @@ export const territorialPriority = [
   {id:13, name:"Metropolitana", ipt:61, superficie:54, frecuencia:67, grandes:58, operacion:64, variacion:49},
   {id:5, name:"Valparaíso", ipt:57, superficie:51, frecuencia:63, grandes:49, operacion:61, variacion:46}
 ];
+
+
+// v2.5.0 · datos demo para Vista 3 / Replay operacional
+export const operationalSummary = {
+  recursosMovilizados: 1769,
+  personalMovilizado: 179969,
+  incendiosAtendidos: 8279,
+  medianaDespachoArribo: 18,
+  medianaArriboCombate: 2,
+  medianaPrimerAtaqueControl: 67
+};
+
+export const operationalReplayFires = [
+  {
+    id:"805149434",
+    name:"Hualqui",
+    region:"Biobío",
+    lat:-36.925556,
+    lon:-72.888056,
+    ha:6943.1881,
+    status:"Extinguido",
+    resources:[
+      {
+        id:"BR-01",
+        name:"Brigada terrestre 01",
+        type:"brigada",
+        combatants:18,
+        base:[-36.82,-73.05],
+        destination:[-36.925556,-72.888056],
+        events:[
+          {t:0, label:"Despacho", time:"17:58"},
+          {t:15, label:"Salida", time:"18:13"},
+          {t:44, label:"Arribo", time:"18:42"},
+          {t:50, label:"Inicio combate", time:"18:48"},
+          {t:180, label:"Fin combate", time:"20:58"},
+          {t:220, label:"Retiro", time:"21:38"}
+        ]
+      },
+      {
+        id:"HEL-02",
+        name:"Helicóptero 02",
+        type:"aereo",
+        combatants:2,
+        base:[-36.77,-73.06],
+        destination:[-36.925556,-72.888056],
+        events:[
+          {t:8, label:"Despacho", time:"18:06"},
+          {t:18, label:"Salida", time:"18:16"},
+          {t:34, label:"Arribo", time:"18:32"},
+          {t:38, label:"Inicio combate", time:"18:36"},
+          {t:145, label:"Fin combate", time:"20:23"},
+          {t:170, label:"Retiro", time:"20:48"}
+        ]
+      },
+      {
+        id:"CAM-08",
+        name:"Recurso terrestre 08",
+        type:"terrestre",
+        combatants:6,
+        base:[-36.88,-72.96],
+        destination:[-36.925556,-72.888056],
+        events:[
+          {t:12, label:"Despacho", time:"18:10"},
+          {t:20, label:"Salida", time:"18:18"},
+          {t:58, label:"Arribo", time:"18:56"},
+          {t:64, label:"Inicio combate", time:"19:02"},
+          {t:205, label:"Fin combate", time:"21:23"},
+          {t:238, label:"Retiro", time:"21:56"}
+        ]
+      }
+    ]
+  },
+  {
+    id:"805119003",
+    name:"Concepción",
+    region:"Biobío",
+    lat:-36.815556,
+    lon:-72.918333,
+    ha:13871.5418,
+    status:"Extinguido",
+    resources:[
+      {
+        id:"BR-11",
+        name:"Brigada terrestre 11",
+        type:"brigada",
+        combatants:22,
+        base:[-36.83,-73.03],
+        destination:[-36.815556,-72.918333],
+        events:[
+          {t:0,label:"Despacho",time:"16:48"},
+          {t:7,label:"Salida",time:"16:55"},
+          {t:25,label:"Arribo",time:"17:13"},
+          {t:29,label:"Inicio combate",time:"17:17"},
+          {t:210,label:"Fin combate",time:"20:18"},
+          {t:250,label:"Retiro",time:"20:58"}
+        ]
+      }
+    ]
+  }
+];
