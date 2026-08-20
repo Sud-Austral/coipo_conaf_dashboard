@@ -1,1 +1,21 @@
-import {Router} from "express";import {narrarBitacora} from "../services/bitacoraService.js";const router=Router();router.get("/:id",(req,res)=>{const ejemplo={inceId:req.params.id,region:"Biobío",comuna:"Hualqui",inicio:"17 de enero de 2026 a las 17:55",minInicioDeteccion:2,superficieHa:6943,recursosDistintos:32,calidad:"Media-Alta"};res.json(narrarBitacora(ejemplo))});export default router;
+import { Router } from "express";
+import { narrarBitacora } from "../services/bitacoraService.js";
+
+const router = Router();
+
+router.get("/:id", (req, res) => {
+  const ejemplo = {
+    inceId: req.params.id,
+    region: "Biobío",
+    comuna: "Hualqui",
+    inicio: "17 de enero de 2026 a las 17:55",
+    minInicioDeteccion: 2,
+    superficieHa: 6943,
+    recursosDistintos: 32,
+    calidad: "Media-Alta"
+  };
+
+  res.json(narrarBitacora(ejemplo));
+});
+
+export default router;

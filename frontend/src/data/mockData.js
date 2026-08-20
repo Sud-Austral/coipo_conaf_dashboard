@@ -1,5 +1,109 @@
-export const regions=[{name:"Biobío",incendios:2256,superficie:62289.77,prioridad:92},{name:"La Araucanía",incendios:1375,superficie:23012.21,prioridad:78},{name:"Maule",incendios:1161,superficie:19924.76,prioridad:73},{name:"Ñuble",incendios:841,superficie:13180.93,prioridad:69},{name:"Metropolitana de Santiago",incendios:1042,superficie:7039.88,prioridad:61}];
-export const kpisResumen=[{label:"Incendios registrados",value:"9.694",delta:"−12,9%",trust:"Alta",note:"Fecha inicio con cobertura completa."},{label:"Superficie registrada",value:"131.891 ha",delta:"−14,0%",trust:"Media-Alta",note:"Cobertura cercana al 77%."},{label:"Superficie media",value:"17,67 ha",delta:"+7,4%",trust:"Media-Alta",note:"Sobre incendios con superficie informada."},{label:"Inicio → Extinción",value:"100 min",delta:"Mediana",trust:"Alta",note:"Fecha extinción ~98%."},{label:"Primer ataque → Control",value:"67 min",delta:"Mediana",trust:"Media",note:"Cobertura ~60%."},{label:"Incendios >100 ha",value:"—",delta:"Pendiente cálculo",trust:"Media-Alta",note:"Se calculará desde superficie validada."},{label:"Territorio prioritario",value:"Biobío",delta:"IPT exp. 92",trust:"Experimental",note:"Índice de ordenamiento, no predictor."},{label:"Recursos movilizados",value:"1.769",delta:"Recursos internos distintos",trust:"Alta",note:"Basado en recurso + movimiento."}];
-export const timeline=[["Inicio → Detección","2 min","80,2%"],["Detección → Despacho","2 min","62,6%"],["Despacho → Salida","0 min","80,1%"],["Salida → Arribo","18 min","85,0%"],["Arribo → Primer ataque","2 min","66,3%"],["Primer ataque → Control","67 min","60,5%"],["Inicio → Extinción","100 min","98,3%"]];
-export const qualityRows=[["Fecha inicio","100%","Alta"],["Fecha extinción","98,34%","Alta"],["Fecha salida","96,01%","Alta"],["Fecha arribo","84,96%","Media-Alta"],["Fecha detección","80,19%","Media-Alta"],["Superficie","77,01%","Media-Alta"],["Coordenadas","76,08%","Media-Alta"],["Fecha primer ataque","66,30%","Media"],["Fecha despacho","62,61%","Media"],["Fecha control","60,45%","Media"],["Superficie arribo","54,09%","Media"]];
-export const fireStory={id:"805149434",title:"Incendio forestal · Hualqui",date:"17 de enero de 2026",location:"Hualqui · Región del Biobío",story:["Durante la tarde del 17 de enero de 2026 se inició un incendio forestal en la comuna de Hualqui, Región del Biobío. El evento fue detectado pocos minutos después de su inicio y activó el despliegue de recursos para su combate.","Los primeros recursos arribaron al sector y dieron inicio a las labores de control. El incendio presentó una evolución significativa y terminó afectando aproximadamente 6.943 hectáreas, ubicándose entre los eventos de mayor superficie de la temporada.","Los registros disponibles muestran una respuesta operacional prolongada hasta alcanzar el control y posterior extinción del evento. Parte de la información de recursos y daño presenta cobertura parcial, por lo que el relato distingue hechos confirmados de datos no disponibles."],facts:["Superficie registrada: 6.943 ha","Detección: pocos minutos después del inicio","Evento de gran magnitud dentro de la temporada","Información operacional reconstruida desde SIDCO"],confidence:"Media-Alta"};
+export const regions = [
+  { name: "Biobío", incendios: 2256, superficie: 62289.77, prioridad: 92, lat: -36.83, lon: -73.05 },
+  { name: "La Araucanía", incendios: 1375, superficie: 23012.21, prioridad: 78, lat: -38.73, lon: -72.59 },
+  { name: "Maule", incendios: 1161, superficie: 19924.76, prioridad: 73, lat: -35.43, lon: -71.65 },
+  { name: "Ñuble", incendios: 841, superficie: 13180.93, prioridad: 69, lat: -36.61, lon: -72.10 },
+  { name: "Metropolitana de Santiago", incendios: 1042, superficie: 7039.88, prioridad: 61, lat: -33.45, lon: -70.66 }
+];
+
+export const kpisResumen = [
+  {
+    label: "Incendios registrados",
+    value: "9.694",
+    delta: "−12,9% vs temporada anterior",
+    trust: "Alta",
+    note: "Fecha de inicio con cobertura completa para el universo analizado."
+  },
+  {
+    label: "Superficie registrada",
+    value: "131.891 ha",
+    delta: "−14,0% vs temporada anterior",
+    trust: "Media-Alta",
+    note: "Cobertura del campo superficie cercana al 77%. Representa superficie informada."
+  },
+  {
+    label: "Superficie media",
+    value: "17,67 ha",
+    delta: "+7,4% vs temporada anterior",
+    trust: "Media-Alta",
+    note: "Calculada sobre incendios con superficie informada."
+  },
+  {
+    label: "Inicio → Extinción",
+    value: "100 min",
+    delta: "Mediana",
+    trust: "Alta",
+    note: "Fecha de extinción con cobertura cercana al 98%."
+  },
+  {
+    label: "Primer ataque → Control",
+    value: "67 min",
+    delta: "Mediana",
+    trust: "Media",
+    note: "Cobertura aproximada del 60%."
+  },
+  {
+    label: "Incendios >100 ha",
+    value: "Pendiente",
+    delta: "Cálculo final con fuente real",
+    trust: "Media-Alta",
+    note: "Debe calcularse desde superficie validada."
+  },
+  {
+    label: "Territorio prioritario",
+    value: "Biobío",
+    delta: "IPT experimental 92",
+    trust: "Experimental",
+    note: "Índice de ordenamiento interno. No representa predicción de riesgo."
+  },
+  {
+    label: "Recursos movilizados",
+    value: "1.769",
+    delta: "Recursos internos distintos",
+    trust: "Alta",
+    note: "Basado en recurso + movimiento."
+  }
+];
+
+export const timeline = [
+  ["Inicio → Detección", "2 min", "80,2%"],
+  ["Detección → Despacho", "2 min", "62,6%"],
+  ["Despacho → Salida", "0 min", "80,1%"],
+  ["Salida → Arribo", "18 min", "85,0%"],
+  ["Arribo → Primer ataque", "2 min", "66,3%"],
+  ["Primer ataque → Control", "67 min", "60,5%"],
+  ["Inicio → Extinción", "100 min", "98,3%"]
+];
+
+export const qualityRows = [
+  ["Fecha inicio", "100%", "Alta"],
+  ["Fecha extinción", "98,34%", "Alta"],
+  ["Fecha salida", "96,01%", "Alta"],
+  ["Fecha arribo", "84,96%", "Media-Alta"],
+  ["Fecha detección", "80,19%", "Media-Alta"],
+  ["Superficie", "77,01%", "Media-Alta"],
+  ["Coordenadas", "76,08%", "Media-Alta"],
+  ["Fecha primer ataque", "66,30%", "Media"],
+  ["Fecha despacho", "62,61%", "Media"],
+  ["Fecha control", "60,45%", "Media"],
+  ["Superficie arribo", "54,09%", "Media"]
+];
+
+export const fireStory = {
+  id: "805149434",
+  title: "Incendio forestal · Hualqui",
+  date: "17 de enero de 2026",
+  location: "Hualqui · Región del Biobío",
+  story: [
+    "Durante la tarde del 17 de enero de 2026 se inició un incendio forestal en la comuna de Hualqui, Región del Biobío. El evento fue detectado pocos minutos después de su inicio y activó el despliegue de recursos para su combate.",
+    "Los primeros recursos arribaron al sector y dieron inicio a las labores de control. El incendio presentó una evolución significativa y terminó afectando aproximadamente 6.943 hectáreas, ubicándose entre los eventos de mayor superficie de la temporada.",
+    "Los registros disponibles muestran una respuesta operacional prolongada hasta alcanzar el control y posterior extinción del evento. Parte de la información de recursos y daño presenta cobertura parcial, por lo que el relato distingue hechos confirmados de datos no disponibles."
+  ],
+  facts: [
+    "Superficie registrada: 6.943 ha",
+    "Detección: pocos minutos después del inicio",
+    "Evento de gran magnitud dentro de la temporada",
+    "Información operacional reconstruida desde SIDCO"
+  ],
+  confidence: "Media-Alta"
+};

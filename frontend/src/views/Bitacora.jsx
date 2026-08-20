@@ -1,1 +1,48 @@
-import {fireStory} from "../data/mockData";export default function Bitacora(){return <div className="print-sheet"><div className="bitacora-actions no-print"><button onClick={()=>window.print()}>Imprimir / Guardar PDF</button><button>Resumen Dirección</button><button>Comunicado de prensa</button><button>Bitácora técnica</button></div><header className="story-head"><span>BITÁCORA DEL INCENDIO</span><h1>{fireStory.title}</h1><p>{fireStory.date} · {fireStory.location}</p></header><section className="story-section"><h2>Resumen</h2>{fireStory.story.map((p,i)=><p key={i}>{p}</p>)}</section><section className="story-section"><h2>Hechos principales</h2><ul>{fireStory.facts.map(x=><li key={x}>{x}</li>)}</ul></section><section className="story-section"><h2>Situación final</h2><p>La reconstrucción se genera a partir de hechos estructurados y validados. Cuando SIDCO no dispone de información suficiente, la bitácora lo declara explícitamente y no completa el relato mediante supuestos.</p></section><footer className="story-footer">Fuente: SIDCO · Calidad de reconstrucción: {fireStory.confidence}</footer></div>}
+import { fireStory } from "../data/mockData";
+
+export default function Bitacora() {
+  return (
+    <article className="print-sheet">
+      <div className="bitacora-actions no-print">
+        <button onClick={() => window.print()}>Imprimir / Guardar PDF</button>
+        <button>Resumen Dirección</button>
+        <button>Comunicado de prensa</button>
+        <button>Bitácora técnica</button>
+      </div>
+
+      <header className="story-head">
+        <span>BITÁCORA DEL INCENDIO</span>
+        <h1>{fireStory.title}</h1>
+        <p>{fireStory.date} · {fireStory.location}</p>
+      </header>
+
+      <section className="story-section">
+        <h2>Resumen</h2>
+        {fireStory.story.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
+      </section>
+
+      <section className="story-section">
+        <h2>Hechos principales</h2>
+        <ul>
+          {fireStory.facts.map((fact) => <li key={fact}>{fact}</li>)}
+        </ul>
+      </section>
+
+      <section className="story-section">
+        <h2>Situación final</h2>
+        <p>
+          La reconstrucción se genera a partir de hechos estructurados y
+          validados. Cuando SIDCO no dispone de información suficiente, la
+          bitácora lo declara explícitamente y no completa el relato mediante
+          supuestos.
+        </p>
+      </section>
+
+      <footer className="story-footer">
+        Fuente: SIDCO · Calidad de reconstrucción: {fireStory.confidence}
+      </footer>
+    </article>
+  );
+}

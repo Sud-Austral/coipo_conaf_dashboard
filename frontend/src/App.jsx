@@ -1,1 +1,56 @@
-import {useState} from "react";import Resumen from "./views/Resumen";import Prioridad from "./views/Prioridad";import Operacion from "./views/Operacion";import Impacto from "./views/Impacto";import Calidad from "./views/Calidad";import Bitacora from "./views/Bitacora";const views=[["Resumen",Resumen],["Prioridad Territorial",Prioridad],["Operación y Recursos",Operacion],["Impacto y Daño",Impacto],["Calidad y Confianza",Calidad],["Bitácora",Bitacora]];export default function App(){const [active,setActive]=useState("Resumen");const Component=views.find(v=>v[0]===active)[1];return <div className="app"><header className="topbar"><div><small>COIPO · Inteligencia de incendios</small><h1>Dashboard de Incendios</h1></div><div className="filters"><button>Hoy</button><button>7d</button><button>30d</button><button className="active">Temporada 2025/26</button><button>Personalizado</button></div></header><nav className="nav no-print">{views.map(([name])=><button className={active===name?"active":""} onClick={()=>setActive(name)} key={name}>{name}</button>)}</nav><main><Component/></main></div>}
+import { useState } from "react";
+import Resumen from "./views/Resumen.jsx";
+import Prioridad from "./views/Prioridad.jsx";
+import Operacion from "./views/Operacion.jsx";
+import Impacto from "./views/Impacto.jsx";
+import Calidad from "./views/Calidad.jsx";
+import Bitacora from "./views/Bitacora.jsx";
+
+const views = [
+  ["Resumen", Resumen],
+  ["Prioridad Territorial", Prioridad],
+  ["Operación y Recursos", Operacion],
+  ["Impacto y Daño", Impacto],
+  ["Calidad y Confianza", Calidad],
+  ["Bitácora", Bitacora]
+];
+
+export default function App() {
+  const [active, setActive] = useState("Resumen");
+  const CurrentView = views.find(([name]) => name === active)[1];
+
+  return (
+    <div className="app">
+      <header className="topbar">
+        <div>
+          <small>COIPO · Inteligencia de incendios</small>
+          <h1>Dashboard de Incendios</h1>
+        </div>
+
+        <div className="filters no-print">
+          <button>Hoy</button>
+          <button>7d</button>
+          <button>30d</button>
+          <button className="active">Temporada 2025/26</button>
+          <button>Personalizado</button>
+        </div>
+      </header>
+
+      <nav className="nav no-print">
+        {views.map(([name]) => (
+          <button
+            key={name}
+            className={active === name ? "active" : ""}
+            onClick={() => setActive(name)}
+          >
+            {name}
+          </button>
+        ))}
+      </nav>
+
+      <main>
+        <CurrentView />
+      </main>
+    </div>
+  );
+}

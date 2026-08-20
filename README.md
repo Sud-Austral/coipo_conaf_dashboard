@@ -1,6 +1,9 @@
 # Forestin · Dashboard de Incendios
 
-Versión consolidada con 6 vistas:
+**Versión:** v2.1
+
+Proyecto consolidado con seis vistas:
+
 1. Resumen Ejecutivo
 2. Prioridad Territorial
 3. Operación y Recursos
@@ -9,25 +12,50 @@ Versión consolidada con 6 vistas:
 6. Bitácora del Incendio
 
 ## Arquitectura
+
 - Frontend: React + Vite
 - Mapas territoriales: Leaflet / React Leaflet
-- Mapa operacional: MapLibre GL JS
+- Vista operacional: MapLibre GL JS
 - Backend: Node.js + Express
 - Base objetivo: PostgreSQL
 - Bitácora v1: motor narrativo determinístico basado en reglas
+- Impresión/PDF: CSS `@media print`
 
-## Ejecutar
-### Frontend
+## Ejecutar frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-### Backend
+
+## Ejecutar backend
+
 ```bash
 cd backend
 npm install
 npm run dev
 ```
 
-La maqueta usa datos de ejemplo para abrir sin PostgreSQL. La conexión real queda preparada para una siguiente iteración.
+Backend por defecto:
+
+```text
+http://localhost:3001
+```
+
+## GitHub Pages
+
+El workflow `.github/workflows/deploy-pages.yml`:
+
+- instala Node 22;
+- usa caché npm con `frontend/package-lock.json`;
+- instala solo el frontend;
+- ejecuta `npm run build`;
+- publica `frontend/dist`.
+
+El backend **no** se despliega en GitHub Pages.
+
+## Datos
+
+La maqueta funciona con datos locales de ejemplo basados en los diagnósticos realizados.
+La conexión real a PostgreSQL queda preparada para una siguiente iteración.
