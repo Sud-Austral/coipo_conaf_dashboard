@@ -196,3 +196,8 @@ Fuentes cartográficas configuradas:
 - Bitácora usa centro seguro si un incendio no posee coordenada.
 - Replay filtra recursos sin base/destino válidos y protege flyToBounds.
 - FireMarker posee una segunda validación antes de crear el Marker.
+
+## v2.8.4
+- Corrige la causa raíz del runtime `Cannot read properties of null (reading lat)`.
+- JavaScript convierte `Number(null)` en `0`; las validaciones ahora rechazan null/undefined/cadena vacía antes de convertir.
+- Se aplica la corrección a incendios, territorios, replay, exposición y GeoJSON.

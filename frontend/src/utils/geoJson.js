@@ -1,6 +1,8 @@
 const finitePair = (pair) =>
   Array.isArray(pair) &&
   pair.length >= 2 &&
+  pair[0] !== null && pair[0] !== undefined && pair[0] !== "" &&
+  pair[1] !== null && pair[1] !== undefined && pair[1] !== "" &&
   Number.isFinite(Number(pair[0])) &&
   Number.isFinite(Number(pair[1]));
 

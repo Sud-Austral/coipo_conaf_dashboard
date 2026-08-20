@@ -21,10 +21,14 @@ const placeIcon=L.divIcon({
 
 export default function PopulationExposureMap({fire,nearest}){
   const safeFire = hasValidLatLng(fire) ? fire : { ...fire, lat:-33.45, lon:-70.66 };
-  const safeNearest =
-    Number.isFinite(Number(nearest?.lat)) && Number.isFinite(Number(nearest?.lon))
-      ? nearest
-      : { ...nearest, lat:safeFire.lat, lon:safeFire.lon };
+  const nearestHasCoords =
+    nearest?.lat !== null && nearest?.lat !== undefined && nearest?.lat !== "" &&
+    nearest?.lon !== null && nearest?.lon !== undefined && nearest?.lon !== "" &&
+    Number.isFinite(Number(nearest.lat)) && Number.isFinite(Number(nearest.lon));
+
+  const safeNearest = nearestHasCoords
+    ? nearest
+    : { ...nearest, lat:safeFire.lat, lon:safeFire.lon };
 
   const center=[safeFire.lat,safeFire.lon];
   const place=[safeNearest.lat,safeNearest.lon];

@@ -88,7 +88,7 @@ function MapNavigator({context, selectedBounds}) {
       return;
     }
 
-    if (context.lat && context.lon) {
+    if (hasValidLatLng(context)) {
       const zoom =
         context.level === "region" ? 7 :
         context.level === "province" ? 9 : 11;

@@ -12,6 +12,8 @@ const { BaseLayer, Overlay } = LayersControl;
 const validPair = (p) =>
   Array.isArray(p) &&
   p.length >= 2 &&
+  p[0] !== null && p[0] !== undefined && p[0] !== "" &&
+  p[1] !== null && p[1] !== undefined && p[1] !== "" &&
   Number.isFinite(Number(p[0])) &&
   Number.isFinite(Number(p[1]));
 

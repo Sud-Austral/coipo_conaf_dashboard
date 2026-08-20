@@ -22,7 +22,10 @@ const bitResourceIcon=(type)=>{
 
 function MiniMap({type,fire}){
   const op=operationalReplayFires.find(x=>x.id===fire.id);
-  const center=[fire.lat||op?.lat||-36.925556,fire.lon||op?.lon||-72.888056];
+  const safeFire = hasValidLatLng(fire)
+    ? fire
+    : (hasValidLatLng(op) ? op : {lat:-36.925556,lon:-72.888056});
+  const center=[safeFire.lat,safeFire.lon];
   return <div className="bitMapBox">
     <div className="bitMapLabel">
       {type==="normal"&&<Map size={14}/>}
