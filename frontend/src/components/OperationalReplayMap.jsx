@@ -132,7 +132,7 @@ function ReplayCamera({fire,resources,time,playing,actualMaxTime,visualMaxTime})
 }
 
 
-export default function OperationalReplayMap({fire,onFireChange,fireOptions=[],selectedResourceId,onSelectResource}){
+export default function OperationalReplayMap({fire,onFireChange,fireOptions=[],selectedResourceId,onSelectResource,fireSearch="",onFireSearch}){
   const safeFire = hasValidLatLng(fire)
     ? fire
     : { ...(fire||{}), lat:-33.45, lon:-70.66, resources:[] };
@@ -209,9 +209,23 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[],s
         <h3>{safeFire.name} · {Number(safeFire.ha||0).toLocaleString("es-CL")} ha</h3>
         <p>Inicio: panorama de todos los recursos · Play: foco en el incendio y llegada progresiva · Cierre: retiro y regreso al encuadre inicial.</p>
       </div>
-      <select value={safeFire.id} onChange={e=>onFireChange?.(e.target.value)}>
-        {fireOptions.map(f=><option key={f.id} value={f.id}>{f.name} · {f.id}</option>)}
-      </select>
+      <div className="opFirePicker">
+        <input
+          type="search"
+          value={fireSearch}
+          onChange={e=>onFireSearch?.(e.target.value)}
+          placeholder="Buscar incendio por nombre o ID"
+          aria-label="Buscar incendio"
+        />
+        <select value={safeFire.id} onChange={e=>onFireChange?.(e.target.value)}>
+          {fireOptions
+            .filter(f=>{
+              const q=fireSearch.trim().toLowerCase();
+              return !q || f.name.toLowerCase().includes(q) || String(f.id).includes(q);
+            })
+            .map(f=><option key={f.id} value={f.id}>{f.name} · {f.id}</option>)}
+        </select>
+      </div>
     </div>
 
     <div className="opReplayMap">
@@ -240,10 +254,9 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[],s
 
           <Overlay checked name="Incendio">
             <LayerGroup>
-              <CircleMarker center={[safeFire.lat,safeFire.lon]} radius={18} pathOptions={{color:"#a9423a",fillColor:"#d65749",fillOpacity:.72}}>
-                
+              <Marker position={[safeFire.lat,safeFire.lon]} icon={fireHeroIcon} zIndexOffset={5000}>
                 <Popup>{Number(safeFire.ha||0).toLocaleString("es-CL")} ha · {safeFire.status}</Popup>
-              </CircleMarker>
+              </Marker>
             </LayerGroup>
           </Overlay>
 

@@ -1029,3 +1029,44 @@ main{max-width:1540px;margin:auto;padding:22px 28px 34px}
   .bitResourceHistories.excludeFromPdf{display:none!important}
   .bitResourceHistories.includeInPdf{display:grid!important}
 }
+
+/* ============================================================
+   v2.8.9 · Consistencia UI
+   ============================================================ */
+.kpiInfoFloating{
+  position:fixed;z-index:2147483000;width:205px;max-width:calc(100vw - 16px);
+  display:grid;gap:4px;padding:8px 9px;border:1px solid var(--line);
+  border-radius:8px;background:var(--panel);color:var(--text);
+  box-shadow:0 8px 22px rgba(0,0,0,.22);font-size:8px;line-height:1.3
+}
+.kpiInfoFloating>b{font-size:8.5px}
+.kpiInfoFloating>span{font-size:7.5px;color:var(--muted)}
+.kpiInfoFloating strong{font-size:7.5px;color:var(--text);margin:0!important}
+
+/* no giant inherited info popovers */
+.infoWrap,.infoPopover{display:none!important}
+
+.resourceTimelineFilteredHead button{
+  padding:8px 13px!important;font-size:10px!important;font-weight:850!important;
+  border-radius:8px!important;background:var(--text)!important;color:var(--panel)!important
+}
+
+.opFirePicker{display:grid;grid-template-columns:minmax(190px,1fr) minmax(190px,1fr);gap:7px;min-width:420px}
+.opFirePicker input,.opFirePicker select{
+  width:100%;border:1px solid var(--line);background:var(--panel2);
+  color:var(--text);border-radius:8px;padding:8px 9px;font-size:9px
+}
+.opFireHeroIcon{background:transparent!important;border:0!important}
+.opFireHeroEmoji{font-size:44px;line-height:1;filter:drop-shadow(0 4px 7px rgba(0,0,0,.38))}
+
+/* Cards should not stretch to the height of the ranking beside them */
+.damageCore{align-items:start!important}
+.damageMapCard{align-self:start!important;height:auto!important;min-height:0!important}
+.damageMap{height:auto!important}
+.damageMap .leaflet-container{height:480px!important}
+
+/* Maps: avoid unused dark space */
+.mapShell,.priorityLeafletCard,.damageMapCard,.exposureMapCard,.opMapShell{align-self:start}
+@media(max-width:900px){
+  .opFirePicker{grid-template-columns:1fr;min-width:220px}
+}

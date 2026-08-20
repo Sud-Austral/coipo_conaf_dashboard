@@ -2,8 +2,9 @@ import { useMemo, useState } from "react";
 import { Info, Gauge, Users, Truck, Flame, Clock, Activity } from "lucide-react";
 import OperationalReplayMap from "./OperationalReplayMap.jsx";
 import KpiInfo from "./KpiInfo.jsx";
-import { operationalSummary, operationalReplayFires } from "../data/dashboardData.js";
-import { operationalFireLifecycleReal } from "../data/operationalFireLifecycle.real.js";
+import { operationalSummary } from "../data/dashboardData.js";
+import { operationalReplayExtended as operationalReplayFires } from "../data/operationalReplay.extended.js";
+import { operationalFireLifecycleExtended as operationalFireLifecycleReal } from "../data/operationalFireLifecycle.extended.js";
 
 
 function formatDuration(minutes){
@@ -123,6 +124,7 @@ function Kpi({icon:Icon,label,value,sub,detail,coverage,source,confidence}){
 export default function OperationsView(){
   const [fireId,setFireId]=useState(operationalReplayFires[0].id);
   const [selectedResourceIds,setSelectedResourceIds]=useState([]);
+  const [fireSearch,setFireSearch]=useState("");
   const fire=useMemo(()=>operationalReplayFires.find(f=>f.id===fireId)||operationalReplayFires[0],[fireId]);
   const lifecycle=operationalFireLifecycleReal[fire.id]||null;
   const selectedResources=fire.resources.filter(r=>selectedResourceIds.includes(String(r.id)));
@@ -152,7 +154,7 @@ export default function OperationsView(){
     </section>
 
     <section className="opMainGrid">
-      <OperationalReplayMap fire={fire} fireOptions={operationalReplayFires} selectedResourceId={selectedResourceIds} onSelectResource={toggleResource} onFireChange={(id)=>{setFireId(id);setSelectedResourceIds([])}}/>
+      <OperationalReplayMap fire={fire} fireOptions={operationalReplayFires} fireSearch={fireSearch} onFireSearch={setFireSearch} selectedResourceId={selectedResourceIds} onSelectResource={toggleResource} onFireChange={(id)=>{setFireId(id);setSelectedResourceIds([])}}/>
       <aside className="opSide">
         <div className="opIncident">
           <small>INCENDIO SELECCIONADO</small>

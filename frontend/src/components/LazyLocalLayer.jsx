@@ -15,20 +15,7 @@ function mapBBox(map){
   return [b.getWest(),b.getSouth(),b.getEast(),b.getNorth()];
 }
 
-function Notice({text}){
-  const map=useMap();
-  useEffect(()=>{
-    const container=map.getContainer();
-    const id=`layer-notice-${Math.random().toString(36).slice(2)}`;
-    const d=document.createElement("div");
-    d.id=id;
-    d.className="localLayerNotice localLayerNoticeSingle";
-    d.textContent=text;
-    container.appendChild(d);
-    return ()=>{document.getElementById(id)?.remove()};
-  },[map,text]);
-  return null;
-}
+function Notice(){ return null; }
 
 export function LazyLocalLayer({layer,style,onEachFeature,minZoom=0,label}){
   const map=useMap();
@@ -75,7 +62,7 @@ export function LazyLocalLayer({layer,style,onEachFeature,minZoom=0,label}){
   },[load,map]);
 
   return <>
-    {status==="unavailable" && <Notice text={`${label}: No disponible`}/>}
+    
     {collections.map((fc,i)=><GeoJSON key={`${layer}-${i}-${map.getZoom()}`} data={fc} style={style} onEachFeature={onEachFeature}/>)}
   </>;
 }

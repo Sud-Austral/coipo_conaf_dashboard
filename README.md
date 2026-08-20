@@ -233,3 +233,14 @@ Fuentes cartográficas configuradas:
 - Aviso No disponible ligado exclusivamente a la capa montada/seleccionada.
 - Bitácora: detalle operacional visible en pantalla y opcional para PDF mediante checkbox.
 - Contexto urbano/rural de Bitácora incorpora anillos 1/3/5 km por defecto, también imprimibles.
+
+## v2.8.9
+- Unifica todos los botones ⓘ con popover flotante compacto fuera de las tarjetas.
+- Elimina avisos automáticos de capas no seleccionadas.
+- Vista 3 amplía el catálogo de replay espacial a 300 incendios con base georreferenciada.
+- Agrega búsqueda por nombre/ID junto al selector de incendio.
+- Incendio del replay se representa como 🔥 y se mantiene sobre los recursos.
+- Botón Limpiar recursos más visible.
+- Vista 4 recalcula KPI y composición al seleccionar una región.
+- Vista 6 ya no activa Zonas urbanas por defecto.
+- Corrige estiramiento vertical del mapa de impacto.

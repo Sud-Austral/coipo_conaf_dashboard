@@ -1,15 +1,22 @@
-import InfoPopover from "./InfoPopover.jsx";
+import KpiInfo from "./KpiInfo.jsx";
 
-export default function KpiCard({item, compact=false}) {
+export default function KpiCard({item,compact=false}){
+  const delta=String(item.delta||"");
   return (
-    <article className={`kpiCard ${compact ? "compact" : ""}`}>
+    <article className={`kpiCard ${compact?"compact":""}`}>
       <div className="kpiTitle">
         <span>{item.label}</span>
-        <InfoPopover item={item}/>
+        <KpiInfo
+          label={item.label}
+          detail={item.detail}
+          coverage={item.coverage}
+          confidence={item.confidence}
+          source={item.source}
+        />
       </div>
       <strong>{item.value}</strong>
-      <small className={item.delta.startsWith("+") ? "delta up" : item.delta.startsWith("−") ? "delta down" : "delta"}>
-        {item.delta}
+      <small className={delta.startsWith("+")?"delta up":delta.startsWith("−")?"delta down":"delta"}>
+        {delta}
       </small>
     </article>
   );

@@ -97,7 +97,7 @@ export default function PopulationExposureMap({fire,nearest}){
           </LayerGroup>
         </Overlay>
 
-        <Overlay checked name="Zonas urbanas">
+        <Overlay name="Zonas urbanas">
           <LayerGroup><CensusContextLayers showUrban minUrbanZoom={7}/></LayerGroup>
         </Overlay>
         <Overlay name="Localidades rurales">
