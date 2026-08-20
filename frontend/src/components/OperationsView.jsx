@@ -3,6 +3,59 @@ import { Info, Gauge, Users, Truck, Flame, Clock, Activity } from "lucide-react"
 import OperationalReplayMap from "./OperationalReplayMap.jsx";
 import { operationalSummary, operationalReplayFires } from "../data/dashboardData.js";
 
+
+function formatDuration(minutes){
+  const m=Math.max(0,Math.round(minutes));
+  if(m<60) return `${m} min`;
+  const h=Math.floor(m/60);
+  const rest=m%60;
+  return rest ? `${h} h ${rest} min` : `${h} h`;
+}
+
+function ResourceTimeline({resource}){
+  const events=resource.events || [];
+  const max=Math.max(1,...events.map(e=>e.t));
+  return (
+    <article className="resourceTimeline">
+      <b>{resource.name}</b>
+      <div className="resourceTimelineBody">
+        <div className="timelineTrackV251">
+          {events.map((e,index)=>(
+            <span
+              key={`${resource.id}-${e.label}`}
+              className="timelineEventV251"
+              style={{left:`${(e.t/max)*100}%`}}
+              title={`${e.label} · ${e.time}`}
+            >
+              <i/>
+              <em>{e.label}</em>
+              <small>{e.time}</small>
+            </span>
+          ))}
+        </div>
+        <div className="timelineDurationsV251">
+          {events.slice(0,-1).map((e,index)=>{
+            const next=events[index+1];
+            const left=(e.t/max)*100;
+            const right=(next.t/max)*100;
+            const width=Math.max(2,right-left);
+            return (
+              <span
+                key={`${resource.id}-dur-${index}`}
+                style={{left:`${left}%`,width:`${width}%`}}
+                title={`${e.label} → ${next.label}: ${formatDuration(next.t-e.t)}`}
+              >
+                {formatDuration(next.t-e.t)}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+
 function Kpi({icon:Icon,label,value,sub}){
   return <article className="opKpi"><div><Icon size={17}/><span>{label}</span></div><strong>{value}</strong><small>{sub}</small></article>;
 }
@@ -57,7 +110,7 @@ export default function OperationsView(){
 
     <section className="opTimeline">
       <div><small>HISTORIA OPERACIONAL</small><h3>Hitos del incendio seleccionado</h3></div>
-      {fire.resources.map(r=><article key={r.id}><b>{r.name}</b><div className="timelineTrack">{r.events.map(e=><span key={e.label} style={{left:`${(e.t/Math.max(...r.events.map(x=>x.t)))*100}%`}} title={`${e.label} · ${e.time}`}><i></i><em>{e.label}</em></span>)}</div></article>)}
+      {fire.resources.map(r=><ResourceTimeline key={r.id} resource={r}/>)}
     </section>
 
     <section className="opNote">

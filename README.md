@@ -63,3 +63,8 @@ La capa IPT nacional ahora usa polígonos GeoJSON regionales completos. Hover re
 - Vista 3 Operación y Recursos implementada.
 - Replay operacional jugable con Play/Pausa/Reinicio/slider.
 - Replay usa datos demo hasta conectar `movimiento` real.
+
+
+## v2.5.1
+- Vista 2: corrección completa de layout, KPI y gráfico comparativo.
+- Vista 3: duraciones entre hitos mostradas en minutos u horas/minutos.
