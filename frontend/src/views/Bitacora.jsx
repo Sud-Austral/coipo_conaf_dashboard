@@ -1,11 +1,21 @@
 import { Printer, ArrowLeft, Copy, Map, Satellite, Truck, Building2 } from "lucide-react";
-import { MapContainer, TileLayer, Marker, CircleMarker, Polyline, Tooltip } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline, Tooltip, LayersControl, LayerGroup } from "react-leaflet";
 import L from "leaflet";
 import { operationalReplayFires } from "../data/dashboardData.js";
 import CensusContextLayers from "../components/CensusContextLayers.jsx";
 
+const { BaseLayer, Overlay } = LayersControl;
+
 const fireIcon=L.divIcon({className:"bitFireIcon",html:'<div style="font-size:28px">🔥</div>',iconSize:[30,30],iconAnchor:[15,25]});
-const resourceIcon=L.divIcon({className:"bitResourceIcon",html:'<div class="bitResourceDot">●</div>',iconSize:[18,18],iconAnchor:[9,9]});
+const bitResourceIcon=(type)=>{
+  const symbol = type==="aereo" ? "🚁" : type==="avion" ? "✈️" : type==="brigada" ? "🚙" : type==="terrestre" ? "🛻" : "👥";
+  return L.divIcon({
+    className:"bitResourceIcon",
+    html:`<div class="bitResourceEmoji">${symbol}</div>`,
+    iconSize:[28,28],
+    iconAnchor:[14,14]
+  });
+};
 
 function MiniMap({type,fire}){
   const op=operationalReplayFires.find(x=>x.id===fire.id);
@@ -19,17 +29,42 @@ function MiniMap({type,fire}){
       <b>{type==="normal"?"Ubicación y contexto":type==="satellite"?"Vista satelital":type==="resources"?"Recursos en el sitio":"Contexto urbano/rural"}</b>
     </div>
     <MapContainer center={center} zoom={type==="urban"?11:10} zoomControl={false} dragging={false} scrollWheelZoom={false} doubleClickZoom={false} attributionControl={false}>
-      {type==="satellite"
-        ? <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"/>
-        : <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>}
-      <Marker position={center} icon={fireIcon}><Tooltip permanent direction="top">Incendio</Tooltip></Marker>
-      {type==="resources" && op?.resources?.map(r=><span key={r.id}>
-        <Polyline positions={[r.base,r.destination]} pathOptions={{weight:2,dashArray:"4 6",opacity:.55}}/>
-        <Marker position={r.destination} icon={resourceIcon}><Tooltip>{r.name}</Tooltip></Marker>
-      </span>)}
-      {type==="urban" && <CensusContextLayers showUrban showRural minUrbanZoom={7} minRuralZoom={9}/>}
+      <LayersControl position="topright">
+        <BaseLayer checked={type!=="satellite"} name="Mapa claro">
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+        </BaseLayer>
+        <BaseLayer checked={type==="satellite"} name="Satélite">
+          <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"/>
+        </BaseLayer>
+        <BaseLayer name="Relieve">
+          <TileLayer url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"/>
+        </BaseLayer>
+
+        <Overlay checked name="Incendio">
+          <LayerGroup>
+            <Marker position={center} icon={fireIcon}><Tooltip permanent direction="top">Incendio</Tooltip></Marker>
+          </LayerGroup>
+        </Overlay>
+
+        <Overlay checked={type==="resources"} name="Recursos">
+          <LayerGroup>
+            {op?.resources?.map(r=><span key={r.id}>
+              <Polyline positions={[r.base,r.destination]} pathOptions={{weight:2,dashArray:"4 6",opacity:.55}}/>
+              <Marker position={r.destination} icon={bitResourceIcon(r.type)}><Tooltip>{r.name}</Tooltip></Marker>
+            </span>)}
+          </LayerGroup>
+        </Overlay>
+
+        <Overlay checked={type==="urban"} name="Zonas urbanas">
+          <LayerGroup><CensusContextLayers showUrban minUrbanZoom={7}/></LayerGroup>
+        </Overlay>
+
+        <Overlay checked={type==="urban"} name="Localidades rurales">
+          <LayerGroup><CensusContextLayers showRural minRuralZoom={9}/></LayerGroup>
+        </Overlay>
+      </LayersControl>
     </MapContainer>
-    {type==="urban"&&<small className="bitMapCaveat">Contexto censal cargado dinámicamente desde capas de origen INE según el área visible.</small>}
+    {type==="urban"&&<small className="bitMapCaveat">Contexto urbano/rural disponible desde el selector de capas.</small>}
   </div>;
 }
 
@@ -62,7 +97,7 @@ export default function Bitacora({fire,onBack}) {
       <section className="bitIntroGrid">
         <div>
           <h2>Resumen del evento</h2>
-          <p>Durante la jornada se registró un incendio forestal en <b>{f.name}</b>. La superficie registrada alcanzó aproximadamente <b>{f.ha.toLocaleString("es-CL")} hectáreas</b>. La reconstrucción narrativa utiliza únicamente hechos disponibles en SIDCO.</p>
+          <p>Durante la jornada se registró un incendio forestal en <b>{f.name}</b>. La superficie registrada alcanzó aproximadamente <b>{f.ha.toLocaleString("es-CL")} hectáreas</b>.</p>
           <p>El evento figura con estado <b>{f.estado}</b>. Cuando una etapa operacional no cuenta con información suficiente, la bitácora lo declara explícitamente en lugar de completar el relato mediante supuestos.</p>
         </div>
         <aside className="bitQuickFacts">
@@ -128,7 +163,7 @@ export default function Bitacora({fire,onBack}) {
         <div className="bitSources"><span>Incendio ✓</span><span>Movimientos ✓</span><span>Recursos ✓</span><span>Daño · según cobertura</span><span>Urbano/rural · pendiente servicio oficial</span></div>
       </section>
 
-      <footer>Fuente: SIDCO · Documento generado desde Forestin / COIPO Dashboard · v2.6.0</footer>
+      <footer>Fuente: SIDCO · Documento generado desde Forestin / COIPO Dashboard · v2.6.5</footer>
     </article>
   );
 }

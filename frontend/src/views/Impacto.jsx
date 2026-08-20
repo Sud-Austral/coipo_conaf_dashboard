@@ -66,19 +66,15 @@ export default function Impacto({onOpenBitacora}){
     </section>
 
     <section className="damageCategoryCard">
-      <div className="damageCardHead"><small>COMPOSICIÓN</small><h3>¿Qué se está dañando?</h3><p>Clasificación ejecutiva validada contra reportes CONAF provenientes de SIDCO.</p></div>
+      <div className="damageCardHead"><small>COMPOSICIÓN</small><h3>¿Qué se está dañando?</h3><p>Distribución de la superficie de daño caracterizada por tipo de cobertura afectada.</p></div>
       <div className="damageCategoryBars">
         {damageByCategory202526.map(x=>{
           const pct=x.ha/totalCat*100;
           return <button key={x.key} className={category===x.key?"selected":""} onClick={()=>setCategory(category===x.key?null:x.key)}>
             <div><b>{x.label}</b><span>{fmt(x.ha)} ha · {pct.toFixed(1).replace(".",",")}%</span></div>
             <i><em style={{width:`${x.ha/maxCat*100}%`}}/></i>
-            <small>SIDCO {x.codes.length>1?`códigos ${x.codes[0]}–${x.codes.at(-1)}`:`código ${x.codes[0]}`}</small>
           </button>
         })}
-      </div>
-      <div className="damageDictionaryNote">
-        <Info size={15}/><p>Los códigos 1–5 se consolidan como <b>Plantaciones</b>. Sus subtipos individuales permanecen pendientes de catálogo oficial y no se interpretan en esta versión.</p>
       </div>
     </section>
 

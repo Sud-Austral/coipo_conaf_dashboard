@@ -1,15 +1,31 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Play, Pause, RotateCcw, SkipBack, Clock3 } from "lucide-react";
-import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker, Tooltip, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker, Tooltip, useMap, LayersControl, LayerGroup } from "react-leaflet";
 import L from "leaflet";
+import CensusContextLayers from "./CensusContextLayers.jsx";
+
+const { BaseLayer, Overlay } = LayersControl;
 
 const iconFor = (type, active=false) => {
-  const symbol = type==="aereo" ? "✈" : type==="brigada" ? "◆" : "●";
+  const symbol =
+    type==="aereo" ? "🚁" :
+    type==="avion" ? "✈️" :
+    type==="brigada" ? "🚙" :
+    type==="terrestre" ? "🛻" :
+    type==="personal" ? "👥" : "🚐";
+
+  const label =
+    type==="aereo" ? "Helicóptero" :
+    type==="avion" ? "Avión" :
+    type==="brigada" ? "Brigada" :
+    type==="terrestre" ? "Recurso terrestre" :
+    type==="personal" ? "Personal" : "Recurso";
+
   return L.divIcon({
     className:"opResourceIcon",
-    html:`<div class="opResourceSymbol ${type} ${active?"active":""}">${symbol}</div>`,
-    iconSize:[30,30],
-    iconAnchor:[15,15]
+    html:`<div class="opResourceEmoji ${active?"active":""}" title="${label}">${symbol}</div>`,
+    iconSize:[38,38],
+    iconAnchor:[19,19]
   });
 };
 
@@ -75,22 +91,59 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
     <div className="opReplayMap">
       <MapContainer center={[fire.lat,fire.lon]} zoom={9} scrollWheelZoom>
         <FitFire fire={fire}/>
-        <TileLayer attribution='&copy; OpenStreetMap' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-        <CircleMarker center={[fire.lat,fire.lon]} radius={18} pathOptions={{color:"#a9423a",fillColor:"#d65749",fillOpacity:.72}}>
-          <Tooltip permanent direction="top">Incendio · {fire.name}</Tooltip>
-          <Popup>{fire.ha.toLocaleString("es-CL")} ha · {fire.status}</Popup>
-        </CircleMarker>
 
-        {fire.resources.map(r=>{
-          const s=resourceState(r);
-          return <span key={r.id}>
-            <Polyline positions={[r.base,r.destination]} pathOptions={{weight:2,dashArray:"6 7",opacity:.45}}/>
-            <Marker position={s.pos} icon={iconFor(r.type,s.status==="En operación")}>
-              <Tooltip>{r.name} · {s.status}</Tooltip>
-              <Popup><b>{r.name}</b><br/>{r.combatants} combatientes<br/>{s.status}</Popup>
-            </Marker>
-          </span>;
-        })}
+        <LayersControl position="topright">
+          <BaseLayer checked name="Mapa claro">
+            <TileLayer attribution="&copy; OpenStreetMap" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+          </BaseLayer>
+
+          <BaseLayer name="Satélite">
+            <TileLayer attribution="Imagery &copy; Esri" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"/>
+          </BaseLayer>
+
+          <BaseLayer name="Relieve">
+            <TileLayer attribution="&copy; OpenTopoMap contributors" url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"/>
+          </BaseLayer>
+
+          <Overlay checked name="Incendio">
+            <LayerGroup>
+              <CircleMarker center={[fire.lat,fire.lon]} radius={18} pathOptions={{color:"#a9423a",fillColor:"#d65749",fillOpacity:.72}}>
+                <Tooltip permanent direction="top">🔥 {fire.name}</Tooltip>
+                <Popup>{fire.ha.toLocaleString("es-CL")} ha · {fire.status}</Popup>
+              </CircleMarker>
+            </LayerGroup>
+          </Overlay>
+
+          <Overlay checked name="Recursos">
+            <LayerGroup>
+              {fire.resources.map(r=>{
+                const s=resourceState(r);
+                return <span key={r.id}>
+                  <Polyline positions={[r.base,r.destination]} pathOptions={{weight:2,dashArray:"6 7",opacity:.45}}/>
+                  <Marker position={s.pos} icon={iconFor(r.type,s.status==="En operación")}>
+                    <Tooltip>
+                      <div className="resourceTooltip">
+                        <b>{r.name}</b>
+                        <span>{r.type==="aereo"?"Helicóptero":r.type==="brigada"?"Brigada":r.type==="terrestre"?"Recurso terrestre":r.type}</span>
+                        <span>{r.combatants} combatientes</span>
+                        <span>{s.status}</span>
+                      </div>
+                    </Tooltip>
+                    <Popup><b>{r.name}</b><br/>{r.combatants} combatientes<br/>{s.status}</Popup>
+                  </Marker>
+                </span>;
+              })}
+            </LayerGroup>
+          </Overlay>
+
+          <Overlay name="Zonas urbanas">
+            <LayerGroup><CensusContextLayers showUrban minUrbanZoom={7}/></LayerGroup>
+          </Overlay>
+
+          <Overlay name="Localidades rurales">
+            <LayerGroup><CensusContextLayers showRural minRuralZoom={9}/></LayerGroup>
+          </Overlay>
+        </LayersControl>
       </MapContainer>
     </div>
 

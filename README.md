@@ -97,3 +97,17 @@ La capa IPT nacional ahora usa polígonos GeoJSON regionales completos. Hover re
 - Vista 2 reemplaza fallback visual por Leaflet/GeoJSON real.
 - Vista 2 elimina gráfico de burbujas y agrega ranking ejecutivo explicativo.
 - Capas censales disponibles en Vista 2, Vista 4 y Bitácora.
+
+
+## v2.6.4
+- Vista 4 sin códigos SIDCO visibles.
+- Tooltips KPI controlados por clic y cerrados por defecto.
+
+
+## v2.6.5
+- Filtros Hoy/7 días/30 días/Temporada/Personalizado funcionales.
+- Estado vacío demostrativo para períodos sin datos.
+- Selector de capas Leaflet estandarizado en mapas.
+- Vista 1: leyenda de incendios con llamas crecientes y menos ruido técnico.
+- Vista 3: replay con emojis por tipo de recurso.
+- Bitácora: limpieza narrativa y selector de capas estandarizado.

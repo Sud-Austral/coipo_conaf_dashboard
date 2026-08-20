@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Info, MapPin, ArrowUpRight, ArrowDownRight, Layers3 } from "lucide-react";
-import { MapContainer, TileLayer, GeoJSON, Tooltip, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, GeoJSON, Tooltip, useMap, LayersControl, LayerGroup } from "react-leaflet";
 import L from "leaflet";
 import { regions, territorialPriority } from "../data/dashboardData.js";
 import { loadRegionGeoJSON } from "../data/regionGeoJson.js";
 import KpiInfo from "./KpiInfo.jsx";
 import CensusContextLayers from "./CensusContextLayers.jsx";
+
+const { BaseLayer, Overlay } = LayersControl;
 
 const priorityColor = v =>
   v >= 80 ? "#aa433a" :
@@ -48,10 +50,6 @@ function reasonFor(item){
 
 function PriorityMap({items,selectedId,onSelect}){
   const [geo,setGeo]=useState(null);
-  const [base,setBase]=useState("normal");
-  const [urban,setUrban]=useState(false);
-  const [rural,setRural]=useState(false);
-  const [status,setStatus]=useState({urban:"off",rural:"off"});
 
   useEffect(()=>{
     let alive=true;
@@ -80,60 +78,57 @@ function PriorityMap({items,selectedId,onSelect}){
         <h3>Prioridad territorial</h3>
         <p>Polígono completo = territorio. Clic para seleccionar; el mapa hace zoom animado.</p>
       </div>
-      <div className="priorityMapBase">
-        <button className={base==="normal"?"active":""} onClick={()=>setBase("normal")}>Claro</button>
-        <button className={base==="satellite"?"active":""} onClick={()=>setBase("satellite")}>Satélite</button>
-      </div>
     </div>
 
-    <div className="priorityLayerControls">
-      <span><Layers3 size={14}/> Capas</span>
-      <button className={urban?"active":""} onClick={()=>setUrban(v=>!v)}>Zonas urbanas</button>
-      <button className={rural?"active":""} onClick={()=>setRural(v=>!v)}>Localidades rurales</button>
-    </div>
-
-    <div className="priorityLeafletMap">
+<div className="priorityLeafletMap">
       <MapContainer center={[-36.5,-71.3]} zoom={5.2} scrollWheelZoom>
-        {base==="normal"
-          ? <TileLayer attribution="&copy; OpenStreetMap" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-          : <TileLayer attribution="Esri" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"/>}
-
         <FlyRegion selected={selected} geo={geo}/>
 
-        {geo && <GeoJSON
-          key={`${selectedId}-${base}`}
-          data={geo}
-          style={styleFeature}
-          onEachFeature={(feature,layer)=>{
-            const id=feature?.properties?.__regionId;
-            const item=items.find(x=>String(x.id)===String(id));
-            if(item){
-              layer.bindTooltip(
-                `<b>${item.name}</b><br>IPT ${item.ipt}<br>${Number(item.incendios||0).toLocaleString("es-CL")} incendios`,
-                {sticky:true}
-              );
-              layer.on("click",()=>onSelect(item.id));
-            }
-          }}
-        />}
+        <LayersControl position="topright">
+          <BaseLayer checked name="Mapa claro">
+            <TileLayer attribution="&copy; OpenStreetMap" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+          </BaseLayer>
 
-        <CensusContextLayers
-          showUrban={urban}
-          showRural={rural}
-          minUrbanZoom={7}
-          minRuralZoom={9}
-          onStatusChange={setStatus}
-        />
+          <BaseLayer name="Satélite">
+            <TileLayer attribution="Imagery &copy; Esri" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"/>
+          </BaseLayer>
+
+          <BaseLayer name="Relieve">
+            <TileLayer attribution="&copy; OpenTopoMap contributors" url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"/>
+          </BaseLayer>
+
+          <Overlay checked name="IPT territorial">
+            <LayerGroup>
+              {geo && <GeoJSON
+                key={`${selectedId}-ipt`}
+                data={geo}
+                style={styleFeature}
+                onEachFeature={(feature,layer)=>{
+                  const id=feature?.properties?.__regionId;
+                  const item=items.find(x=>String(x.id)===String(id));
+                  if(item){
+                    layer.bindTooltip(
+                      `<b>${item.name}</b><br>IPT ${item.ipt}<br>${Number(item.incendios||0).toLocaleString("es-CL")} incendios`,
+                      {sticky:true}
+                    );
+                    layer.on("click",()=>onSelect(item.id));
+                  }
+                }}
+              />}
+            </LayerGroup>
+          </Overlay>
+
+          <Overlay name="Zonas urbanas">
+            <LayerGroup><CensusContextLayers showUrban minUrbanZoom={7}/></LayerGroup>
+          </Overlay>
+
+          <Overlay name="Localidades rurales">
+            <LayerGroup><CensusContextLayers showRural minRuralZoom={9}/></LayerGroup>
+          </Overlay>
+        </LayersControl>
       </MapContainer>
 
-      {(urban||rural) && <div className="priorityCensusStatus">
-        {urban && status.urban==="zoom" && <span>Acerca el mapa para ver zonas urbanas.</span>}
-        {rural && status.rural==="zoom" && <span>Acerca a nivel comunal para ver entidades rurales.</span>}
-        {urban && String(status.urban).startsWith("ok:") && <span>Zonas urbanas reales: {String(status.urban).split(":")[1]}</span>}
-        {rural && String(status.rural).startsWith("ok:") && <span>Entidades rurales reales: {String(status.rural).split(":")[1]}</span>}
-      </div>}
-
-      <div className="priorityLayerLegend">
+<div className="priorityLayerLegend">
         <b>IPT</b>
         <span><i className="low"/>Baja</span>
         <span><i className="medium"/>Media</span>

@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Layers3, MapPin } from "lucide-react";
-import { MapContainer, TileLayer, Marker, Popup, Tooltip, GeoJSON, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Tooltip, GeoJSON, useMap, LayersControl, LayerGroup } from "react-leaflet";
 import L from "leaflet";
 import { fires, regions } from "../data/dashboardData.js";
 import { loadRegionGeoJSON } from "../data/regionGeoJson.js";
 import CensusContextLayers from "./CensusContextLayers.jsx";
+
+const { BaseLayer, Overlay } = LayersControl;
 
 const flameIcon = ha => {
   const size=Math.max(25,Math.min(58,24+Math.sqrt(Math.max(ha,0))/3));
@@ -28,10 +30,6 @@ function FlyToSelection({regionId}){
 
 export default function DamageImpactMap({selectedRegion,onSelectRegion,onOpenBitacora}){
   const [geo,setGeo]=useState(null);
-  const [base,setBase]=useState("normal");
-  const [urban,setUrban]=useState(false);
-  const [rural,setRural]=useState(false);
-  const [censusStatus,setCensusStatus]=useState({urban:"off",rural:"off"});
 
   useEffect(()=>{
     let alive=true;
@@ -60,63 +58,64 @@ export default function DamageImpactMap({selectedRegion,onSelectRegion,onOpenBit
   return <section className="damageMapCard">
     <div className="damageMapHeader">
       <div><small>MAPA DE IMPACTO</small><h3>Concentración territorial del daño</h3><p>Polígono territorial + incendios dimensionados por superficie.</p></div>
-      <div className="damageMapBase">
-        <button className={base==="normal"?"active":""} onClick={()=>setBase("normal")}>Claro</button>
-        <button className={base==="satellite"?"active":""} onClick={()=>setBase("satellite")}>Satélite</button>
-        <button className={base==="relief"?"active":""} onClick={()=>setBase("relief")}>Relieve</button>
-      </div>
     </div>
-    <div className="damageLayerBar">
-      <span><Layers3 size={14}/> Capas</span>
-      <button className="active">Incendios</button>
-      <button className="active">Superficie</button>
-      <button className="active">&gt;400 ha</button>
-      <button className={urban?"active":""} onClick={()=>setUrban(v=>!v)}>Zonas urbanas</button>
-      <button className={rural?"active":""} onClick={()=>setRural(v=>!v)}>Localidades rurales</button>
-    </div>
-    <div className="damageMap">
+<div className="damageMap">
       <MapContainer center={[-36.4,-71.4]} zoom={5.25} scrollWheelZoom>
         <FlyToSelection regionId={selectedRegion}/>
-        {base==="normal" && <TileLayer attribution="&copy; OpenStreetMap" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>}
-        {base==="satellite" && <TileLayer attribution="Esri" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"/>}
-        {base==="relief" && <TileLayer attribution="OpenTopoMap" url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"/>}
-        {geo && <GeoJSON key={`${selectedRegion||"all"}-${base}`} data={geo} style={styleFeature}
-          onEachFeature={(feature,layer)=>{
-            const id=feature?.properties?.__regionId;
-            const r=regions.find(x=>String(x.id)===String(id));
-            if(r){
-              layer.bindTooltip(`${r.name} · ${(r.superficie||0).toLocaleString("es-CL")} ha registradas`);
-              layer.on("click",()=>onSelectRegion?.(id));
-            }
-          }}
-        />}
-        {shownFires.map(f=><Marker key={f.id} position={[f.lat,f.lon]} icon={flameIcon(f.ha)}
-          eventHandlers={{dblclick:()=>onOpenBitacora?.(f)}}>
-          <Tooltip direction="top" offset={[0,-20]}>
-            <div className="fireTooltip"><b>{f.name}</b><span>{f.ha.toLocaleString("es-CL")} ha</span><small>Doble clic → Bitácora</small></div>
-          </Tooltip>
-          <Popup><b>{f.name}</b><br/>{f.ha.toLocaleString("es-CL")} ha<br/>{f.estado}</Popup>
-        </Marker>)}
 
-        <CensusContextLayers
-          showUrban={urban}
-          showRural={rural}
-          minUrbanZoom={7}
-          minRuralZoom={9}
-          onStatusChange={setCensusStatus}
-        />
+        <LayersControl position="topright">
+          <BaseLayer checked name="Mapa claro">
+            <TileLayer attribution="&copy; OpenStreetMap" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+          </BaseLayer>
+
+          <BaseLayer name="Satélite">
+            <TileLayer attribution="Imagery &copy; Esri" url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"/>
+          </BaseLayer>
+
+          <BaseLayer name="Relieve">
+            <TileLayer attribution="&copy; OpenTopoMap contributors" url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"/>
+          </BaseLayer>
+
+          <Overlay checked name="Impacto territorial">
+            <LayerGroup>
+              {geo && <GeoJSON
+                key={`${selectedRegion||"all"}-impact`}
+                data={geo}
+                style={styleFeature}
+                onEachFeature={(feature,layer)=>{
+                  const id=feature?.properties?.__regionId;
+                  const r=regions.find(x=>String(x.id)===String(id));
+                  if(r){
+                    layer.bindTooltip(`${r.name} · ${(r.superficie||0).toLocaleString("es-CL")} ha registradas`);
+                    layer.on("click",()=>onSelectRegion?.(id));
+                  }
+                }}
+              />}
+            </LayerGroup>
+          </Overlay>
+
+          <Overlay checked name="Incendios">
+            <LayerGroup>
+              {shownFires.map(f=><Marker key={f.id} position={[f.lat,f.lon]} icon={flameIcon(f.ha)}
+                eventHandlers={{dblclick:()=>onOpenBitacora?.(f)}}>
+                <Tooltip direction="top" offset={[0,-20]}>
+                  <div className="fireTooltip"><b>{f.name}</b><span>{f.ha.toLocaleString("es-CL")} ha</span><small>Doble clic → Bitácora</small></div>
+                </Tooltip>
+                <Popup><b>{f.name}</b><br/>{f.ha.toLocaleString("es-CL")} ha<br/>{f.estado}</Popup>
+              </Marker>)}
+            </LayerGroup>
+          </Overlay>
+
+          <Overlay name="Zonas urbanas">
+            <LayerGroup><CensusContextLayers showUrban minUrbanZoom={7}/></LayerGroup>
+          </Overlay>
+
+          <Overlay name="Localidades rurales">
+            <LayerGroup><CensusContextLayers showRural minRuralZoom={9}/></LayerGroup>
+          </Overlay>
+        </LayersControl>
       </MapContainer>
 
-      {(urban||rural) && <div className="officialLayerNotice">
-        <MapPin size={14}/>
-        <span>
-          {urban && censusStatus.urban==="zoom" && "Zonas urbanas: acerca el mapa para cargar geometrías reales. "}
-          {rural && censusStatus.rural==="zoom" && "Localidades rurales: acerca el mapa a nivel comunal para cargar geometrías reales. "}
-          {urban && String(censusStatus.urban).startsWith("ok:") && `Zonas urbanas cargadas: ${String(censusStatus.urban).split(":")[1]}. `}
-          {rural && String(censusStatus.rural).startsWith("ok:") && `Entidades rurales cargadas: ${String(censusStatus.rural).split(":")[1]}. `}
-          {(censusStatus.urban==="error"||censusStatus.rural==="error") && "No fue posible consultar temporalmente el servicio cartográfico."}
-        </span>
-      </div>}
-    </div>
+</div>
   </section>;
 }

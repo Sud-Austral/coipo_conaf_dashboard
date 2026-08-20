@@ -9,6 +9,7 @@ import {
 } from "../data/dashboardData.js";
 import { loadRegionGeoJSON } from "../data/regionGeoJson.js";
 import { flameHtml } from "./FlameIcon.jsx";
+import CensusContextLayers from "./CensusContextLayers.jsx";
 
 const { BaseLayer, Overlay } = LayersControl;
 
@@ -216,15 +217,7 @@ export default function ExecutiveMap({
   return (
     <section className="mapShell">
       <div className="mapHeading">
-        <div>
-          <h3>Mapa de situación</h3>
-          <p>Polígono = territorio · llama = incendio · hover informa · clic filtra.</p>
-        </div>
-        <span className="mapBadge">
-          {geoStatus === "ready" ? "Leaflet · límites reales" :
-           geoStatus === "loading" ? "Cargando límites…" :
-           "Leaflet · modo respaldo"}
-        </span>
+        <div><h3>Mapa de situación</h3></div>
       </div>
 
       <MapContainer center={[-36.8,-72.4]} zoom={5} scrollWheelZoom>
@@ -243,6 +236,14 @@ export default function ExecutiveMap({
               attribution='Imagery &copy; Esri and contributors'
               url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
               maxZoom={19}
+            />
+          </BaseLayer>
+
+          <BaseLayer name="Relieve">
+            <TileLayer
+              attribution='&copy; OpenTopoMap contributors'
+              url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
+              maxZoom={17}
             />
           </BaseLayer>
 
@@ -339,6 +340,18 @@ export default function ExecutiveMap({
             </LayerGroup>
           </Overlay>
 
+          <Overlay name="Zonas urbanas">
+            <LayerGroup>
+              <CensusContextLayers showUrban minUrbanZoom={7}/>
+            </LayerGroup>
+          </Overlay>
+
+          <Overlay name="Localidades rurales">
+            <LayerGroup>
+              <CensusContextLayers showRural minRuralZoom={9}/>
+            </LayerGroup>
+          </Overlay>
+
           <Overlay name="Calidad del dato">
             <LayerGroup>
               {regions.map(r => (
@@ -362,16 +375,14 @@ export default function ExecutiveMap({
       </MapContainer>
 
       <div className="mapMetaRow">
-        <span>Límites regionales GeoJSON</span>
         <span className="geoRule">IPT colorea el territorio completo</span>
       </div>
 
-      <div className="fireLegend">
-        <span><i className="legendFlame sm">◆</i>&lt;10 ha</span>
-        <span><i className="legendFlame md">◆</i>10–400 ha</span>
-        <span><i className="legendFlame lg">◆</i>400–1.000 ha</span>
-        <span><i className="legendFlame xl">◆</i>&gt;1.000 ha</span>
-        <small>Tamaño de llama = superficie registrada</small>
+      <div className="fireLegend flameSizeLegend">
+        <span><i className="legendFlameEmoji f1">🔥</i>&lt;10 ha</span>
+        <span><i className="legendFlameEmoji f2">🔥</i>10–400 ha</span>
+        <span><i className="legendFlameEmoji f3">🔥</i>400–1.000 ha</span>
+        <span><i className="legendFlameEmoji f4">🔥</i>&gt;1.000 ha</span>
       </div>
     </section>
   );
