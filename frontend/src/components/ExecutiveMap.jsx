@@ -29,6 +29,8 @@ const qualityColor = v =>
   v >= 60 ? "#d57d35" : "#ad4a43";
 
 function FireMarker({fire, onSelectFire, onOpenBitacora}) {
+  if(!hasValidLatLng(fire)) return null;
+
   const size = Math.max(20, Math.min(58, 18 + Math.sqrt(Math.max(fire.ha,1)) / 2.6));
   const icon = useMemo(() => L.divIcon({
     className: "fireDivIcon",

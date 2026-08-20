@@ -187,3 +187,12 @@ Fuentes cartográficas configuradas:
 - Los incendios sin georreferencia siguen presentes en KPI, rankings y datos.
 - Agrega AppErrorBoundary: un error de runtime ya no deja la aplicación completamente negra.
 - Vista 4 toma superficie afectada desde los datos integrados, no desde valor hardcodeado.
+
+## v2.8.3
+- Sanea todos los GeoJSON antes de entregarlos a Leaflet.
+- Elimina features con geometría nula o coordenadas no finitas.
+- Sanea límites regionales externos.
+- Sanea bases 🏠 y capas locales descargadas.
+- Bitácora usa centro seguro si un incendio no posee coordenada.
+- Replay filtra recursos sin base/destino válidos y protege flyToBounds.
+- FireMarker posee una segunda validación antes de crear el Marker.

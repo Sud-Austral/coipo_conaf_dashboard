@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
+import { sanitizeFeatureCollection } from "../utils/geoJson.js";
 
 const BASE=`${import.meta.env.BASE_URL}data/capas/`;
 
@@ -55,10 +56,10 @@ export function LazyLocalLayer({layer,style,onEachFeature,minZoom=0,label}){
       try{
         const r=await fetch(`${BASE}${e.file}`);
         if(!r.ok) return null;
-        return await r.json();
+        return sanitizeFeatureCollection(await r.json());
       }catch(_){return null}
     }));
-    const good=loaded.filter(Boolean);
+    const good=loaded.filter(fc => fc?.features?.length);
     setCollections(good);
     setStatus(good.length?"ready":"unavailable");
   },[manifest,map,layer,minZoom]);

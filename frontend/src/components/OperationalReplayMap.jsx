@@ -5,8 +5,18 @@ import L from "leaflet";
 import CensusContextLayers from "./CensusContextLayers.jsx";
 import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
 import ResourceBasesLayer from "./ResourceBasesLayer.jsx";
+import { hasValidLatLng } from "../utils/mapData.js";
 
 const { BaseLayer, Overlay } = LayersControl;
+
+const validPair = (p) =>
+  Array.isArray(p) &&
+  p.length >= 2 &&
+  Number.isFinite(Number(p[0])) &&
+  Number.isFinite(Number(p[1]));
+
+const validResource = (r) =>
+  r && validPair(r.base) && validPair(r.destination) && Array.isArray(r.events);
 
 const iconFor = (type, active=false) => {
   const symbol =
@@ -47,17 +57,27 @@ const offsetAroundFire=(destination,index,total)=>{
 function FitFire({fire}){
   const map=useMap();
   useEffect(()=>{
-    if(!fire) return;
-    const pts=[...fire.resources.map(r=>r.base), [fire.lat,fire.lon]];
-    map.flyToBounds(L.latLngBounds(pts),{padding:[40,40],duration:1.0});
+    if(!fire || !hasValidLatLng(fire)) return;
+    const pts=[
+      ...(fire.resources||[]).filter(validResource).map(r=>r.base),
+      [fire.lat,fire.lon]
+    ].filter(validPair);
+    if(!pts.length) return;
+    const bounds=L.latLngBounds(pts);
+    if(bounds.isValid()) map.flyToBounds(bounds,{padding:[40,40],duration:1.0});
   },[fire,map]);
   return null;
 }
 
 export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]}){
+  const safeFire = hasValidLatLng(fire)
+    ? fire
+    : { ...(fire||{}), lat:-33.45, lon:-70.66, resources:[] };
+  const safeResources=(safeFire.resources||[]).filter(validResource);
+
   const [playing,setPlaying]=useState(false);
   const [time,setTime]=useState(0);
-  const maxTime=useMemo(()=>Math.max(1,...fire.resources.flatMap(r=>r.events.map(e=>e.t))),[fire]);
+  const maxTime=useMemo(()=>Math.max(1,...safeResources.flatMap(r=>r.events.map(e=>Number(e.t)||0))),[safeFire.id]);
 
   useEffect(()=>{
     if(!playing) return;
@@ -70,7 +90,7 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
     return ()=>clearInterval(id);
   },[playing,maxTime]);
 
-  useEffect(()=>{setPlaying(false);setTime(0)},[fire.id]);
+  useEffect(()=>{setPlaying(false);setTime(0)},[safeFire.id]);
 
   const resourceState = r => {
     const dispatch=r.events.find(e=>e.label==="Despacho")?.t ?? 0;
@@ -91,17 +111,17 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
     <div className="opMapHead">
       <div>
         <small>REPLAY OPERACIONAL</small>
-        <h3>{fire.name} · {fire.ha.toLocaleString("es-CL")} ha</h3>
+        <h3>{safeFire.name} · {Number(safeFire.ha||0).toLocaleString("es-CL")} ha</h3>
         <p>Hitos temporales SIDCO reales · Base → Incendio es interpolación visual entre puntos conocidos.</p>
       </div>
-      <select value={fire.id} onChange={e=>onFireChange?.(e.target.value)}>
+      <select value={safeFire.id} onChange={e=>onFireChange?.(e.target.value)}>
         {fireOptions.map(f=><option key={f.id} value={f.id}>{f.name} · {f.id}</option>)}
       </select>
     </div>
 
     <div className="opReplayMap">
-      <MapContainer center={[fire.lat,fire.lon]} zoom={9} scrollWheelZoom>
-        <FitFire fire={fire}/>
+      <MapContainer center={[safeFire.lat,safeFire.lon]} zoom={9} scrollWheelZoom>
+        <FitFire fire={{...safeFire,resources:safeResources}}/>
 
         <LayersControl position="topright">
           <BaseLayer checked name="Mapa claro">
@@ -118,19 +138,19 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
 
           <Overlay checked name="Incendio">
             <LayerGroup>
-              <CircleMarker center={[fire.lat,fire.lon]} radius={18} pathOptions={{color:"#a9423a",fillColor:"#d65749",fillOpacity:.72}}>
+              <CircleMarker center={[safeFire.lat,safeFire.lon]} radius={18} pathOptions={{color:"#a9423a",fillColor:"#d65749",fillOpacity:.72}}>
                 
-                <Popup>{fire.ha.toLocaleString("es-CL")} ha · {fire.status}</Popup>
+                <Popup>{Number(safeFire.ha||0).toLocaleString("es-CL")} ha · {safeFire.status}</Popup>
               </CircleMarker>
             </LayerGroup>
           </Overlay>
 
           <Overlay checked name="Recursos">
             <LayerGroup>
-              {fire.resources.map((r,index)=>{
+              {safeResources.map((r,index)=>{
                 const s=resourceState(r);
                 const displayPos = s.status==="En operación"
-                  ? offsetAroundFire(s.pos,index,fire.resources.length)
+                  ? offsetAroundFire(s.pos,index,safeResources.length)
                   : s.pos;
                 return <span key={r.id}>
                   <Polyline positions={[r.base,r.destination]} pathOptions={{weight:2,dashArray:"6 7",opacity:.45}}/>
@@ -183,7 +203,7 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
     </div>
 
     <div className="replayEvents">
-      {fire.resources.map((r,index)=>{
+      {safeResources.map((r,index)=>{
         const current=[...r.events].reverse().find(e=>e.t<=time);
         return <div key={r.id}><b>{r.name}</b><span>{current ? `${current.label} · ${current.time}` : "En base"}</span><small>{r.combatants} combatientes</small></div>
       })}

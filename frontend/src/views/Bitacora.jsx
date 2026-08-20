@@ -5,6 +5,7 @@ import { operationalReplayFires } from "../data/dashboardData.js";
 import CensusContextLayers from "../components/CensusContextLayers.jsx";
 import PopulationExposureMap from "../components/PopulationExposureMap.jsx";
 import ResourceBasesLayer from "../components/ResourceBasesLayer.jsx";
+import { hasValidLatLng } from "../utils/mapData.js";
 
 const { BaseLayer, Overlay } = LayersControl;
 

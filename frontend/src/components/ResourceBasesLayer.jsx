@@ -1,6 +1,7 @@
 import { GeoJSON } from "react-leaflet";
 import L from "leaflet";
 import { resourceBasesReal } from "../data/resourceBases.real.js";
+import { sanitizeFeatureCollection } from "../utils/geoJson.js";
 
 const houseIcon = L.divIcon({
   className: "resourceBaseHouse",
@@ -9,11 +10,13 @@ const houseIcon = L.divIcon({
   iconAnchor: [14, 14]
 });
 
+const safeResourceBases = sanitizeFeatureCollection(resourceBasesReal);
+
 export default function ResourceBasesLayer({ visible = true }) {
   if (!visible) return null;
   return (
     <GeoJSON
-      data={resourceBasesReal}
+      data={safeResourceBases}
       pointToLayer={(feature, latlng) => L.marker(latlng, { icon: houseIcon })}
       onEachFeature={(feature, layer) => {
         const p = feature.properties || {};

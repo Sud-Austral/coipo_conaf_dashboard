@@ -1,3 +1,5 @@
+import { sanitizeFeatureCollection } from "../utils/geoJson.js";
+
 const REGION_GEOJSON_URL =
   "https://raw.githubusercontent.com/caracena/chile-geojson/master/regiones.json";
 
@@ -68,7 +70,7 @@ export async function loadRegionGeoJSON() {
   const data = await response.json();
   const features = Array.isArray(data?.features) ? data.features : [];
 
-  return {
+  const normalized = {
     type: "FeatureCollection",
     features: features.map(feature => ({
       ...feature,
@@ -78,6 +80,8 @@ export async function loadRegionGeoJSON() {
       }
     }))
   };
+
+  return sanitizeFeatureCollection(normalized);
 }
 
 export const regionGeoJsonSource = REGION_GEOJSON_URL;
