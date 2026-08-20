@@ -1,4 +1,4 @@
-# Forestin · SIDCO Dashboard v2.3
+# Forestin · SIDCO Dashboard v2.3.1
 
 Versión consolidada con seis vistas:
 
@@ -45,3 +45,7 @@ cd backend
 npm install
 npm run dev
 ```
+
+
+## v2.3.1
+La capa IPT nacional ahora usa polígonos GeoJSON regionales completos. Hover resalta, clic filtra y `flyToBounds()` hace zoom animado al territorio.

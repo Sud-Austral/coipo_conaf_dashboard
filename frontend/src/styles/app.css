@@ -29,3 +29,29 @@ main{max-width:1540px;margin:auto;padding:22px 28px 34px}
 @media(max-width:1100px){.topbar{align-items:flex-start;flex-direction:column}.kpiGrid{grid-template-columns:repeat(2,1fr)}.mapLayout{grid-template-columns:1fr}.priorityPanel{width:100%}}
 @media(max-width:650px){main{padding:14px}.topbar{padding:14px}.mainNav{padding:8px 14px}.kpiGrid{grid-template-columns:1fr}.toolbar{align-items:flex-start}.leaflet-container{height:440px}.breadcrumbRow{align-items:flex-start;flex-direction:column}.executiveStatement p{font-size:15px}}
 @media print{body{background:#fff}.noPrint,.topbar,.mainNav{display:none!important}main{padding:0}.bitacoraSheet{box-shadow:none;border:0;max-width:none}}
+
+
+/* v2.3.1 · prioridad por límites reales */
+.regionTooltip{
+  display:grid;
+  gap:3px;
+  min-width:150px;
+}
+.regionTooltip b{font-size:12px}
+.regionTooltip span{font-size:10px}
+.mapMetaRow{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  padding-top:9px;
+  color:var(--muted);
+  font-size:9px;
+}
+.geoRule{
+  font-weight:750;
+  color:var(--text);
+}
+.leaflet-interactive{
+  transition:fill-opacity .14s ease, stroke-width .14s ease, stroke .14s ease;
+}
