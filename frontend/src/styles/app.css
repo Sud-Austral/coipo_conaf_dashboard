@@ -770,3 +770,49 @@ main{max-width:1540px;margin:auto;padding:22px 28px 34px}
   box-shadow: 0 2px 7px rgba(0,0,0,.22);
 }
 
+
+
+/* ============================================================
+   v2.8.5 · Agregación nacional de incendios
+   ============================================================ */
+.regionalFireDivIcon{
+  background:transparent!important;
+  border:0!important;
+}
+.regionalFireSummary{
+  position:relative;
+  display:grid;
+  place-items:center;
+  transform-origin:center;
+  filter:drop-shadow(0 3px 7px rgba(0,0,0,.30));
+}
+.regionalFireEmoji{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  font-size:72%;
+  line-height:1;
+}
+.regionalFireSummary b{
+  position:absolute;
+  bottom:-3px;
+  right:-4px;
+  min-width:24px;
+  height:24px;
+  padding:0 5px;
+  display:grid;
+  place-items:center;
+  border-radius:999px;
+  background:rgba(255,255,255,.96);
+  border:2px solid rgba(151,59,46,.68);
+  color:#28322e;
+  font-size:9px;
+  font-weight:900;
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+/* Replay cinematográfico */
+.opReplayMap .leaflet-container{
+  transition:filter .25s ease;
+}

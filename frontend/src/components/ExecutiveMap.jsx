@@ -70,6 +70,43 @@ function FireMarker({fire, onSelectFire, onOpenBitacora}) {
   );
 }
 
+
+function RegionalFireSummary({region,onTerritorySelect}) {
+  if(!hasValidLatLng(region)) return null;
+
+  const count = Number(region.incendios || 0);
+  const size = Math.max(30, Math.min(84, 26 + Math.sqrt(Math.max(count,1)) * 2.25));
+
+  const icon = useMemo(() => L.divIcon({
+    className:"regionalFireDivIcon",
+    html:`
+      <div class="regionalFireSummary" style="width:${size}px;height:${size}px">
+        <span class="regionalFireEmoji">🔥</span>
+        <b>${count.toLocaleString("es-CL")}</b>
+      </div>
+    `,
+    iconSize:[size,size],
+    iconAnchor:[size/2,size/2]
+  }),[size,count]);
+
+  return (
+    <Marker
+      position={[region.lat,region.lon]}
+      icon={icon}
+      eventHandlers={{click:()=>onTerritorySelect?.(region)}}
+    >
+      <Tooltip direction="top" opacity={0.97}>
+        <div className="fireTooltip">
+          <b>{region.name}</b>
+          <span>{count.toLocaleString("es-CL")} incendios</span>
+          <span>{Number(region.superficie||0).toLocaleString("es-CL")} ha registradas</span>
+          <span>Clic para entrar a la región</span>
+        </div>
+      </Tooltip>
+    </Marker>
+  );
+}
+
 function MapNavigator({context, selectedBounds}) {
   const map = useMap();
 
@@ -211,14 +248,21 @@ export default function ExecutiveMap({
           ? (communesByProvince[context.id] || [])
           : [];
 
-  const visibleFires = fires.filter(f => {
+  // Rendimiento cartográfico:
+  // Chile completo = una llama agregada por región.
+  // Región/provincia/comuna = incendios individuales del territorio seleccionado.
+  const visibleFires = context.level === "country" ? [] : fires.filter(f => {
     if (!hasValidLatLng(f)) return false;
-    if(context.level === "country") return true;
     if(context.level === "region") return f.regionId === context.id;
     if(context.level === "province") return f.provinceId === context.id;
     if(context.level === "commune") return f.communeId === context.id;
-    return true;
+    return false;
   });
+
+  const regionalFireSummaries =
+    context.level === "country"
+      ? regions.filter(hasValidLatLng)
+      : [];
 
   return (
     <section className="mapShell">
@@ -288,16 +332,25 @@ export default function ExecutiveMap({
             </LayerGroup>
           </Overlay>
 
-          <Overlay checked name="Incendios">
+          <Overlay checked name={context.level==="country" ? "Incendios por región" : "Incendios"}>
             <LayerGroup>
-              {visibleFires.map(f => (
-                <FireMarker
-                  key={f.id}
-                  fire={f}
-                  onSelectFire={onSelectFire}
-                  onOpenBitacora={onOpenBitacora}
-                />
-              ))}
+              {context.level==="country"
+                ? regionalFireSummaries.map(region=>(
+                    <RegionalFireSummary
+                      key={`regional-fire-${region.id}`}
+                      region={region}
+                      onTerritorySelect={onTerritorySelect}
+                    />
+                  ))
+                : visibleFires.map(f => (
+                    <FireMarker
+                      key={f.id}
+                      fire={f}
+                      onSelectFire={onSelectFire}
+                      onOpenBitacora={onOpenBitacora}
+                    />
+                  ))
+              }
             </LayerGroup>
           </Overlay>
 
@@ -395,15 +448,21 @@ export default function ExecutiveMap({
       </MapContainer>
 
       <div className="mapMetaRow">
-        <span className="geoRule">IPT colorea el territorio completo</span>
+        <span className="geoRule">
+          {context.level==="country"
+            ? "🔥 Tamaño = cantidad de incendios por región · clic para drill-down"
+            : "🔥 Tamaño = superficie registrada del incendio"}
+        </span>
       </div>
 
-      <div className="fireLegend flameSizeLegend">
-        <span><i className="legendFlameEmoji f1">🔥</i>&lt;10 ha</span>
-        <span><i className="legendFlameEmoji f2">🔥</i>10–400 ha</span>
-        <span><i className="legendFlameEmoji f3">🔥</i>400–1.000 ha</span>
-        <span><i className="legendFlameEmoji f4">🔥</i>&gt;1.000 ha</span>
-      </div>
+      {context.level!=="country" &&
+        <div className="fireLegend flameSizeLegend">
+          <span><i className="legendFlameEmoji f1">🔥</i>&lt;10 ha</span>
+          <span><i className="legendFlameEmoji f2">🔥</i>10–400 ha</span>
+          <span><i className="legendFlameEmoji f3">🔥</i>400–1.000 ha</span>
+          <span><i className="legendFlameEmoji f4">🔥</i>&gt;1.000 ha</span>
+        </div>
+      }
     </section>
   );
 }

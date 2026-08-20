@@ -56,20 +56,69 @@ const offsetAroundFire=(destination,index,total)=>{
   ];
 };
 
-function FitFire({fire}){
+
+function ReplayCamera({fire,resources,time,playing,actualMaxTime,visualMaxTime}){
   const map=useMap();
-  useEffect(()=>{
-    if(!fire || !hasValidLatLng(fire)) return;
+  const stageRef=useRef(null);
+
+  const initialBounds=useMemo(()=>{
+    if(!fire || !hasValidLatLng(fire)) return null;
     const pts=[
-      ...(fire.resources||[]).filter(validResource).map(r=>r.base),
+      ...resources.map(r=>r.base).filter(validPair),
       [fire.lat,fire.lon]
     ].filter(validPair);
-    if(!pts.length) return;
+    if(!pts.length) return null;
     const bounds=L.latLngBounds(pts);
-    if(bounds.isValid()) map.flyToBounds(bounds,{padding:[40,40],duration:1.0});
-  },[fire,map]);
+    return bounds.isValid()?bounds:null;
+  },[fire?.id,resources]);
+
+  const arrivalTimes=resources
+    .map(r=>Number(r.events.find(e=>e.label==="Arribo")?.t))
+    .filter(Number.isFinite);
+  const firstArrival=arrivalTimes.length?Math.min(...arrivalTimes):Math.max(1,actualMaxTime*.30);
+
+  const closingStart=actualMaxTime;
+
+  const stage =
+    time<=0 ? "overview" :
+    time<firstArrival ? "approach" :
+    time<closingStart ? "incident" :
+    "closing";
+
+  useEffect(()=>{
+    if(!map || !fire || !hasValidLatLng(fire)) return;
+
+    // Evitar flyTo repetitivo cada tick.
+    if(stageRef.current===stage && stage!=="closing") return;
+    stageRef.current=stage;
+
+    if(stage==="overview"){
+      if(initialBounds) map.flyToBounds(initialBounds,{padding:[46,46],duration:1.0});
+      return;
+    }
+
+    if(stage==="approach"){
+      // Inicio del play: abandonamos la vista nacional de recursos y ponemos
+      // al incendio como protagonista, dejando entrar visualmente los recursos.
+      map.flyTo([fire.lat,fire.lon],10.3,{duration:1.45});
+      return;
+    }
+
+    if(stage==="incident"){
+      map.flyTo([fire.lat,fire.lon],11.6,{duration:1.15});
+      return;
+    }
+
+    if(stage==="closing"){
+      // Cierre: recursos regresan visualmente hacia sus bases y recuperamos
+      // exactamente el encuadre amplio de inicio.
+      if(initialBounds) map.flyToBounds(initialBounds,{padding:[46,46],duration:1.8});
+    }
+  },[stage,map,fire,initialBounds,playing]);
+
   return null;
 }
+
 
 export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]}){
   const safeFire = hasValidLatLng(fire)
@@ -79,7 +128,20 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
 
   const [playing,setPlaying]=useState(false);
   const [time,setTime]=useState(0);
-  const maxTime=useMemo(()=>Math.max(1,...safeResources.flatMap(r=>r.events.map(e=>Number(e.t)||0))),[safeFire.id]);
+
+  const actualMaxTime=useMemo(
+    ()=>Math.max(1,...safeResources.flatMap(r=>r.events.map(e=>Number(e.t)||0))),
+    [safeFire.id]
+  );
+
+  // Ventana adicional exclusivamente visual para mostrar el retiro y volver
+  // al encuadre inicial. No corresponde a un tiempo GPS registrado.
+  const closingVisualMinutes=useMemo(
+    ()=>Math.max(12,Math.min(35,Math.round(actualMaxTime*.10))),
+    [actualMaxTime]
+  );
+
+  const maxTime=actualMaxTime+closingVisualMinutes;
 
   useEffect(()=>{
     if(!playing) return;
@@ -95,26 +157,47 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
   useEffect(()=>{setPlaying(false);setTime(0)},[safeFire.id]);
 
   const resourceState = r => {
-    const dispatch=r.events.find(e=>e.label==="Despacho")?.t ?? 0;
-    const arrival=r.events.find(e=>e.label==="Arribo")?.t ?? maxTime;
-    const retreat=r.events.find(e=>e.label==="Retiro")?.t ?? maxTime;
+    const dispatch=Number(r.events.find(e=>e.label==="Despacho")?.t ?? 0);
+    const arrival=Number(r.events.find(e=>e.label==="Arribo")?.t ?? actualMaxTime);
+    const retreat=Number(r.events.find(e=>e.label==="Retiro")?.t ?? actualMaxTime);
+
     if(time<dispatch) return {pos:r.base,status:"En base",progress:0};
+
     if(time<=arrival){
       const p=Math.max(0,Math.min(1,(time-dispatch)/Math.max(1,arrival-dispatch)));
       return {pos:interpolate(r.base,r.destination,p),status:"En desplazamiento",progress:p};
     }
+
     if(time<retreat) return {pos:r.destination,status:"En operación",progress:1};
-    return {pos:r.base,status:"Retirado",progress:1};
+
+    // El retiro es un cierre visual entre puntos conocidos. La salida del
+    // incendio sí está registrada; la trayectoria de retorno no es GPS.
+    const returnStart=Math.max(retreat,actualMaxTime);
+    if(time<returnStart) return {pos:r.destination,status:"Retiro registrado",progress:1};
+
+    if(time<maxTime){
+      const p=Math.max(0,Math.min(1,(time-returnStart)/Math.max(1,maxTime-returnStart)));
+      return {
+        pos:interpolate(r.destination,r.base,p),
+        status:"Retirándose",
+        progress:1-p
+      };
+    }
+
+    return {pos:r.base,status:"En base · cierre",progress:0};
   };
 
-  const elapsedLabel = `${Math.floor(time/60)}h ${String(Math.round(time%60)).padStart(2,"0")}m`;
+  const elapsedLabel =
+    time>actualMaxTime
+      ? "Cierre visual"
+      : `${Math.floor(time/60)}h ${String(Math.round(time%60)).padStart(2,"0")}m`;
 
   return <section className="opMapShell">
     <div className="opMapHead">
       <div>
         <small>REPLAY OPERACIONAL</small>
         <h3>{safeFire.name} · {Number(safeFire.ha||0).toLocaleString("es-CL")} ha</h3>
-        <p>Hitos temporales SIDCO reales · Base → Incendio es interpolación visual entre puntos conocidos.</p>
+        <p>Inicio: panorama de todos los recursos · Play: foco en el incendio y llegada progresiva · Cierre: retiro y regreso al encuadre inicial.</p>
       </div>
       <select value={safeFire.id} onChange={e=>onFireChange?.(e.target.value)}>
         {fireOptions.map(f=><option key={f.id} value={f.id}>{f.name} · {f.id}</option>)}
@@ -123,7 +206,14 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
 
     <div className="opReplayMap">
       <MapContainer center={[safeFire.lat,safeFire.lon]} zoom={9} scrollWheelZoom>
-        <FitFire fire={{...safeFire,resources:safeResources}}/>
+        <ReplayCamera
+          fire={safeFire}
+          resources={safeResources}
+          time={time}
+          playing={playing}
+          actualMaxTime={actualMaxTime}
+          visualMaxTime={maxTime}
+        />
 
         <LayersControl position="topright">
           <BaseLayer checked name="Mapa claro">
@@ -206,8 +296,12 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
 
     <div className="replayEvents">
       {safeResources.map((r,index)=>{
-        const current=[...r.events].reverse().find(e=>e.t<=time);
-        return <div key={r.id}><b>{r.name}</b><span>{current ? `${current.label} · ${current.time}` : "En base"}</span><small>{r.combatants} combatientes</small></div>
+        const state=resourceState(r);
+        const current=[...r.events].reverse().find(e=>e.t<=Math.min(time,actualMaxTime));
+        const eventText=time>actualMaxTime
+          ? state.status
+          : (current ? `${current.label} · ${current.time}` : "En base");
+        return <div key={r.id}><b>{r.name}</b><span>{eventText}</span><small>{r.combatants} combatientes</small></div>
       })}
     </div>
   </section>;

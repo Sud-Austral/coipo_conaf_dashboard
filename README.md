@@ -201,3 +201,14 @@ Fuentes cartográficas configuradas:
 - Corrige la causa raíz del runtime `Cannot read properties of null (reading lat)`.
 - JavaScript convierte `Number(null)` en `0`; las validaciones ahora rechazan null/undefined/cadena vacía antes de convertir.
 - Se aplica la corrección a incendios, territorios, replay, exposición y GeoJSON.
+
+## v2.8.5 · Rendimiento mapa + replay cinematográfico
+- Vista Chile: no dibuja miles de incendios individuales.
+- Muestra una llama agregada por región; tamaño = cantidad de incendios.
+- La llama regional incluye contador y clic para entrar a la región.
+- Región/provincia/comuna: vuelve a mostrar incendios individuales filtrados.
+- Replay inicia mostrando incendio + todas las bases de recursos participantes.
+- Al presionar Play la cámara se acerca automáticamente al incendio.
+- Durante la operación mantiene el foco en el incendio mientras llegan recursos.
+- Al finalizar agrega un cierre visual de retiro y vuelve automáticamente al encuadre inicial.
+- El retorno es una interpolación visual entre puntos conocidos, no tracking GPS histórico.
