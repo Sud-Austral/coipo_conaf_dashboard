@@ -6,6 +6,7 @@ import { regions, territorialPriority } from "../data/dashboardData.js";
 import { loadRegionGeoJSON } from "../data/regionGeoJson.js";
 import KpiInfo from "./KpiInfo.jsx";
 import CensusContextLayers from "./CensusContextLayers.jsx";
+import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
 
 const { BaseLayer, Overlay } = LayersControl;
 
@@ -124,6 +125,16 @@ function PriorityMap({items,selectedId,onSelect}){
 
           <Overlay name="Localidades rurales">
             <LayerGroup><CensusContextLayers showRural minRuralZoom={9}/></LayerGroup>
+          </Overlay>
+
+          <Overlay name="Bosques / vegetación natural">
+            <LayerGroup><EnvironmentalContextLayers showForest/></LayerGroup>
+          </Overlay>
+          <Overlay name="Áreas protegidas">
+            <LayerGroup><EnvironmentalContextLayers showProtected/></LayerGroup>
+          </Overlay>
+          <Overlay name="Otros usos de suelo">
+            <LayerGroup><EnvironmentalContextLayers showOtherLand/></LayerGroup>
           </Overlay>
         </LayersControl>
       </MapContainer>

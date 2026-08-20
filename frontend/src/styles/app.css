@@ -639,3 +639,68 @@ main{max-width:1540px;margin:auto;padding:22px 28px 34px}
   .customPeriodPopover,
   .emptyPeriodNotice{display:none!important}
 }
+
+
+/* ============================================================
+   v2.7.0 · Vista 6 Exposición a Zonas Pobladas
+   ============================================================ */
+.exposureView{display:grid;gap:12px}
+.exposureStatement{display:flex;justify-content:space-between;align-items:flex-end}
+.exposureWarning{
+  min-width:210px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
+  background:var(--panel2);display:grid;gap:3px
+}
+.exposureWarning b{font-size:9px;text-transform:uppercase}
+.exposureWarning span{font-size:8px;color:var(--muted)}
+
+.exposureKpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.exposureKpis article{
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;
+  display:grid;gap:5px;box-shadow:var(--shadow)
+}
+.exposureKpis article>span{font-size:8px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.exposureKpis strong{font-size:23px}
+.exposureKpis small{font-size:8px;color:var(--muted)}
+
+.exposureCore{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(230px,.55fr);gap:12px}
+.exposureMapCard,.exposureSide,.exposureExplanation{
+  background:var(--panel);border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow)
+}
+.exposureMapCard{padding:10px}
+.exposureMapCard .sectionHeading{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.exposureMapCard .sectionHeading span,.exposureExplanation>div>span{font-size:7px;font-weight:900;letter-spacing:.1em;color:var(--muted)}
+.exposureMapCard .sectionHeading h3,.exposureExplanation h3{margin:2px 0 0;font-size:13px}
+.exposureMapCard select{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:8px;padding:7px;font-size:9px}
+.populationExposureMap,.populationExposureMap .leaflet-container{height:560px;border-radius:10px}
+.exposureFire{font-size:30px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+.exposurePlace{font-size:24px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+
+.exposureSide{padding:11px;display:grid;gap:8px;align-content:start}
+.exposureSelected,.exposureMetric{border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:3px}
+.exposureSelected span,.exposureMetric span{font-size:7px;color:var(--muted);font-weight:900;text-transform:uppercase}
+.exposureSelected h3{margin:1px 0;font-size:14px}
+.exposureSelected strong{font-size:20px}
+.exposureMetric b{font-size:13px}
+.exposureMetric small{font-size:8px;color:var(--muted)}
+.exposureMetric.emphasis b{font-size:22px}
+.exposureExplanation{padding:12px}
+.exposureExplanation p{font-size:9px;color:var(--muted);max-width:900px}
+.exposureBands{display:flex;gap:10px;flex-wrap:wrap;margin-top:9px}
+.exposureBands span{font-size:8px;border:1px solid var(--line);border-radius:999px;padding:5px 8px}
+.exposureBands b{margin-right:3px}
+
+/* Bitácora: mapa contexto urbano/rural con anillos */
+.bitMapBox .populationExposureMap,
+.bitMapBox .populationExposureMap .leaflet-container{height:260px}
+
+/* Capas naturales: selector común */
+.leaflet-control-layers-overlays label span{white-space:nowrap}
+
+@media(max-width:900px){
+  .exposureKpis{grid-template-columns:repeat(2,1fr)}
+  .exposureCore{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .exposureKpis{grid-template-columns:1fr 1fr}
+  .populationExposureMap,.populationExposureMap .leaflet-container{height:430px}
+}

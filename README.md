@@ -111,3 +111,11 @@ La capa IPT nacional ahora usa polígonos GeoJSON regionales completos. Hover re
 - Vista 1: leyenda de incendios con llamas crecientes y menos ruido técnico.
 - Vista 3: replay con emojis por tipo de recurso.
 - Bitácora: limpieza narrativa y selector de capas estandarizado.
+
+
+## v2.7.0
+- Nueva Vista 6: Exposición a Zonas Pobladas.
+- Calidad y Confianza pasa a Vista 7.
+- Anillos 1/3/5 km y línea a zona poblada próxima.
+- Bitácora reutiliza mapa de exposición en Contexto urbano/rural.
+- Capas Bosques/vegetación, Áreas protegidas y Otros usos de suelo agregadas a selectores cartográficos.

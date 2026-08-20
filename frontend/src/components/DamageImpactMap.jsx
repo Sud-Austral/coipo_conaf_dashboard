@@ -5,6 +5,7 @@ import L from "leaflet";
 import { fires, regions } from "../data/dashboardData.js";
 import { loadRegionGeoJSON } from "../data/regionGeoJson.js";
 import CensusContextLayers from "./CensusContextLayers.jsx";
+import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
 
 const { BaseLayer, Overlay } = LayersControl;
 
@@ -112,6 +113,16 @@ export default function DamageImpactMap({selectedRegion,onSelectRegion,onOpenBit
 
           <Overlay name="Localidades rurales">
             <LayerGroup><CensusContextLayers showRural minRuralZoom={9}/></LayerGroup>
+          </Overlay>
+
+          <Overlay name="Bosques / vegetación natural">
+            <LayerGroup><EnvironmentalContextLayers showForest/></LayerGroup>
+          </Overlay>
+          <Overlay name="Áreas protegidas">
+            <LayerGroup><EnvironmentalContextLayers showProtected/></LayerGroup>
+          </Overlay>
+          <Overlay name="Otros usos de suelo">
+            <LayerGroup><EnvironmentalContextLayers showOtherLand/></LayerGroup>
           </Overlay>
         </LayersControl>
       </MapContainer>

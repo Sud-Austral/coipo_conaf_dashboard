@@ -10,6 +10,7 @@ import {
 import { loadRegionGeoJSON } from "../data/regionGeoJson.js";
 import { flameHtml } from "./FlameIcon.jsx";
 import CensusContextLayers from "./CensusContextLayers.jsx";
+import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
 
 const { BaseLayer, Overlay } = LayersControl;
 
@@ -350,6 +351,16 @@ export default function ExecutiveMap({
             <LayerGroup>
               <CensusContextLayers showRural minRuralZoom={9}/>
             </LayerGroup>
+          </Overlay>
+
+          <Overlay name="Bosques / vegetación natural">
+            <LayerGroup><EnvironmentalContextLayers showForest/></LayerGroup>
+          </Overlay>
+          <Overlay name="Áreas protegidas">
+            <LayerGroup><EnvironmentalContextLayers showProtected/></LayerGroup>
+          </Overlay>
+          <Overlay name="Otros usos de suelo">
+            <LayerGroup><EnvironmentalContextLayers showOtherLand/></LayerGroup>
           </Overlay>
 
           <Overlay name="Calidad del dato">

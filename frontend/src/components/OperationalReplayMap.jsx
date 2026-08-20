@@ -3,6 +3,7 @@ import { Play, Pause, RotateCcw, SkipBack, Clock3 } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker, Tooltip, useMap, LayersControl, LayerGroup } from "react-leaflet";
 import L from "leaflet";
 import CensusContextLayers from "./CensusContextLayers.jsx";
+import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
 
 const { BaseLayer, Overlay } = LayersControl;
 
@@ -142,6 +143,16 @@ export default function OperationalReplayMap({fire,onFireChange,fireOptions=[]})
 
           <Overlay name="Localidades rurales">
             <LayerGroup><CensusContextLayers showRural minRuralZoom={9}/></LayerGroup>
+          </Overlay>
+
+          <Overlay name="Bosques / vegetación natural">
+            <LayerGroup><EnvironmentalContextLayers showForest/></LayerGroup>
+          </Overlay>
+          <Overlay name="Áreas protegidas">
+            <LayerGroup><EnvironmentalContextLayers showProtected/></LayerGroup>
+          </Overlay>
+          <Overlay name="Otros usos de suelo">
+            <LayerGroup><EnvironmentalContextLayers showOtherLand/></LayerGroup>
           </Overlay>
         </LayersControl>
       </MapContainer>

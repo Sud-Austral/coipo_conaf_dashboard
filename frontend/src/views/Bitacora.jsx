@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Polyline, Tooltip, LayersControl, Laye
 import L from "leaflet";
 import { operationalReplayFires } from "../data/dashboardData.js";
 import CensusContextLayers from "../components/CensusContextLayers.jsx";
+import PopulationExposureMap from "../components/PopulationExposureMap.jsx";
 
 const { BaseLayer, Overlay } = LayersControl;
 

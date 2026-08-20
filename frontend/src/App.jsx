@@ -5,6 +5,7 @@ import PrioridadTerritorial from "./views/PrioridadTerritorial.jsx";
 import OperacionRecursos from "./views/OperacionRecursos.jsx";
 import Impacto from "./views/Impacto.jsx";
 import Calidad from "./views/Calidad.jsx";
+import Exposicion from "./views/Exposicion.jsx";
 import Bitacora from "./views/Bitacora.jsx";
 
 const dashboardViews = [
@@ -12,7 +13,8 @@ const dashboardViews = [
   ["Prioridad Territorial","prioridad"],
   ["Operación y Recursos","operacion"],
   ["Impacto y Daño","impacto"],
-  ["Bitácora","bitacora"]
+  ["Bitácora","bitacora"],
+  ["Exposición Poblada","exposicion"]
 ];
 
 const periodOptions = [
@@ -53,6 +55,7 @@ export default function App(){
   if(active==="operacion") content=<OperacionRecursos/>;
   if(active==="impacto") content=<Impacto onOpenBitacora={openBitacora}/>;
   if(active==="bitacora") content=<Bitacora fire={fire} onBack={()=>setActive("impacto")}/>;
+  if(active==="exposicion") content=<Exposicion/>;
   if(active==="calidad") content=<Calidad/>;
 
   const applyCustom=()=>{
@@ -130,7 +133,7 @@ export default function App(){
       <div className="navDataGroup">
         <span></span>
         <button className={`dataNavButton ${active==="calidad"?"active":""}`} onClick={()=>setActive("calidad")}>
-          <Database size={14}/> Calidad y Confianza
+          <Database size={14}/> Vista 7 · Calidad y Confianza
         </button>
       </div>
     </nav>
