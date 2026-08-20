@@ -7,7 +7,8 @@ import KpiInfo from "../components/KpiInfo.jsx";
 const exposureDemo = exposureReal;
 
 export default function Exposicion(){
-  const exposureIds=Object.keys(exposureDemo);\n  const [selectedId,setSelectedId]=useState(exposureIds[0]||fires[0]?.id);
+  const exposureIds=Object.keys(exposureDemo);
+  const [selectedId,setSelectedId]=useState(exposureIds[0]||fires[0]?.id);
   const fire=fires.find(f=>f.id===selectedId)||fires.find(f=>exposureDemo[f.id])||fires[0];
   const nearest=exposureDemo[fire.id]||Object.values(exposureDemo)[0]||{name:"Sin cálculo",type:"—",distanceKm:999,lat:fire.lat,lon:fire.lon,expansion:null,index:null,level:"Sin cálculo",context:"Pendiente cartografía local"};
 
@@ -34,10 +35,10 @@ export default function Exposicion(){
     </section>
 
     <section className="exposureKpis">
-      <article><span>Incendios a &lt;1 km <KpiInfo label="Incendios a menos de 1 km" detail="Ejemplo demostrativo sobre incendios disponibles en la maqueta."/></span><strong>{counts.lt1}</strong><small>Zona poblada</small></article>
+      <article><span>Incendios a &lt;1 km <KpiInfo label="Incendios a menos de 1 km" detail="Incendios con cálculo de exposición disponible para el período."/></span><strong>{counts.lt1}</strong><small>Zona poblada</small></article>
       <article><span>Incendios a 1–3 km <KpiInfo label="Incendios entre 1 y 3 km" detail="Distancia geométrica mínima a zona urbana/rural."/></span><strong>{counts.one3}</strong><small>Zona poblada</small></article>
       <article><span>Incendios a 3–5 km <KpiInfo label="Incendios entre 3 y 5 km" detail="Distancia geométrica mínima a zona urbana/rural."/></span><strong>{counts.three5}</strong><small>Zona poblada</small></article>
-      <article><span>Índice de exposición <KpiInfo label="Índice de Exposición Territorial" confidence="Experimental" detail="Combina proximidad, superficie, expansión equivalente y tipo de entorno. No representa probabilidad de afectación."/></span><strong>{nearest.index}/100</strong><small>{nearest.level}</small></article>
+      <article><span>Índice de exposición <KpiInfo label="Índice de Exposición Territorial" confidence="Experimental" detail="Combina proximidad, superficie, expansión equivalente y tipo de entorno. No representa probabilidad de afectación."/></span><strong>{nearest.index != null ? `${nearest.index}/100` : "—"}</strong><small>{nearest.level}</small></article>
     </section>
 
     <section className="exposureCore">
@@ -60,7 +61,7 @@ export default function Exposicion(){
         <div className="exposureMetric"><span>Zona más cercana</span><b>{nearest.name}</b><small>{nearest.type}</small></div>
         <div className="exposureMetric emphasis"><span>Distancia mínima</span><b>{nearest.distanceKm.toFixed(1).replace(".",",")} km</b><small>Línea geométrica más próxima</small></div>
         <div className="exposureMetric"><span>Entorno inmediato</span><b>{nearest.context}</b></div>
-        <div className="exposureMetric"><span>Expansión equivalente</span><b>{nearest.expansion.toFixed(2).replace(".",",")} km/h</b><small>Estimación geométrica por evolución de superficie</small></div>
+        <div className="exposureMetric"><span>Expansión equivalente</span><b>{nearest.expansion != null ? `${nearest.expansion.toFixed(2).replace(".",",")} km/h` : "—"}</b><small>Estimación geométrica por evolución de superficie</small></div>
       </aside>
     </section>
 
