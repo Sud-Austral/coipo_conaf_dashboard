@@ -2,6 +2,7 @@ import { MapContainer, TileLayer, Marker, Circle, Polyline, Tooltip, Popup, Laye
 import L from "leaflet";
 import CensusContextLayers from "./CensusContextLayers.jsx";
 import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
+import { hasValidLatLng } from "../utils/mapData.js";
 import ResourceBasesLayer from "./ResourceBasesLayer.jsx";
 
 const {BaseLayer,Overlay}=LayersControl;
@@ -19,11 +20,17 @@ const placeIcon=L.divIcon({
 });
 
 export default function PopulationExposureMap({fire,nearest}){
-  const center=[fire.lat,fire.lon];
-  const place=[nearest.lat,nearest.lon];
+  const safeFire = hasValidLatLng(fire) ? fire : { ...fire, lat:-33.45, lon:-70.66 };
+  const safeNearest =
+    Number.isFinite(Number(nearest?.lat)) && Number.isFinite(Number(nearest?.lon))
+      ? nearest
+      : { ...nearest, lat:safeFire.lat, lon:safeFire.lon };
+
+  const center=[safeFire.lat,safeFire.lon];
+  const place=[safeNearest.lat,safeNearest.lon];
   const lineColor =
-    nearest.distanceKm <= 1 ? "#b53b32" :
-    nearest.distanceKm <= 3 ? "#d9772f" :
+    safeNearest.distanceKm <= 1 ? "#b53b32" :
+    safeNearest.distanceKm <= 3 ? "#d9772f" :
     "#d4b13e";
 
   return <div className="populationExposureMap">
@@ -66,11 +73,11 @@ export default function PopulationExposureMap({fire,nearest}){
             </Circle>
 
             <Marker position={center} icon={fireIcon}>
-              <Popup><b>{fire.name}</b><br/>{fire.ha.toLocaleString("es-CL")} ha</Popup>
+              <Popup><b>{safeFire.name}</b><br/>{Number(safeFire.ha||0).toLocaleString("es-CL")} ha</Popup>
             </Marker>
-            <Marker position={place} icon={placeIcon}><Tooltip permanent direction="top">{nearest.name} · {nearest.type}</Tooltip></Marker>
+            <Marker position={place} icon={placeIcon}><Tooltip permanent direction="top">{safeNearest.name} · {safeNearest.type}</Tooltip></Marker>
             <Polyline positions={[center,place]} pathOptions={{color:lineColor,weight:3,dashArray:"7 6"}}>
-              <Tooltip permanent>{nearest.distanceKm.toFixed(1).replace(".",",")} km</Tooltip>
+              <Tooltip permanent>{Number(safeNearest.distanceKm||0).toFixed(1).replace(".",",")} km</Tooltip>
             </Polyline>
           </LayerGroup>
         </Overlay>

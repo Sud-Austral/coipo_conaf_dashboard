@@ -12,6 +12,7 @@ import { flameHtml } from "./FlameIcon.jsx";
 import CensusContextLayers from "./CensusContextLayers.jsx";
 import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
 import ResourceBasesLayer from "./ResourceBasesLayer.jsx";
+import { hasValidLatLng } from "../utils/mapData.js";
 
 const { BaseLayer, Overlay } = LayersControl;
 
@@ -209,6 +210,7 @@ export default function ExecutiveMap({
           : [];
 
   const visibleFires = fires.filter(f => {
+    if (!hasValidLatLng(f)) return false;
     if(context.level === "country") return true;
     if(context.level === "region") return f.regionId === context.id;
     if(context.level === "province") return f.provinceId === context.id;
@@ -259,7 +261,7 @@ export default function ExecutiveMap({
                   onBoundsChange={setSelectedBounds}
                 />
               ) : (
-                territoryData.map(t => (
+                territoryData.filter(hasValidLatLng).map(t => (
                   <CircleMarker
                     key={`priority-${t.id}`}
                     center={[t.lat,t.lon]}
@@ -299,7 +301,7 @@ export default function ExecutiveMap({
 
           <Overlay name="Superficie">
             <LayerGroup>
-              {territoryData.map(t => (
+              {territoryData.filter(hasValidLatLng).map(t => (
                 <CircleMarker
                   key={`surface-${t.id}`}
                   center={[t.lat,t.lon]}
@@ -322,7 +324,7 @@ export default function ExecutiveMap({
 
           <Overlay name="Carga operacional">
             <LayerGroup>
-              {regions.map(r => (
+              {regions.filter(hasValidLatLng).map(r => (
                 <CircleMarker
                   key={`resource-${r.id}`}
                   center={[r.lat,r.lon]}
@@ -366,7 +368,7 @@ export default function ExecutiveMap({
 
           <Overlay name="Calidad del dato">
             <LayerGroup>
-              {regions.map(r => (
+              {regions.filter(hasValidLatLng).map(r => (
                 <CircleMarker
                   key={`quality-${r.id}`}
                   center={[r.lat,r.lon]}

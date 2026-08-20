@@ -180,3 +180,10 @@ Fuentes cartográficas configuradas:
 - IDE Minagri/CONAF · Recursos forestales.
 - INE · zonas urbanas.
 - INE · localidades/entidades rurales.
+
+## v2.8.2
+- Corrige pantalla negra provocada por marcadores Leaflet con coordenadas nulas.
+- Solo se dibujan incendios/territorios con coordenadas válidas.
+- Los incendios sin georreferencia siguen presentes en KPI, rankings y datos.
+- Agrega AppErrorBoundary: un error de runtime ya no deja la aplicación completamente negra.
+- Vista 4 toma superficie afectada desde los datos integrados, no desde valor hardcodeado.

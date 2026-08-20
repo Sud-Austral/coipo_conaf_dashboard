@@ -7,6 +7,7 @@ import { loadRegionGeoJSON } from "../data/regionGeoJson.js";
 import CensusContextLayers from "./CensusContextLayers.jsx";
 import EnvironmentalContextLayers from "./EnvironmentalContextLayers.jsx";
 import ResourceBasesLayer from "./ResourceBasesLayer.jsx";
+import { hasValidLatLng } from "../utils/mapData.js";
 
 const { BaseLayer, Overlay } = LayersControl;
 
@@ -24,7 +25,7 @@ function FlyToSelection({regionId}){
   const map=useMap();
   useEffect(()=>{
     const r=regions.find(x=>String(x.id)===String(regionId));
-    if(r) map.flyTo([r.lat,r.lon],7.3,{duration:1.0});
+    if(r && hasValidLatLng(r)) map.flyTo([r.lat,r.lon],7.3,{duration:1.0});
     else map.flyTo([-36.4,-71.4],5.25,{duration:1.0});
   },[regionId,map]);
   return null;
@@ -40,7 +41,10 @@ export default function DamageImpactMap({selectedRegion,onSelectRegion,onOpenBit
   },[]);
 
   const shownFires=useMemo(
-    ()=>selectedRegion ? fires.filter(f=>String(f.regionId)===String(selectedRegion)) : fires,
+    ()=>fires.filter(f =>
+      hasValidLatLng(f) &&
+      (!selectedRegion || String(f.regionId)===String(selectedRegion))
+    ),
     [selectedRegion]
   );
 
