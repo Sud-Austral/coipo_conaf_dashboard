@@ -1,5 +1,0 @@
-import {dummy} from '../data/dummy.js'
-import {Kpi,Card,Header,Page} from '../components/DashboardUI.jsx'
-export default function Respuesta(){const k=dummy.kpis;return <Page><Header title="Respuesta" subtitle="Tiempos y desempeño de la cadena operacional del incendio."/>
-<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><Kpi label="Detección → despacho" value={`${k.deteccionDespachoMin} min`}/><Kpi label="Despacho → primer ataque" value={`${k.despachoPrimerAtaqueMin} min`}/><Kpi label="Hasta control" value={`${k.controlHoras} h`}/><Kpi label="Duración promedio" value={`${k.duracionHoras} h`}/></div>
-<div className="grid gap-6 lg:grid-cols-2"><Card title="Cadena operacional">{dummy.respuesta.map(x=><div className="flex justify-between border-b border-slate-100 py-4 text-sm last:border-0" key={x.etapa}><span>{x.etapa}</span><b>{x.valor} {x.unidad}</b></div>)}</Card><Card title="KPI de gestión"><p className="mt-4 text-sm leading-6 text-slate-600">Los tiempos de detección, despacho, primer ataque y control permiten evaluar la oportunidad de la respuesta y comparar desempeño entre períodos y territorios.</p></Card></div></Page>}
