@@ -36,5 +36,4 @@ La arquitectura queda preparada para servicios oficiales:
 - SNASPE / MMA / IDE Minagri;
 - Catastro de uso de la tierra CONAF.
 
-Las geometrías naturales incluidas en esta maqueta son demostrativas y están
-identificadas en el código para ser reemplazadas por los servicios oficiales.
+Desde v2.7.1 las capas naturales se conectan a servicios cartográficos oficiales externos.

@@ -119,3 +119,10 @@ La capa IPT nacional ahora usa polígonos GeoJSON regionales completos. Hover re
 - Anillos 1/3/5 km y línea a zona poblada próxima.
 - Bitácora reutiliza mapa de exposición en Contexto urbano/rural.
 - Capas Bosques/vegetación, Áreas protegidas y Otros usos de suelo agregadas a selectores cartográficos.
+
+
+## v2.7.1
+- Eliminadas geometrías naturales demostrativas.
+- Áreas Protegidas conectadas a MMA SIMBIO FeatureServer con polígonos reales.
+- Bosques/Recursos Forestales conectados a WMS IDE Minagri/CONAF.
+- Usos de la Tierra conectados a WMS IDE Minagri/CONAF.
