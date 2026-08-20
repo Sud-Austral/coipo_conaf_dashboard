@@ -42,7 +42,7 @@ export const baseKpis = [
   {label:"Superficie media",value:"17,67 ha",delta:"+7,4%",confidence:"Media-Alta",coverage:"77,01%",source:"SIDCO · incendio.ince_superficie"},
   {label:"Inicio → Extinción",value:"100 min",delta:"Mediana",confidence:"Alta",coverage:"98,34%",source:"SIDCO · fechas operacionales"},
   {label:"Primer ataque → Control",value:"67 min",delta:"Mediana",confidence:"Media",coverage:"60,45%",source:"SIDCO · fechas operacionales"},
-  {label:"Incendios >100 ha",value:"—",delta:"Pendiente cálculo",confidence:"Media-Alta",coverage:"77,01%",source:"SIDCO · superficie"},
+  {label:"Incendios >400 ha",value:"—",delta:"Pendiente cálculo",confidence:"Media-Alta",coverage:"77,01%",source:"SIDCO · superficie"},
   {label:"Territorio prioritario",value:"Biobío",delta:"IPT experimental 92",confidence:"Experimental",coverage:"—",source:"Índice interno de priorización"},
   {label:"Recursos movilizados",value:"1.769",delta:"Recursos distintos",confidence:"Alta",coverage:"Alta",source:"SIDCO · recurso + movimiento"}
 ];
@@ -56,4 +56,24 @@ export const qualityRows = [
   ["Coordenadas","76,08%","Media-Alta"],
   ["Primer ataque","66,30%","Media"],
   ["Control","60,45%","Media"]
+];
+
+
+// v2.4.0 · KPI real validado desde SIDCO
+export const largeFireKpi = {
+  thresholdHa: 400,
+  current: 48,
+  previous: 88,
+  variationPct: -45.45,
+  surfaceCoveragePct: 76.98,
+  firesWithSurface: 7439,
+  firesTotal: 9664
+};
+
+export const territorialPriority = [
+  {id:8, name:"Biobío", ipt:92, superficie:96, frecuencia:81, grandes:76, operacion:83, variacion:58},
+  {id:9, name:"La Araucanía", ipt:78, superficie:77, frecuencia:73, grandes:71, operacion:69, variacion:62},
+  {id:7, name:"Maule", ipt:73, superficie:72, frecuencia:68, grandes:66, operacion:70, variacion:55},
+  {id:13, name:"Metropolitana", ipt:61, superficie:54, frecuencia:67, grandes:58, operacion:64, variacion:49},
+  {id:5, name:"Valparaíso", ipt:57, superficie:51, frecuencia:63, grandes:49, operacion:61, variacion:46}
 ];

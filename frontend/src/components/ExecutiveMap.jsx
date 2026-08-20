@@ -368,8 +368,8 @@ export default function ExecutiveMap({
 
       <div className="fireLegend">
         <span><i className="legendFlame sm">◆</i>&lt;10 ha</span>
-        <span><i className="legendFlame md">◆</i>10–100 ha</span>
-        <span><i className="legendFlame lg">◆</i>100–1.000 ha</span>
+        <span><i className="legendFlame md">◆</i>10–400 ha</span>
+        <span><i className="legendFlame lg">◆</i>400–1.000 ha</span>
         <span><i className="legendFlame xl">◆</i>&gt;1.000 ha</span>
         <small>Tamaño de llama = superficie registrada</small>
       </div>

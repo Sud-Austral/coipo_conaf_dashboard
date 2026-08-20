@@ -49,3 +49,10 @@ npm run dev
 
 ## v2.3.1
 La capa IPT nacional ahora usa polígonos GeoJSON regionales completos. Hover resalta, clic filtra y `flyToBounds()` hace zoom animado al territorio.
+
+
+## v2.4.0
+- Banner institucional transversal.
+- Umbral estándar de grandes incendios: >400 ha.
+- KPI Vista 1: 48 (>400 ha), -45,45% vs temporada anterior.
+- Vista 2 Prioridad Territorial incorporada.

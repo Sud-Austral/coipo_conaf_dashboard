@@ -6,6 +6,7 @@ import Operacion from "./views/Operacion.jsx";
 import Impacto from "./views/Impacto.jsx";
 import Calidad from "./views/Calidad.jsx";
 import Bitacora from "./views/Bitacora.jsx";
+import TerritorialPriorityView from "./components/TerritorialPriorityView.jsx";
 
 const nav = ["Resumen","Prioridad Territorial","Operación y Recursos","Impacto y Daño","Calidad y Confianza","Bitácora"];
 
@@ -31,6 +32,7 @@ export default function App(){
 
   return (
     <div className="app">
+      <img className="institutionalBanner" src={`${import.meta.env.BASE_URL}assets/banner-institucional.png`} alt="Banner institucional" />
       <header className="topbar noPrint">
         <div className="brand">
           <small>COIPO · SITUACIÓN NACIONAL</small>
