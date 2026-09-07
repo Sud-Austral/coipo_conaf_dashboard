@@ -1,0 +1,244 @@
+archivos:
+
+  - ruta: backend/package.json
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] sin patron de dato personal detectado en la evidencia; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: declara las dependencias y los comandos del servicio
+
+  - ruta: backend/package-lock.json
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] sin patron de dato personal detectado en la evidencia; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: fija las versiones exactas resueltas para el servicio
+
+  - ruta: frontend/package.json
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] sin patron de dato personal detectado en la evidencia; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: declara las dependencias y los comandos del tablero
+
+  - ruta: frontend/package-lock.json
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] sin patron de dato personal detectado en la evidencia; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: fija las versiones exactas resueltas para el tablero
+
+  - ruta: backend/.env.example
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] plantilla de configuracion; patron esperable de credencial de base de datos [backend/src/db/postgres.js:7]; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: plantilla de las variables de conexion y del puerto [backend/src/server.js:9]
+
+  - ruta: frontend/vite.config.js
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] sin patron de dato personal detectado en la evidencia; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: configuracion de construccion del tablero
+
+  - ruta: frontend/.oxlintrc.json
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] sin patron de dato personal detectado en la evidencia; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: configuracion de la revision estatica del tablero
+
+  - ruta: data/source_sidco_2025_26/00_reporte_export_final.txt
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] describe una exportacion del sistema de origen; contenido no extraido; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: deja constancia de que se exporto y con que resultado
+
+  - ruta: data/source_sidco_2025_26/00_resumen_export_final.json
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] contenido no extraido; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: resumen de la exportacion del sistema de origen
+
+  - ruta: data/source_sidco_2025_26/01_incendios_todos_2025_26.csv
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] extraccion de un sistema de origen, no una muestra de prueba; patrones de identificador de persona no comprobados porque el contenido no fue extraido; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: registro de incendios de la temporada, base de las vistas [frontend/src/views/Resumen.jsx]
+
+  - ruta: data/source_sidco_2025_26/01_incendios_todos_2025_26.json
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] mismo contenido que la version separada por comas; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: la misma extraccion en formato de intercambio
+
+  - ruta: data/source_sidco_2025_26/02_dano_por_incendio_detalle.csv
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] extraccion de un sistema de origen; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: dano por incendio en detalle, codificado segun [frontend/src/config/danoCatalogo.js]
+
+  - ruta: data/source_sidco_2025_26/02_dano_por_incendio_resumen.csv
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] extraccion de un sistema de origen; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: dano por incendio agregado
+
+  - ruta: data/source_sidco_2025_26/03_movimientos_completos_2025_26.csv
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] movimientos de recursos; si identifica personas u operadores no consta, el contenido no fue extraido; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: base de la vista de operacion [frontend/src/views/OperacionRecursos.jsx]
+
+  - ruta: data/source_sidco_2025_26/04_catalogo_candidatos_tipos_recurso.csv
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] catalogo de tipos; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: candidatos de catalogo identificados en el sistema de origen
+
+  - ruta: data/source_sidco_2025_26/04_manifest_muestras_catalogo.json
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: declara que muestras de catalogo se tomaron del sistema de origen
+
+  - ruta: data/source_sidco_2025_26/04_muestra_catalogo_recurso.csv
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] es una muestra del catalogo de origen, no un dato sintetico; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: muestra del catalogo de recursos
+
+  - ruta: data/source_sidco_2025_26/04_muestra_catalogo_recurso_empresa.csv
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] muestra que puede nombrar empresas; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: muestra del catalogo de recursos por empresa
+
+  - ruta: data/source_sidco_2025_26/04_muestra_catalogo_sci_registro_recurso.csv
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] muestra de un registro de recursos; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: muestra del registro de recursos del sistema de origen
+
+  - ruta: data/source_sidco_2025_26/05_bases_recursos_agrupadas.geojson
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] ubicaciones de bases; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: capa que dibuja las bases de recursos [frontend/src/components/ResourceBasesLayer.jsx]
+
+  - ruta: sidco_sintetico_sur_chile_1mes_yoy.json
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] el nombre lo declara sintetico, pero eso es una afirmacion del nombre, no una comprobacion; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: conjunto de datos que consume la interfaz [frontend/src/lib/data.js:6]
+
+  - ruta: frontend/public/sidco_sintetico_sur_chile_1mes_yoy.json
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] copia del anterior dentro del sitio publicado; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: la copia que el sitio publicado sirve [frontend/src/lib/data.js:6]
+
+  - ruta: frontend/public/data/capas/manifest.json
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] catalogo de capas; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: lista las capas que la interfaz carga de forma diferida [frontend/src/components/LazyLocalLayer.jsx:28]
+
+  - ruta: frontend/src/data/damageByRegion.real.js
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] el nombre lo declara real; agregado por region; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: datos de dano incrustados en la interfaz [frontend/src/views/Impacto.jsx]
+
+  - ruta: frontend/src/data/exposure.real.js
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] el nombre lo declara real; datos de exposicion de poblacion; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: datos de exposicion incrustados [frontend/src/views/Exposicion.jsx]
+
+  - ruta: frontend/src/data/operationalFireLifecycle.real.js
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] el nombre lo declara real; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: linea de tiempo de la operacion incrustada [frontend/src/components/OperationsView.jsx]
+
+  - ruta: frontend/src/data/resourceBases.real.js
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] el nombre lo declara real; ubicaciones de bases; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: bases de recursos incrustadas [frontend/src/components/ResourceBasesLayer.jsx]
+
+  - ruta: frontend/src/data/seasonTrend.real.js
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] el nombre lo declara real; serie agregada; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: tendencia de temporada incrustada [frontend/src/views/Resumen.jsx]
+
+  - ruta: frontend/src/data/dummy.js
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] el nombre sugiere relleno, pero no se comprobo; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: datos de relleno de la interfaz
+
+  - ruta: frontend/src/config/danoCatalogo.js
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] catalogo de codificacion; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: unica definicion de uso de suelo, agrupaciones y grado de dano
+
+  - ruta: descargar_capas.bat
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] sin patron de dato personal detectado en la evidencia; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: invoca la descarga de capas [scripts/descargar_capas_oficiales.py]
+
+  - ruta: .github/workflows/deploy-pages.yml
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] sin patron de dato personal detectado en la evidencia; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: publica el tablero como sitio estatico
+
+  - ruta: .github/workflows/deploy.yml
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] sin patron de dato personal detectado en la evidencia; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: segundo flujo de publicacion
+
+  - ruta: .gitignore
+    sha256: "[PENDIENTE] sin calcular"
+    origen: "[PENDIENTE] quien lo entrego y cuando"
+    contiene_pii: "[VERIFICAR] sin patron de dato personal detectado en la evidencia; conteo [PENDIENTE]"
+    puede_versionarse: true
+    uso: lista de exclusiones del control de versiones; no se edita desde este ejercicio
+
+hallazgos:
+  - "El repositorio es publico segun la evidencia del repositorio, y contiene una extraccion de un sistema de origen bajo data/source_sidco_2025_26/. Corresponde revisar si esos archivos pueden estar publicados. [VERIFICAR]"
+  - "Ocho archivos de la interfaz llevan la marca real o sintetico en el nombre. Esa marca es una afirmacion del nombre del archivo, no una comprobacion de contenido. [VERIFICAR]"
+  - "El analizador no extrajo el contenido de los archivos, de modo que ningun conteo de patrones de dato personal pudo calcularse. Todos los conteos quedan [PENDIENTE]."
