@@ -135,19 +135,17 @@ Solo ausencias que el analizador enumero de forma exhaustiva.
   [.github/workflows/deploy-pages.yml] y otra distinta
   [.github/workflows/deploy.yml]. [INFERIDO]
 
-## Donde el analizador no ve
+## Donde el analizador no veia (actualizado 2026-10-24 leyendo el codigo)
 
-Esta es la parte mas importante de este documento.
-
-- El analizador no enumero ninguna ruta del servicio. Existen dos archivos de
-  rutas [backend/src/routes/dashboard.js], [backend/src/routes/bitacora.js] y
-  su punto de entrada [backend/src/server.js], pero que operaciones exponen no
-  esta en la evidencia: [PENDIENTE]
-- Tampoco se leyo que consultas hace el servicio contra la base
-  [backend/src/services/bitacoraService.js],
-  [backend/src/data/dashboard.js]. [PENDIENTE]
-- La interfaz no declara rutas de navegacion detectables; la descripcion se
-  armo desde los componentes [frontend/src/App.jsx]. Como se llega a cada
-  pantalla: [PENDIENTE]
-- El contenido de los documentos de version no fue extraido: se cita su
-  existencia y su titulo, no lo que dicen [docs/MEJORAS_TRANSVERSALES_V2_6_5.md].
+- VERIFICADO: el servicio solo monta `GET /health` y `GET /api/bitacora/:id`; este ultimo devuelve una narracion armada con
+  valores fijos de ejemplo [backend/src/server.js], [backend/src/routes/bitacora.js]. `routes/dashboard.js`
+  [backend/src/routes/dashboard.js] y la conexion a PostgreSQL [backend/src/db/postgres.js] existen pero no estan montados;
+  hoy no hay ninguna consulta activa contra la base.
+- VERIFICADO: la navegacion es por estado interno, sin enrutador: Resumen, Prioridad, Operacion, Impacto, Bitacora, Exposicion y
+  Calidad [frontend/src/App.jsx]. La carpeta `pages/` (incluida FichaIncendio) no se importa desde `App.jsx`: es codigo heredado
+  de la iteracion v1.1.0, con datos sinteticos. La generacion vigente es la de `views/`.
+- VERIFICADO: los datos de las vistas vigentes estan embebidos como modulos JS [frontend/src/data/dashboardData.js]; el
+  frontend no depende del backend para mostrarlos.
+- VERIFICADO: ambos workflows publican `frontend/dist` en GitHub Pages [.github/workflows/deploy.yml],
+  [.github/workflows/deploy-pages.yml]; cual es el oficial: [PENDIENTE].
+- El detalle de cada version esta en `frontend/VERSIONES.md` (hasta v2.8.9); no recalcule sus cifras.
