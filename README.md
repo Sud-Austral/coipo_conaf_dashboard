@@ -1,246 +1,59 @@
-# Forestin · SIDCO Dashboard v2.3.1
+# Forestin · SIDCO Dashboard (coipo_conaf_dashboard)
 
-Versión consolidada con seis vistas:
+Tablero web de lectura sobre incendios forestales de CONAF para la temporada 2025/26: resumen ejecutivo, prioridad territorial,
+operación y recursos (con replay en mapa), impacto y daño, bitácora imprimible a PDF, exposición de zonas pobladas y calidad de datos.
+Versión de los `package.json`: **2.8.9** (VERIFICADO). Para quién es y la decisión que apoya: pendiente de confirmar por el
+equipo (ver [`insumos/00-PROBLEMA.md`](insumos/00-PROBLEMA.md)).
 
-1. Resumen Ejecutivo
-2. Prioridad Territorial
-3. Operación y Recursos
-4. Impacto y Daño
-5. Calidad y Confianza
-6. Bitácora
+## Vistas (VERIFICADO: `frontend/src/App.jsx`)
 
-## Mejora principal v2.3
+Navegación por estado interno (sin react-router): **Resumen**, **Prioridad Territorial**, **Operación y Recursos**, **Impacto y Daño**,
+**Bitácora**, **Exposición Poblada**, y aparte (grupo «Datos») **Calidad y Confianza**. Filtros de período (Hoy, 7 días, 30 días,
+Temporada, Personalizado), tema claro/oscuro y mapas Leaflet con drill-down Chile → Región → Provincia → Comuna → Incendio.
 
-La Vista 1 incorpora:
+## Datos
 
-- rediseño visual institucional;
-- Light Mode limpio;
-- Dark Mode neutro gris carbón/grafito;
-- iconografía SVG profesional;
-- filtros de período y territorio;
-- breadcrumb territorial;
-- sincronización mapa ↔ dashboard;
-- drill-down Chile → Región → Provincia → Comuna → Incendio;
-- ranking territorial dinámico;
-- Leaflet con mapa claro + satélite;
-- capas de Prioridad, Incendios, Superficie, Carga y Calidad;
-- focos de incendio con llama SVG dimensionada por hectáreas;
-- hover con información rápida;
-- clic simple para seleccionar;
-- doble clic para abrir Bitácora;
-- flyTo/flyToBounds en navegación territorial.
+- Los datos de las vistas vienen **embebidos en el frontend** como módulos JS (`frontend/src/data/dashboardData.js` ~1,9 MB,
+  `operationalReplay.extended.js`, `resourceBases.real.js`, etc.). `App.jsx` no llama al backend (VERIFICADO: `api.js` y
+  `lib/data.js` solo los importa `src/pages/`, código heredado que `App.jsx` no usa).
+- Fuente: extracción SIDCO 2025/26 en `data/source_sidco_2025_26/` (CSV/JSON/GeoJSON; reporte en `00_reporte_export_final.txt`).
+  Las cifras de cobertura de cada versión están en `frontend/VERSIONES.md`; no las recalculé.
+- Capas cartográficas oficiales (áreas protegidas, bosques, urbano/rural INE) se descargan a `frontend/public/data/capas/`
+  con `descargar_capas.bat` (usa `scripts/descargar_capas_chile.py`; requiere Python y `requests`). Si faltan, el mapa muestra «No disponible».
+- `frontend/public/sidco_sintetico_sur_chile_1mes_yoy.json` es un dataset **sintético** de una iteración anterior (v1.1.0),
+  usado solo por `frontend/src/pages/`.
 
-## Ejecutar
+## Estructura
 
-```bash
-cd frontend
-npm install
-npm run dev
+```
+frontend/   React 19 + Vite 7 + Leaflet/react-leaflet + maplibre-gl (views/, components/, data/, config/danoCatalogo.js)
+backend/    Express 5 + pg: API mínima de maqueta (ver abajo)
+data/       Extracción SIDCO 2025/26
+scripts/    Descarga de capas territoriales
+docs/       Notas por versión (V2_3 ... V2_8_5)
+insumos/    Problema, solución y manifiesto
 ```
 
-Backend:
+## Cómo ejecutarlo
 
 ```bash
-cd backend
-npm install
-npm run dev
+cd frontend && npm install && npm run dev      # http://localhost:5173
+npm run build                                   # frontend/dist
+cd ../backend && npm install && npm run dev     # puerto PORT o 3001
 ```
 
+Backend (VERIFICADO: `backend/src/server.js`): solo monta `GET /health` y `GET /api/bitacora/:id`, que devuelve un texto
+armado con valores fijos de ejemplo. `routes/dashboard.js` y `db/postgres.js` existen pero **no están montados**. Variables
+del backend (`backend/.env.example`): `PORT`, `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`. Hay un linter
+configurado (`frontend/.oxlintrc.json`) pero sin script en `package.json`; no hay pruebas. No ejecuté estos comandos: no lo comprobé.
 
-## v2.3.1
-La capa IPT nacional ahora usa polígonos GeoJSON regionales completos. Hover resalta, clic filtra y `flyToBounds()` hace zoom animado al territorio.
+## Despliegue
 
+Dos workflows publican `frontend/dist` en GitHub Pages: `deploy.yml` (push a `main` que toque `frontend/**`, `npm ci`) y
+`deploy-pages.yml` (cualquier push a `main`, `npm install`). Ambos pueden correr a la vez; cuál es el oficial: pendiente de confirmar.
+`vite.config.js` usa `base: "./"` (la nota `CONFIG_GITHUB_PAGES.md` menciona `VITE_BASE`, que ya no se lee).
 
-## v2.4.0
-- Banner institucional transversal.
-- Umbral estándar de grandes incendios: >400 ha.
-- KPI Vista 1: 48 (>400 ha), -45,45% vs temporada anterior.
-- Vista 2 Prioridad Territorial incorporada.
+## Documentos
 
-
-## v2.5.0
-- Ruteo corregido: Vistas 1, 2 y 3 completas y accesibles.
-- Vista 3 Operación y Recursos implementada.
-- Replay operacional jugable con Play/Pausa/Reinicio/slider.
-- Replay usa datos demo hasta conectar `movimiento` real.
-
-
-## v2.5.1
-- Vista 2: corrección completa de layout, KPI y gráfico comparativo.
-- Vista 3: duraciones entre hitos mostradas en minutos u horas/minutos.
-
-
-## v2.6.0
-- Vista 4 Impacto y Daño implementada con clasificación SIDCO validada.
-- Diccionario central `src/config/danoCatalogo.js`.
-- Vista 5 Bitácora ampliada con cronología y cuatro mapas para impresión/PDF.
-- Vista 6 Calidad y Confianza separada visualmente del flujo principal.
-- Navegación principal: Resumen → Prioridad → Operación → Impacto → Bitácora | Datos: Calidad.
-- Mantiene umbral >400 ha.
-
-
-## v2.6.1
-- KPI limpios con icono de información transversal.
-- Vista 1: Incendios >400 ha = 48.
-- Vista 3: lectura operacional con escala tipográfica consistente.
-- Vista 4: eliminado bloque de calidad; reemplazado por concentración del impacto.
-- Calidad/cobertura técnica concentrada en tooltips y Vista 6.
-
-
-## v2.6.2
-- Bitácora PDF: Historia operacional vertical, sin barra de scroll ni elementos interactivos inútiles en impresión.
-- Pantalla mantiene timeline horizontal.
-
-
-## v2.6.3
-- Capas urbano/rural reales conectadas dinámicamente a servicios de origen INE.
-- Vista 2 reemplaza fallback visual por Leaflet/GeoJSON real.
-- Vista 2 elimina gráfico de burbujas y agrega ranking ejecutivo explicativo.
-- Capas censales disponibles en Vista 2, Vista 4 y Bitácora.
-
-
-## v2.6.4
-- Vista 4 sin códigos SIDCO visibles.
-- Tooltips KPI controlados por clic y cerrados por defecto.
-
-
-## v2.6.5
-- Filtros Hoy/7 días/30 días/Temporada/Personalizado funcionales.
-- Estado vacío demostrativo para períodos sin datos.
-- Selector de capas Leaflet estandarizado en mapas.
-- Vista 1: leyenda de incendios con llamas crecientes y menos ruido técnico.
-- Vista 3: replay con emojis por tipo de recurso.
-- Bitácora: limpieza narrativa y selector de capas estandarizado.
-
-
-## v2.7.0
-- Nueva Vista 6: Exposición a Zonas Pobladas.
-- Calidad y Confianza pasa a Vista 7.
-- Anillos 1/3/5 km y línea a zona poblada próxima.
-- Bitácora reutiliza mapa de exposición en Contexto urbano/rural.
-- Capas Bosques/vegetación, Áreas protegidas y Otros usos de suelo agregadas a selectores cartográficos.
-
-
-## v2.7.1
-- Eliminadas geometrías naturales demostrativas.
-- Áreas Protegidas conectadas a MMA SIMBIO FeatureServer con polígonos reales.
-- Bosques/Recursos Forestales conectados a WMS IDE Minagri/CONAF.
-- Usos de la Tierra conectados a WMS IDE Minagri/CONAF.
-
-
-## v2.7.2
-- Bitácora sin etiqueta permanente `Incendio` sobre la llama.
-- Recursos distribuidos alrededor del foco para evitar solapamiento.
-- Replay operacional separa visualmente recursos en operación.
-- Anillos de exposición: rojo 1 km, naranjo 3 km, amarillo 5 km.
-- Línea de proximidad usa la misma escala de color.
-
-
-## v2.7.3
-- Capas naturales migradas a estrategia local-first (`public/data/capas`).
-- Script `scripts/descargar_capas_oficiales.py` para cachear fuentes oficiales.
-- `descargar_capas.bat` para Windows.
-- Manifiesto de disponibilidad por capa.
-- El mapa muestra `No disponible` si una capa local falta o falla.
-- Se elimina la dependencia silenciosa de WMS para capas naturales.
-
-## v2.7.4 · Working (sin ZIP)
-- Capa real `Bases de recursos` integrada a los selectores cartográficos.
-- 352 puntos/base agrupados desde SIDCO.
-- Marcador visual 🏠.
-- Tooltip con nombre, cantidad de recursos y tipos disponibles.
-- Disponible también en Bitácora, especialmente en `Recursos en el sitio`.
-- La capa representa bases georreferenciadas; no implica tracking GPS.
-
-
-## v2.8.0 · Maqueta funcional SIDCO 2025/26
-
-Datos integrados:
-- 9,664 incendios reales.
-- 7,344 incendios con coordenada válida.
-- 18,255 registros de daño.
-- 5,287 incendios con daño.
-- 62,908 movimientos asociados a incendio.
-- 1,751 recursos distintos.
-- 352 bases/puntos de recursos agrupados.
-
-Replay:
-- Hitos temporales reales.
-- Cuando existe base georreferenciada se representa Base → Incendio mediante interpolación visual.
-- No es tracking GPS histórico.
-
-Capas:
-1. Ejecutar `descargar_capas.bat`.
-2. El script crea particiones locales en `frontend/public/data/capas/`.
-3. El frontend carga solo las particiones que intersectan el viewport.
-4. Si falta una capa, el mapa muestra `No disponible`.
-
-Fuentes cartográficas configuradas:
-- MMA/SIMBIO · Áreas protegidas.
-- IDE Minagri/CONAF · Recursos forestales.
-- INE · zonas urbanas.
-- INE · localidades/entidades rurales.
-
-## v2.8.2
-- Corrige pantalla negra provocada por marcadores Leaflet con coordenadas nulas.
-- Solo se dibujan incendios/territorios con coordenadas válidas.
-- Los incendios sin georreferencia siguen presentes en KPI, rankings y datos.
-- Agrega AppErrorBoundary: un error de runtime ya no deja la aplicación completamente negra.
-- Vista 4 toma superficie afectada desde los datos integrados, no desde valor hardcodeado.
-
-## v2.8.3
-- Sanea todos los GeoJSON antes de entregarlos a Leaflet.
-- Elimina features con geometría nula o coordenadas no finitas.
-- Sanea límites regionales externos.
-- Sanea bases 🏠 y capas locales descargadas.
-- Bitácora usa centro seguro si un incendio no posee coordenada.
-- Replay filtra recursos sin base/destino válidos y protege flyToBounds.
-- FireMarker posee una segunda validación antes de crear el Marker.
-
-## v2.8.4
-- Corrige la causa raíz del runtime `Cannot read properties of null (reading lat)`.
-- JavaScript convierte `Number(null)` en `0`; las validaciones ahora rechazan null/undefined/cadena vacía antes de convertir.
-- Se aplica la corrección a incendios, territorios, replay, exposición y GeoJSON.
-
-## v2.8.5 · Rendimiento mapa + replay cinematográfico
-- Vista Chile: no dibuja miles de incendios individuales.
-- Muestra una llama agregada por región; tamaño = cantidad de incendios.
-- La llama regional incluye contador y clic para entrar a la región.
-- Región/provincia/comuna: vuelve a mostrar incendios individuales filtrados.
-- Replay inicia mostrando incendio + todas las bases de recursos participantes.
-- Al presionar Play la cámara se acerca automáticamente al incendio.
-- Durante la operación mantiene el foco en el incendio mientras llegan recursos.
-- Al finalizar agrega un cierre visual de retiro y vuelve automáticamente al encuadre inicial.
-- El retorno es una interpolación visual entre puntos conocidos, no tracking GPS histórico.
-
-## v2.8.6 · Claridad ejecutiva
-- Vista 2: ranking territorial limitado a Top 8.
-- Vista 1: gráfico mensual interactivo con tarjeta hover por mes.
-- La serie 2025/26 usa conteos SIDCO reales.
-- La serie mensual 2024/25 queda explícitamente pendiente de extracción; no se inventan valores.
-- Vista 4: barras de composición escaladas contra el total caracterizado (100%), no contra la categoría mayor.
-- Vista 3: historia operacional principal ahora pertenece al incendio completo.
-- Línea del incendio con gradiente rojo → verde, fechas y duración total.
-- KPI del incendio seleccionado muestra inicio / término o Activo.
-- Recursos asignados son seleccionables y muestran una línea operacional secundaria filtrada.
-
-## v2.8.8
-- Popovers ⓘ compactos y consistentes.
-- Hitos: nodos permanecen en la línea y textos se distribuyen en niveles inferiores.
-- Selección múltiple de recursos desde tarjetas bajo el replay.
-- Botón Limpiar recursos.
-- Recursos más separados alrededor del incendio; fuego siempre por encima.
-- Aviso No disponible ligado exclusivamente a la capa montada/seleccionada.
-- Bitácora: detalle operacional visible en pantalla y opcional para PDF mediante checkbox.
-- Contexto urbano/rural de Bitácora incorpora anillos 1/3/5 km por defecto, también imprimibles.
-
-## v2.8.9
-- Unifica todos los botones ⓘ con popover flotante compacto fuera de las tarjetas.
-- Elimina avisos automáticos de capas no seleccionadas.
-- Vista 3 amplía el catálogo de replay espacial a 300 incendios con base georreferenciada.
-- Agrega búsqueda por nombre/ID junto al selector de incendio.
-- Incendio del replay se representa como 🔥 y se mantiene sobre los recursos.
-- Botón Limpiar recursos más visible.
-- Vista 4 recalcula KPI y composición al seleccionar una región.
-- Vista 6 ya no activa Zonas urbanas por defecto.
-- Corrige estiramiento vertical del mapa de impacto.
+[`CLAUDE.md`](CLAUDE.md) · [`insumos/00-PROBLEMA.md`](insumos/00-PROBLEMA.md) · [`insumos/01-SOLUCION.md`](insumos/01-SOLUCION.md) ·
+[`frontend/VERSIONES.md`](frontend/VERSIONES.md) · [`docs/`](docs/)
